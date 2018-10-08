@@ -25,15 +25,15 @@ export default {
       const socket = new net.Socket(wsAddress, 'Skipchain')
 
       // the name of the protobuf structure we are sending
-      const sendingMessageName = "Status"
+      const sendingMessageName = 'Status'
       // the name of the protobuf structure we expect to receive
-      const expectedMessageName = "ID"
+      const expectedMessageName = 'ID'
 
       socket.send(sendingMessageName, expectedMessageName, {})
         .then((data) => {
           // data is a JS object
           this.response = data.id
-        }).catch(() =>  {
+        }).catch(() => {
         })
     }
   }

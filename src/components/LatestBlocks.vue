@@ -10,12 +10,12 @@
   >
 
     <template slot="items" slot-scope="props">
-      <td>{{ props.item.index }}</td>
-      <td class="text-xs-left">{{ props.item.transactionNumber }}</td>
-      <td class="text-xs-left">{{ props.item.verifiers.length }}</td>
-      <td class="text-xs-left">{{ props.item.height }}</td>
-
-
+      <tr v-on:click="goToBlock(props.item.index)">
+        <td>{{ props.item.index }}</td>
+        <td class="text-xs-left">{{ props.item.transactionNumber }}</td>
+        <td class="text-xs-left">{{ props.item.verifiers.length }}</td>
+        <td class="text-xs-left">{{ props.item.height }}</td>
+      </tr>
     </template>
 
   </v-data-table>
@@ -69,6 +69,15 @@
           this.blocks = data.update
         }).catch(() => {
         })
+    },
+    methods: {
+      goToBlock: function (id) {
+        console.log(id)
+        console.log(this)
+        this.$router.push(`/blocks/${id}`)
+
+      }
+
     }
   }
 </script>

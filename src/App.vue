@@ -7,7 +7,7 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
     <v-content>
-      <LatestBlocks/>
+      <router-view></router-view>
     </v-content>
     <v-navigation-drawer
       temporary
@@ -26,19 +26,14 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
+      <span>&copy; DEDIS 2018 - Student Project</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import LatestBlocks from './components/LatestBlocks'
-
 export default {
   name: 'App',
-  components: {
-    LatestBlocks
-  },
   data () {
     return {
       clipped: false,
@@ -51,7 +46,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Conode Status Checker'
+      title: 'SkipChain Explorer'
     }
   }
 }

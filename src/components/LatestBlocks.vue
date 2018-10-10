@@ -20,7 +20,6 @@
 
   </v-data-table>
 
-  <h1>Block #blockId</h1>
 </v-container>
 </template>
 

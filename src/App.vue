@@ -7,8 +7,6 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
     <v-content>
-      <StatusChecker/>
-      <StatusCheckerRoster/>
       <LatestBlocks/>
     </v-content>
     <v-navigation-drawer
@@ -34,15 +32,11 @@
 </template>
 
 <script>
-import StatusChecker from './components/StatusChecker'
-import StatusCheckerRoster from './components/StatusCheckerRoster'
 import LatestBlocks from './components/LatestBlocks'
 
 export default {
   name: 'App',
   components: {
-    StatusChecker,
-    StatusCheckerRoster,
     LatestBlocks
   },
   data () {

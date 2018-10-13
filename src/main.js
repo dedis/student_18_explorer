@@ -13,7 +13,7 @@ const router = new VueRouter({
   routes: [
     { path: '/', redirect: '/blocks' },
     { path: '/blocks', component: LatestBlocks },
-    { path: '/blocks/:id', component: BlockInfo }
+    { path: '/blocks/:index', component: BlockInfo }
   ]
 })
 

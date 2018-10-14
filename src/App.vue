@@ -81,6 +81,12 @@ export default {
         this.blocks = data.update
       }).catch(() => {
       })
+    /*  socket.send('GetSingleBlock', 'SkipBlock', { id:  })
+        .then((data) => {
+          // data is a JS object
+          this.blocks[0] = data.reply
+        }).catch(() => {
+        }) */
   }
 }
 </script>

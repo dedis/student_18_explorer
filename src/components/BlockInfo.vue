@@ -38,6 +38,11 @@
                 <BlockLink :hash="misc.uint8ArrayToHex(hash)"/>
               </p>
             </span>
+            <span v-else-if="field.display === 'forward' && block[field.name]">
+              <p v-for="forwardLink in block[field.name]" :key="JSON.stringify(forwardLink)">
+                <ForwardLink :forwardLink="forwardLink"/>
+              </p>
+            </span>
             <span v-else>
               {{block[field.name]}}
             </span>
@@ -51,10 +56,14 @@
 <script>
   import { misc } from '@dedis/cothority'
   import BlockLink from './BlockLink'
+  import ForwardLink from './ForwardLink'
 
   export default {
     props: ['blocks'],
-    components: { 'BlockLink': BlockLink },
+    components: {
+      'BlockLink': BlockLink,
+      'ForwardLink': ForwardLink
+    },
     data: function () {
       return {
         fields: [

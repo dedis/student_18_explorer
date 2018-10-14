@@ -4,7 +4,10 @@
       app
       :clipped-left="clipped"
     >
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <router-link to="/" class="title-link">
+        <v-toolbar-title v-text="title"></v-toolbar-title>
+      </router-link>
+
     </v-toolbar>
     <v-content>
       <router-view v-bind:blocks="blocks"></router-view>
@@ -81,3 +84,9 @@ export default {
   }
 }
 </script>
+<style>
+  .title-link {
+    text-decoration: none;
+    color: black;
+  }
+</style>

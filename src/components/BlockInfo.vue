@@ -1,7 +1,7 @@
 <template>
   <v-container>
 
-    <h1>Block {{$route.params.index}}</h1>
+    <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
 
     <div grid-list-md text-xs-center>
         <v-layout row wrap v-for="field in fields.filter(x => x.grid)" v-bind:key="field.name">
@@ -11,7 +11,7 @@
           <v-flex xs8>
             <v-card-text class="px-0">
               <span v-if="field.display === 'hash'">
-                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name])}}
+                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </span>
               <span v-else>
                 {{block[field.name]}}
@@ -34,8 +34,8 @@
           <v-card-text class="grey lighten-3">
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
-              <p v-for="hash in block[field.name]">
-                0x{{hash && misc.uint8ArrayToHex(hash)}}
+              <p v-for="hash in block[field.name]" :key="JSON.stringify(hash)">
+                <BlockLink :hash="misc.uint8ArrayToHex(hash)"/>
               </p>
             </span>
             <span v-else>
@@ -50,9 +50,11 @@
 
 <script>
   import { misc } from '@dedis/cothority'
+  import BlockLink from './BlockLink'
 
   export default {
     props: ['blocks'],
+    components: { 'BlockLink': BlockLink },
     data: function () {
       return {
         fields: [
@@ -70,11 +72,11 @@
           { name: 'verifiers', show: 'Verifiers', display: 'array' },
           { name: 'roster', show: 'Roster', display: 'roster' }
         ],
+        misc: misc
       }
     },
     computed: {
-      block: function () { return this.blocks.length ? this.blocks.find(({ index }) => index === Number(this.$route.params.index)) : {} },
-      misc: function () { return misc }
+      block: function () { return this.blocks.length ? this.blocks.find(({ hash }) => ('0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
     }
   }
 </script>

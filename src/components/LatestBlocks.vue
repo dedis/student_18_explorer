@@ -38,13 +38,12 @@
           { text: 'Transactions (nb)', value: 'transactionNumber' },
           { text: 'Collective Signing (nb)', value: 'verifiers.length' },
           { text: 'Height (nb)', value: 'height' }
-        ],
+        ]
       }
     },
     methods: {
       goToBlock: function (index) {
         this.$router.push(`/blocks/${index}`)
-
       }
 
     }

@@ -48,6 +48,9 @@
                 <ForwardLink :forwardLink="forwardLink"/>
               </p>
             </span>
+            <span v-else-if="field.display === 'roster' && block[field.name]">
+              <Roster :roster="block[field.name]"/>
+            </span>
             <span v-else>
               {{block[field.name]}}
             </span>
@@ -64,12 +67,14 @@
   import { misc } from '@jeannechaverot/cothority'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
+  import Roster from './Roster'
 
   export default {
     props: ['blocks'],
     components: {
       'BlockLink': BlockLink,
-      'ForwardLink': ForwardLink
+      'ForwardLink': ForwardLink,
+      'Roster': Roster
     },
     data: function () {
       return {

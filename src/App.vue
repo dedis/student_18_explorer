@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import identity, { net, misc } from '@dedis/cothority'
+import identity, { net, misc } from '@jeannechaverot/cothority'
 
 export default {
   name: 'App',
@@ -52,7 +52,8 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'SkipChain Explorer',
-      blocks: []
+      blocks: [],
+      skipchains: []
     }
   },
   mounted: function () {
@@ -81,10 +82,17 @@ export default {
         this.blocks = data.update
       }).catch(() => {
       })
-    /*  socket.send('GetSingleBlock', 'SkipBlock', { id:  })
+    /*  socket.send('GetSingleBlock', 'SkipBlock', { id: misc.hexToUint8Array('aa9bbaad83c999a348a9977afcfc0acfc677c26adc669c8accd41c0083c7a9ea') })
         .then((data) => {
           // data is a JS object
-          this.blocks[0] = data.reply
+          this.blocks = data.reply
+        }).catch(() => {
+        }) */
+
+    /*      socket.send('GetAllSkipchainIDs', 'SkipBlock', {})
+        .then((data) => {
+          // data is a JS object
+          this.skipchains = data.reply
         }).catch(() => {
         }) */
   }

@@ -721,19 +721,6 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@dedis/cothority@^1.1.17":
-  version "1.1.17"
-  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-1.1.17.tgz#f1f9fcf8467c5b3abcb34508f43ee9f9e4a56f2e"
-  integrity sha512-l5ziJp2W4oMsed2Q5qV96CNwOMmtiJ/0mrtV/ueBaeMO7lnA/GfnlQmr+Oe1kE3hpABdzx2lJBgORwKQQrGBiQ==
-  dependencies:
-    "@dedis/kyber-js" "^0.0.10"
-    co "^4.6.0"
-    protobufjs "^6.8.6"
-    pure-uuid "^1.5.0"
-    shuffle-array "^1.0.1"
-    topl "^0.3.1"
-    ws "^4.0.0"
-
 "@dedis/kyber-js@^0.0.10":
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/@dedis/kyber-js/-/kyber-js-0.0.10.tgz#8508493d7841af2ad1ef477e36fd95757694f748"
@@ -751,6 +738,19 @@
     cssnano "^4.0.0"
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
+
+"@jeannechaverot/cothority@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@jeannechaverot/cothority/-/cothority-1.10.1.tgz#5c244d404aa32d7b30f39712420f917c71ed950e"
+  integrity sha512-HQY6t/QvHygJDfcr9cHd0Bf4t2ndLs8eefrAIsufnmCLwGd3Zb/h0Pdt3BxrXEvzlanMaPXKgxOWW1WZhg2mug==
+  dependencies:
+    "@dedis/kyber-js" "^0.0.10"
+    co "^4.6.0"
+    protobufjs "^6.8.6"
+    pure-uuid "^1.5.0"
+    shuffle-array "^1.0.1"
+    topl "^0.3.1"
+    ws "^4.0.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -824,9 +824,9 @@
   integrity sha512-1w52Nyx4Gq47uuu0EVcsHBxZFJgurQ+rTKS3qMHxR1GY2T8c2AJYd6vZoZ9q1rupaDjU0yT+Jc2XTyXkjeMA+Q==
 
 "@types/node@^10.1.0":
-  version "10.11.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.4.tgz#e8bd933c3f78795d580ae41d86590bfc1f4f389d"
-  integrity sha512-ojnbBiKkZFYRfQpmtnnWTMw+rzGp/JiystjluW9jgN3VzRwilXddJ6aGQ9V/7iuDG06SBgn7ozW9k3zcAnYjYQ==
+  version "10.12.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.0.tgz#ea6dcbddbc5b584c83f06c60e82736d8fbb0c235"
+  integrity sha512-3TUHC3jsBAB7qVRGxT6lWyYo2v96BMmD2PTcl47H25Lu7UXtFH/2qqmKiVrnel6Ne//0TFYf6uvNX+HW2FRkLQ==
 
 "@vue/babel-preset-app@^3.0.4":
   version "3.0.4"

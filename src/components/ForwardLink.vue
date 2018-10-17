@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="'/blocks/0x' + link.to">0x{{link.from.slice(0, 16)}}... -> 0x{{link.to.slice(0, 16)}}...</router-link>
+  <p>0x{{link.from.slice(0, 16)}}... <v-icon>arrow_forward</v-icon><router-link :to="'/blocks/0x' + link.to"> 0x{{link.to.slice(0, 16)}}...</router-link></p>
 </template>
 
 
@@ -7,7 +7,7 @@
 
 
 <script>
-import { misc } from '@dedis/cothority'
+import { misc } from '@jeannechaverot/cothority'
 export default {
   props: ['forwardLink'],
   computed: {

@@ -1,30 +1,35 @@
+
+
+
 <template>
   <v-container>
 
-    <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
-
-    <div grid-list-md text-xs-center>
-        <v-layout row wrap v-for="field in fields.filter(x => x.grid)" v-bind:key="field.name">
-          <v-flex xs4>
-            <v-card-text class="px-0">{{field.show}}</v-card-text>
-          </v-flex>
-          <v-flex xs8>
-            <v-card-text class="px-0">
-              <span v-if="field.display === 'hash'">
-                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
-              </span>
-              <span v-else>
-                {{block[field.name]}}
-              </span>
-            </v-card-text>
-          </v-flex>
-        </v-layout>
-      </div>
-
 
     <v-expansion-panel
+      v-model="panel"
+      :disabled="disabled"
+      :readonly="readonly"
       expand
     >
+      <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
+
+      <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.grid)" v-bind:key="field.name">
+        <template slot="header">
+
+          <v-layout row>
+            <v-flex xs4>
+              <p>{{field.show}}</p>
+            </v-flex>
+            <v-flex xs8>
+              <p v-if="field.display === 'hash'">
+                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
+              </p>
+              <p v-else>{{block[field.name]}}</p>
+            </v-flex>
+          </v-layout>
+        </template>
+      </v-expansion-panel-content>
+
       <v-expansion-panel-content
         v-for="field in fields.filter(x => !x.grid)"
         v-bind:key="field.name"
@@ -49,12 +54,14 @@
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
-    </v-expansion-panel>
-  </v-container>
+
+</v-expansion-panel>
+</v-container>
+
 </template>
 
 <script>
-  import { misc } from '@dedis/cothority'
+  import { misc } from '@jeannechaverot/cothority'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
 
@@ -81,7 +88,10 @@
           { name: 'verifiers', show: 'Verifiers', display: 'array' },
           { name: 'roster', show: 'Roster', display: 'roster' }
         ],
-        misc: misc
+        misc: misc,
+        panel: [true, true, false],
+        disabled: false,
+        readonly: false
       }
     },
     computed: {
@@ -89,3 +99,8 @@
     }
   }
 </script>
+<style>
+.v-expansion-panel__container--disabled {
+  color: black !important;
+}
+</style>

@@ -7,11 +7,30 @@
       <router-link to="/" class="title-link">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </router-link>
+<v-spacer></v-spacer>
 
+      <v-menu :nudge-width="100">
+        <v-toolbar-title slot="activator">
+          <span>0x{{chosenSkipchain.slice(0, 16)}}...</span>
+          <v-icon>arrow_drop_down</v-icon>
+        </v-toolbar-title>
+
+        <v-list>
+          <v-list-tile
+            v-for="skipchain in skipchains"
+            :key="JSON.stringify(skipchain)"
+            @click="chooseSkipchain"
+          >
+            <v-list-tile-title v-text="skipchain"></v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar>
-    <v-content>
-      <router-view v-bind:blocks="blocks"></router-view>
-    </v-content>
+
+
+    <Explorer v-if="socket" :socket="socket" :chosenSkipchain="chosenSkipchain" :key="Math.random()"/>
+
+
     <v-navigation-drawer
       temporary
       :right="right"
@@ -36,9 +55,11 @@
 
 <script>
 import identity, { net, misc } from '@jeannechaverot/cothority'
+import Explorer from './Explorer'
 
 export default {
   name: 'App',
+  components: { 'Explorer': Explorer },
   data () {
     return {
       clipped: false,
@@ -52,8 +73,10 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'SkipChain Explorer',
+      socket: null,
       blocks: [],
-      skipchains: []
+      skipchains: [],
+      chosenSkipchain: ''
     }
   },
   mounted: function () {
@@ -74,27 +97,20 @@ export default {
         Public = "b21216372ea04f3c7d25e9386f94d58a564266ff7bd85d7acf79385e076e5f39"
         Description = "Conode_3"
     `), 'Skipchain')
-    // 3013bfed8292c7e34d4845271d1486d17fa2863eedcd7c056f85d70a3076cb27
-    // aa9bbaad83c999a348a9977afcfc0acfc677c26adc669c8accd41c0083c7a9ea
-    socket.send('GetUpdateChain', 'GetUpdateChainReply', { latestID: misc.hexToUint8Array('aa9bbaad83c999a348a9977afcfc0acfc677c26adc669c8accd41c0083c7a9ea') })
+
+    socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
       .then((data) => {
-        // data is a JS object
-        this.blocks = data.update
+        this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))
+        this.chosenSkipchain = this.skipchains[0]
       }).catch(() => {
       })
-    /*  socket.send('GetSingleBlock', 'SkipBlock', { id: misc.hexToUint8Array('aa9bbaad83c999a348a9977afcfc0acfc677c26adc669c8accd41c0083c7a9ea') })
-        .then((data) => {
-          // data is a JS object
-          this.blocks = data.reply
-        }).catch(() => {
-        }) */
-
-    /*      socket.send('GetAllSkipchainIDs', 'SkipBlock', {})
-        .then((data) => {
-          // data is a JS object
-          this.skipchains = data.reply
-        }).catch(() => {
-        }) */
+    this.socket = socket
+  },
+  methods: {
+    chooseSkipchain: function (e) {
+      // target.innerText is the parameter that displays the selected skipchain's hash
+      this.chosenSkipchain = e.target.innerText
+    }
   }
 }
 </script>

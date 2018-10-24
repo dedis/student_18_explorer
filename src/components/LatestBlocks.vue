@@ -34,19 +34,20 @@
           {
             text: 'Block Index',
             align: 'left',
+            sortable: true,
             value: 'index'
           },
-          { text: 'Hash (nb)', value: 'hash' },
-          { text: 'Transactions (nb)', value: 'transactionNumber' },
-          { text: 'Collective Signing (nb)', value: 'verifiers.length' },
-          { text: 'Height (nb)', value: 'height' }
+          { text: 'Hash', value: 'hash' },
+          { text: 'Transactions', value: 'transactionNumber' },
+          { text: 'Collective Signing', value: 'verifiers.length' },
+          { text: 'Height', value: 'height' }
         ],
         misc: misc
       }
     },
     methods: {
       goToBlock: function (hash) {
-        this.$router.push(`/blocks/${hash}`)
+        this.$router.push(`/blocks/${hash}`) /*To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL.*/
       }
 
     }

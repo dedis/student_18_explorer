@@ -1,10 +1,5 @@
-
-
-
 <template>
   <v-container>
-
-
     <v-expansion-panel
       v-model="panel"
       :disabled="disabled"
@@ -13,7 +8,7 @@
     >
       <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
 
-      <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.grid)" v-bind:key="field.name">
+      <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
         <template slot="header">
 
           <v-layout row>
@@ -31,7 +26,7 @@
       </v-expansion-panel-content>
 
       <v-expansion-panel-content
-        v-for="field in fields.filter(x => !x.grid)"
+        v-for="field in fields.filter(x => !x.display_first)"
         v-bind:key="field.name"
       >
         <div slot="header">{{field.show}}</div>
@@ -58,8 +53,8 @@
         </v-card>
       </v-expansion-panel-content>
 
-</v-expansion-panel>
-</v-container>
+    </v-expansion-panel>
+  </v-container>
 
 </template>
 
@@ -78,20 +73,23 @@
     },
     data: function () {
       return {
+        /*'show' is the name to be displayed, 'display' is the format
+        Forward links and the Roster are both special cases*/
         fields: [
-          { name: 'index', show: 'Index', display: 'number', grid: true },
-          { name: 'height', show: 'Height', display: 'number', grid: true },
-          { name: 'maxHeight', show: 'Max height', display: 'number', grid: true },
-          { name: 'baseHeight', show: 'Base height', display: 'number', grid: true },
-          { name: 'hash', show: 'Hash', display: 'hash', grid: true },
+          { name: 'index', show: 'Index', display: 'number', display_first: true },
+          { name: 'height', show: 'Height', display: 'number', display_first: true },
+          { name: 'maxHeight', show: 'Max height', display: 'number', display_first: true },
+          { name: 'baseHeight', show: 'Base height', display: 'number', display_first: true },
+          { name: 'hash', show: 'Hash', display: 'hash', display_first: true },
           { name: 'payload', show: 'Payload', display: '' },
-          { name: 'parent', show: 'Parent', display: 'hash', grid: true },
-          { name: 'genesis', show: 'Genesis block', display: 'hash', grid: true },
-          { name: 'data', show: 'Data', display: 'hash', grid: true },
+          { name: 'parent', show: 'Parent', display: 'hash', display_first: true },
+          { name: 'genesis', show: 'Genesis block', display: 'hash', display_first: true },
+          { name: 'data', show: 'Data', display: 'hash', display_first: true },
           { name: 'backlinks', show: 'Backward links', display: 'array' },
           { name: 'forward', show: 'Forward links', display: 'forward' },
           { name: 'verifiers', show: 'Verifiers', display: 'array' },
           { name: 'roster', show: 'Roster', display: 'roster' }
+
         ],
         misc: misc,
         panel: [true, true, false],

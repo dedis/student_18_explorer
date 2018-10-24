@@ -9,9 +9,10 @@
       </router-link>
 <v-spacer></v-spacer>
 
+      <!--header -->
       <v-menu :nudge-width="100">
         <v-toolbar-title slot="activator">
-          <span>0x{{chosenSkipchain.slice(0, 16)}}...</span>
+          <span>Current Skipchain: 0x{{chosenSkipchain.slice(0, 16)}}...</span>
           <v-icon>arrow_drop_down</v-icon>
         </v-toolbar-title>
 
@@ -30,7 +31,6 @@
 
     <Explorer v-if="socket" :socket="socket" :chosenSkipchain="chosenSkipchain" :key="Math.random()"/>
 
-
     <v-navigation-drawer
       temporary
       :right="right"
@@ -47,6 +47,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
     <v-footer :fixed="fixed" app>
       <span>&copy; DEDIS 2018 - Student Project</span>
     </v-footer>
@@ -79,6 +80,7 @@ export default {
       chosenSkipchain: ''
     }
   },
+  /*-- my local roster, to be updated once we'll be dealing with DEDIS' skipchains */
   mounted: function () {
     const socket = new net.RosterSocket(identity.Roster.fromTOML(`
       [[servers]]
@@ -97,7 +99,8 @@ export default {
         Public = "b21216372ea04f3c7d25e9386f94d58a564266ff7bd85d7acf79385e076e5f39"
         Description = "Conode_3"
     `), 'Skipchain')
-
+    /* get all skipchains IDs and map each of them to its hexadecimal form
+       we define the first skipchain from the list as the one to be displayed, and the user can switch */
     socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
       .then((data) => {
         this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))

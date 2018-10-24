@@ -1,4 +1,5 @@
 <template>
+  <!-- Special Roster case as it has many arguments -->
   <span>
     <p>Roster ID: {{id}}</p>
     <ul>

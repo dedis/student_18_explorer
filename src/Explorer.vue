@@ -19,7 +19,18 @@ export default {
     }
   },
   mounted: function () {
-    const getNextBlockRecur = index => {
+    /*the if case stands for when the component is mounted for the first time it might take chosenSkipchain
+      as the empty string. So we want mounted to be called only when chosenSkipchain exists*/
+    if (!this.chosenSkipchain) return
+      const getUpdateChain = () => {
+        this.socket.send('GetUpdateChain', 'GetUpdateChainReply', { latestID: misc.hexToUint8Array(this.chosenSkipchain) })
+          .then((data) => {
+            this.blocks = data.update
+          }).catch(() => {
+          })
+      }
+      getUpdateChain()
+    /*const getNextBlockRecur = index => {
       this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: index })
         .then((data) => {
           // data is a JS object
@@ -30,7 +41,7 @@ export default {
           console.log(e)
         })
     }
-    getNextBlockRecur(0)
+    getNextBlockRecur(0)*/
   }
 }
 </script>

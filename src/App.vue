@@ -7,7 +7,17 @@
       <router-link to="/" class="title-link">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </router-link>
-<v-spacer></v-spacer>
+      
+      <v-spacer></v-spacer>
+
+      <router-link to="/blocks" class="title-link">
+        <v-btn flat>Explorer</v-btn>
+      </router-link>
+      <router-link to="/graph" class="title-link">
+        <v-btn flat>Graph</v-btn>
+      </router-link>
+
+      <v-spacer></v-spacer>
 
       <!--header -->
       <v-menu :nudge-width="100">
@@ -80,7 +90,7 @@ export default {
       chosenSkipchain: ''
     }
   },
-  /*-- my local roster, to be updated once we'll be dealing with DEDIS' skipchains */
+  /* -- my local roster, to be updated once we'll be dealing with DEDIS' skipchains */
   mounted: function () {
     const socket = new net.RosterSocket(identity.Roster.fromTOML(`
       [[servers]]

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@jeannechaverot/cothority": "^1.10.2",
+    "d3": "^5.7.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.19"

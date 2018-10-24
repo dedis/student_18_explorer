@@ -73,8 +73,8 @@
     },
     data: function () {
       return {
-        /*'show' is the name to be displayed, 'display' is the format
-        Forward links and the Roster are both special cases*/
+        /* 'show' is the name to be displayed, 'display' is the format
+        Forward links and the Roster are both special cases */
         fields: [
           { name: 'index', show: 'Index', display: 'number', display_first: true },
           { name: 'height', show: 'Height', display: 'number', display_first: true },

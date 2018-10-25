@@ -25,7 +25,9 @@ export default {
     const getUpdateChain = () => {
       this.socket.send('GetUpdateChain', 'GetUpdateChainReply', { latestID: misc.hexToUint8Array(this.chosenSkipchain) })
         .then((data) => {
-          this.blocks = data.update
+          /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
+          const blocks = data.update.map(b => ({ ...b, loaded: true }))
+          this.blocks = blocks
         }).catch(() => {
         })
     }

@@ -46,7 +46,7 @@
             <span v-else-if="field.display === 'roster' && block[field.name]">
               <Roster :roster="block[field.name]"/>
             </span>
-            <span v-else>
+            <span v-else> //payload
               {{block[field.name]}}
             </span>
           </v-card-text>

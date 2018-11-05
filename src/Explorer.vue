@@ -1,22 +1,18 @@
 <template lang="html">
-
-
   <v-content>
-    <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex"></router-view>
+    <router-view key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex"></router-view>
   </v-content>
-
-
 </template>
 
 <script>
-import { misc } from '@jeannechaverot/cothority'
+import { misc } from '@dedis/cothority'
 export default {
   props: ['socket', 'chosenSkipchain'],
   data: function () {
     return {
       blocks: [],
       getBlockByIndex: i => {
-        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: 2 * i})
+        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: i })
           .then(skipblock => {
             this.blocks.splice(i, 1, { ...skipblock, loaded: true })
           })
@@ -32,12 +28,13 @@ export default {
         .then((data) => {
           /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
           const blocks = data.update.map(b => ({ ...b, loaded: true }))
-          const allBlocks = new Array(blocks[blocks.length - 1].index / 2 + 1).fill({}).map((_, i) => {
-            const b = blocks.find(block => block.index === i * 2)
-            return b || { loaded: false, index: i * 2, height: 1 }
+          const allBlocks = new Array(blocks[blocks.length - 1].index+1).fill({}).map((_, i) => {
+            const b = blocks.find(block => block.index === i)
+            return b || { loaded: false, index: i, height: 1 }
           })
           this.blocks = allBlocks
-        }).catch(() => {
+        }).catch((err) => {
+		  console.log(err)
         })
     }
     getUpdateChain()
@@ -45,7 +42,6 @@ export default {
       this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: index })
         .then((data) => {
           // data is a JS object
-          console.log(data)
           this.blocks[index] = data.reply
           getNextBlockRecur(index + 1)
         }).catch((e) => {

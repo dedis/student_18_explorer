@@ -21,7 +21,7 @@
 
 <script>
 import * as d3 from 'd3'
-import { misc } from '@jeannechaverot/cothority'
+import { misc } from '@dedis/cothority'
 
 const BLOCK_SIZE = 20
 const BLOCK_SEPARATION = 60

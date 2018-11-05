@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import identity, { net, misc } from '@jeannechaverot/cothority'
+import identity, { net, misc } from '@dedis/cothority'
 import Explorer from './Explorer'
 export default {
   name: 'App',

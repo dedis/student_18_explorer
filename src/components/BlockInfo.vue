@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import { misc } from '@jeannechaverot/cothority'
+  import { misc } from '@dedis/cothority'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'

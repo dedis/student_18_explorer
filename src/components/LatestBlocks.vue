@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { misc } from '@jeannechaverot/cothority'
+  import { misc } from '@dedis/cothority'
   export default {
     props: ['blocks'],
     data () {

@@ -84,16 +84,17 @@ export default {
           const to = this.blocks.find(b => b.hash && misc.uint8ArrayCompare(backlink, b.hash))
           if (to) {
             const indexDiff = (block.index - to.index )
+            const minHeight = Math.min(block.height, to.height) + 1
             group.append('line')
-              .attr('x1', (to.height - 1) * BLOCK_SIZE - BLOCK_SIZE / 2)
+              .attr('x1', (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE / 2)
               .attr('y1', BLOCK_SIZE / 2)
-              .attr('x2', (to.height - 1) * BLOCK_SIZE - BLOCK_SIZE / 2)
+              .attr('x2', (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE / 2)
               .attr('y2', -indexDiff * BLOCK_SEPARATION + BLOCK_SIZE)
               .attr('stroke-width', 2)
               .attr('stroke', 'green')
-            const [x1, y1] = [BLOCK_SIZE / 2 + (to.height - 1)* BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + BLOCK_SIZE]
-            const [x2, y2] = [BLOCK_SIZE + (to.height - 1) * BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
-            const [x3, y3] = [-0.5 + (to.height - 1) * BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
+            const [x1, y1] = [BLOCK_SIZE / 2 + (minHeight - 1)* BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + BLOCK_SIZE]
+            const [x2, y2] = [BLOCK_SIZE + (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
+            const [x3, y3] = [-0.5 + (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
             group.append('polygon')
               .attr('points', `${x1},${y1} ${x2},${y2} ${x3},${y3}`)
               .attr('fill', 'green')

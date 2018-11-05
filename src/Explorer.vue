@@ -2,7 +2,7 @@
 
 
   <v-content>
-    <router-view v-bind:blocks="blocks"></router-view>
+    <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex"></router-view>
   </v-content>
 
 
@@ -10,12 +10,17 @@
 
 <script>
 import { misc } from '@jeannechaverot/cothority'
-
 export default {
   props: ['socket', 'chosenSkipchain'],
   data: function () {
     return {
-      blocks: []
+      blocks: [],
+      getBlockByIndex: i => {
+        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: 2 * i})
+          .then(skipblock => {
+            this.blocks.splice(i, 1, { ...skipblock, loaded: true })
+          })
+      }
     }
   },
   mounted: function () {
@@ -27,7 +32,11 @@ export default {
         .then((data) => {
           /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
           const blocks = data.update.map(b => ({ ...b, loaded: true }))
-          this.blocks = blocks
+          const allBlocks = new Array(blocks[blocks.length - 1].index / 2 + 1).fill({}).map((_, i) => {
+            const b = blocks.find(block => block.index === i * 2)
+            return b || { loaded: false, index: i * 2, height: 1 }
+          })
+          this.blocks = allBlocks
         }).catch(() => {
         })
     }

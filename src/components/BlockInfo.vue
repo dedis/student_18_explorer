@@ -63,7 +63,6 @@
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
-
   export default {
     props: ['blocks'],
     components: {
@@ -89,7 +88,6 @@
           { name: 'forward', show: 'Forward links', display: 'forward' },
           { name: 'verifiers', show: 'Verifiers', display: 'array' },
           { name: 'roster', show: 'Roster', display: 'roster' }
-
         ],
         misc: misc,
         panel: [true, true, false],

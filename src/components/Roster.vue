@@ -12,7 +12,6 @@
 
 <script>
 import { misc } from '@jeannechaverot/cothority'
-
 export default {
   props: ['roster'],
   computed: {

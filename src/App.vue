@@ -7,7 +7,7 @@
       <router-link to="/" class="title-link">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </router-link>
-      
+
       <v-spacer></v-spacer>
 
       <router-link to="/blocks" class="title-link">
@@ -67,7 +67,6 @@
 <script>
 import identity, { net, misc } from '@jeannechaverot/cothority'
 import Explorer from './Explorer'
-
 export default {
   name: 'App',
   components: { 'Explorer': Explorer },

@@ -5,7 +5,8 @@
   <br>
   <v-data-table
     :headers="headers"
-    :items="blocks"
+    :items="blocks.filter(x => x.loaded)"
+    hide-actions
     class="elevation-1"
   >
 
@@ -49,7 +50,6 @@
       goToBlock: function (hash) {
         this.$router.push(`/blocks/${hash}`) /* To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL. */
       }
-
     }
   }
 </script>

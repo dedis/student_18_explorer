@@ -3,9 +3,7 @@
 </template>
 
 <script>
-
 export default {
   props: ['hash', 'index']
-
 }
 </script>

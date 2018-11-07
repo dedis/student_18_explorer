@@ -108,8 +108,8 @@ export default {
           if (to) {
             const indexDiff = (to.index - block.index)
             maxDiff = indexDiff > maxDiff ? indexDiff : maxDiff
-            const [x1, y1] = [-indexDiff * BLOCK_SIZE, BLOCK_SIZE / 2]
-            const [x2, y2] = [-indexDiff * BLOCK_SIZE, BLOCK_SIZE / 2 + indexDiff * BLOCK_SEPARATION - indexDiff * BLOCK_SIZE]
+            const [x1, y1] = [- (Math.log2(indexDiff) + 1) * BLOCK_SIZE, BLOCK_SIZE / 2]
+            const [x2, y2] = [- (Math.log2(indexDiff) + 1) * BLOCK_SIZE, BLOCK_SIZE / 2 + indexDiff * BLOCK_SEPARATION - (Math.log2(indexDiff) + 1) * BLOCK_SIZE]
             const [x3, y3] = [-BLOCK_SIZE / 2, indexDiff * BLOCK_SEPARATION]
             group.append('polyline')
               .attr('points', `${x1},${y1} ${x2},${y2} ${x3},${y3}`)
@@ -128,7 +128,7 @@ export default {
           group.append('line')
             .attr('x1', 0)
             .attr('y1', BLOCK_SIZE / 2)
-            .attr('x2', -maxDiff * BLOCK_SIZE)
+            .attr('x2', -(Math.log2(maxDiff) + 1) * BLOCK_SIZE)
             .attr('y2', BLOCK_SIZE / 2)
             .attr('stroke-dasharray', '5,5')
             .attr('stroke-width', 2)

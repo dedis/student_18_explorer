@@ -1,6 +1,6 @@
 <template lang="html">
   <v-content>
-    <router-view key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex"></router-view>
+    <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex"></router-view>
   </v-content>
 </template>
 

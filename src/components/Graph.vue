@@ -1,7 +1,7 @@
 <template lang="html">
 <v-container>
-  <v-card :height="PADDING_Y * blocks.length * 2" width="1250px">
-    <svg :height="PADDING_Y * blocks.length * 2" width="1250px" />
+  <v-card :height="PADDING_Y * blocks.length" width="1250px">
+    <svg :height="PADDING_Y * blocks.length" width="1250px" />
     <defs>
   <marker
     id="arrow"
@@ -23,8 +23,8 @@
 import * as d3 from 'd3'
 import { misc } from '@dedis/cothority'
 
-const BLOCK_SIZE = 20
-const BLOCK_SEPARATION = 60
+const BLOCK_SIZE = 10
+const BLOCK_SEPARATION = 30
 const PADDING_X = 500
 const PADDING_Y = 100
 

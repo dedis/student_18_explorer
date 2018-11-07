@@ -36,6 +36,7 @@
           </v-list-tile>
         </v-list>
       </v-menu>
+      <UserRoster :connectToCothority="connectToCothority" />
     </v-toolbar>
 
 
@@ -67,10 +68,11 @@
 <script>
 import identity, { net, misc } from '@dedis/cothority'
 import Explorer from './Explorer'
-import roster from './default-roster'
+import UserRoster from './components/UserRoster'
+import defaultRoster from './default-roster'
 export default {
   name: 'App',
-  components: { 'Explorer': Explorer },
+  components: { 'Explorer': Explorer, 'UserRoster': UserRoster },
   data () {
     return {
       clipped: false,
@@ -92,21 +94,27 @@ export default {
   },
   /* -- my local roster, to be updated once we'll be dealing with DEDIS' skipchains */
   mounted: function () {
-    const socket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'Skipchain')
-    /* get all skipchains IDs and map each of them to its hexadecimal form
-       we define the first skipchain from the list as the one to be displayed, and the user can switch */
-    socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
-      .then((data) => {
-        this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))
-        this.chosenSkipchain = this.skipchains[0]
-      }).catch(() => {
-      })
-    this.socket = socket
+    this.connectToCothority(defaultRoster)
   },
   methods: {
+
     chooseSkipchain: function (e) {
       // target.innerText is the parameter that displays the selected skipchain's hash
       this.chosenSkipchain = e.target.innerText
+    },
+
+    connectToCothority: function (roster) {
+      console.log(roster)
+      const socket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'Skipchain')
+      /* get all skipchains IDs and map each of them to its hexadecimal form
+         we define the first skipchain from the list as the one to be displayed, and the user can switch */
+      socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
+        .then((data) => {
+          this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))
+          this.chosenSkipchain = this.skipchains[0]
+        }).catch(() => {
+        })
+      this.socket = socket
     }
   }
 }

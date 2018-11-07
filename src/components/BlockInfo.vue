@@ -96,7 +96,7 @@
       }
     },
     computed: {
-      block: function () { return this.blocks.length ? this.blocks.find(({ hash }) => ('0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
+      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
     }
   }
 </script>

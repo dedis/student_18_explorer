@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialog" @keydown.esc="dialog = false" max-width="600px">
       <v-btn slot="activator" color="pink" dark>Roster</v-btn>
       <v-card>
         <v-card-title>

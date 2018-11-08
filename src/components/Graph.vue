@@ -23,8 +23,8 @@
 import * as d3 from 'd3'
 import { misc } from '@dedis/cothority'
 
-const BLOCK_SIZE = 10
-const BLOCK_SEPARATION = 30
+const BLOCK_SIZE = 20
+const BLOCK_SEPARATION = 60
 const PADDING_X = 500
 const PADDING_Y = 100
 
@@ -92,9 +92,10 @@ export default {
               .attr('y2', -indexDiff * BLOCK_SEPARATION + BLOCK_SIZE)
               .attr('stroke-width', 2)
               .attr('stroke', 'green')
+            //green arrow
             const [x1, y1] = [BLOCK_SIZE / 2 + (minHeight - 1)* BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + BLOCK_SIZE]
-            const [x2, y2] = [BLOCK_SIZE + (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
-            const [x3, y3] = [-0.5 + (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
+            const [x2, y2] = [BLOCK_SIZE + (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE - 3, -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
+            const [x3, y3] = [-0.5 + (minHeight - 1) * BLOCK_SIZE - BLOCK_SIZE +3 , -indexDiff * BLOCK_SEPARATION + 1.5 * BLOCK_SIZE]
             group.append('polygon')
               .attr('points', `${x1},${y1} ${x2},${y2} ${x3},${y3}`)
               .attr('fill', 'green')
@@ -116,6 +117,7 @@ export default {
               .attr('stroke-width', 2)
               .attr('fill', 'none')
               .attr('stroke', 'blue')
+            //blue arrow
             const [x4, y4] = [-BLOCK_SIZE / 2 - BLOCK_SIZE / 2, indexDiff * BLOCK_SEPARATION + BLOCK_SIZE / 2 - BLOCK_SIZE / 2]
             const [x5, y5] = [-BLOCK_SIZE / 3, indexDiff * BLOCK_SEPARATION + BLOCK_SIZE / 2 - BLOCK_SIZE / 3] // point
             const [x6, y6] = [-BLOCK_SIZE / 2, indexDiff * BLOCK_SEPARATION - BLOCK_SIZE / 2]

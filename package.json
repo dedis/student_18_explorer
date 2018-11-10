@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@dedis/cothority": "^1.1.20",
+    "buffer-hexdump": "^1.0.0",
     "d3": "^5.7.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",

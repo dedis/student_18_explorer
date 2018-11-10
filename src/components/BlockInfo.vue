@@ -19,6 +19,9 @@
               <p v-if="field.display === 'hash'">
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
+              <p v-else-if="field.display === 'hex'">
+                {{dump(block[field.name])}}
+              </p>
               <p v-else>{{block[field.name]}}</p>
             </v-flex>
           </v-layout>
@@ -38,6 +41,21 @@
                 <BlockLink :hash="misc.uint8ArrayToHex(hash)"/>
               </p>
             </span>
+            <span v-if="field.display === 'uuid' && block[field.name]">
+              <p v-for="hash in block[field.name]" :key="JSON.stringify(hash)">
+                <pre>{{
+                  misc.uint8ArrayToHex(hash).slice(0, 8).concat('-').concat(
+                      misc.uint8ArrayToHex(hash).slice(8, 12)
+                    ).concat('-').concat(
+                      misc.uint8ArrayToHex(hash).slice(12, 16)
+                    ).concat('-').concat(
+                      misc.uint8ArrayToHex(hash).slice(16, 20)
+                    ).concat('-').concat(
+                      misc.uint8ArrayToHex(hash).slice(20, 32)
+                    )
+                }}</pre>
+              </p>
+            </span>
             <span v-else-if="field.display === 'forward' && block[field.name]">
               <p v-for="forwardLink in block[field.name]" :key="JSON.stringify(forwardLink)">
                 <ForwardLink :forwardLink="forwardLink"/>
@@ -46,7 +64,7 @@
             <span v-else-if="field.display === 'roster' && block[field.name]">
               <Roster :roster="block[field.name]"/>
             </span>
-            <span v-else> //payload
+            <span v-else>
               {{block[field.name]}}
             </span>
           </v-card-text>
@@ -59,12 +77,13 @@
 </template>
 
 <script>
-  import { misc } from '@dedis/cothority'
+  import { misc, byzcoin } from '@dedis/cothority'
+  import dump from 'buffer-hexdump'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
   export default {
-    props: ['blocks'],
+    props: ['blocks', 'socket'],
     components: {
       'BlockLink': BlockLink,
       'ForwardLink': ForwardLink,
@@ -83,20 +102,24 @@
           { name: 'payload', show: 'Payload', display: '' },
           { name: 'parent', show: 'Parent', display: 'hash', display_first: true },
           { name: 'genesis', show: 'Genesis block', display: 'hash', display_first: true },
-          { name: 'data', show: 'Data', display: 'hash', display_first: true },
+          { name: 'data', show: 'Data', display: 'hex', display_first: true },
           { name: 'backlinks', show: 'Backward links', display: 'array' },
           { name: 'forward', show: 'Forward links', display: 'forward' },
-          { name: 'verifiers', show: 'Verifiers', display: 'array' },
+          { name: 'verifiers', show: 'Verifiers', display: 'uuid' },
           { name: 'roster', show: 'Roster', display: 'roster' }
         ],
         misc: misc,
         panel: [true, true, false],
         disabled: false,
-        readonly: false
+        readonly: false,
+        dump
       }
     },
     computed: {
-      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
+      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
+      /*byzcoin: function () {
+        console.log(byzcoin.ByzCoinRPC.fromKnownConfiguration(this.socket, this.blocks[0].hash))
+      }*/
     }
   }
 </script>

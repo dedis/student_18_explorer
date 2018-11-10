@@ -33,7 +33,6 @@ export default {
   methods: {
     connect: function() {
       this.dialog = false
-      console.log(this.roster)
       this.connectToCothority(this.roster)
     }
 

@@ -1,7 +1,7 @@
 <template lang="html">
 <v-container>
   <v-card :height="PADDING_Y * blocks.length" width="1250px">
-    <svg :height="PADDING_Y * blocks.length" width="1250px" />
+    <svg :height="PADDING_Y * blocks.length " width="1250px" />
     <defs>
   <marker
     id="arrow"
@@ -35,6 +35,7 @@ export default {
       PADDING_Y
     }
   },
+
   mounted: function () {
     const svg = d3.selectAll('svg')
     this.blocks.forEach((block, i) => {
@@ -62,13 +63,13 @@ export default {
         // blocks hash and index display
         rect.on('mouseenter', () => {
           svg.append('text')
-            .attr('x', PADDING_X + block.height*BLOCK_SIZE + 10)
+            .attr('x', PADDING_X + this.blocks[0].maxHeight*BLOCK_SIZE + 10)
             .attr('y', PADDING_Y + block.index*BLOCK_SEPARATION + BLOCK_SIZE / 2 - 2)
             .attr('class', 'infoText')
             .attr('hash', misc.uint8ArrayToHex(block.hash))
             .html('Block index: ' + block.index)
           svg.append('text')
-            .attr('x', PADDING_X + block.height*BLOCK_SIZE + 10)
+            .attr('x', PADDING_X + this.blocks[0].maxHeight*BLOCK_SIZE + 10)
             .attr('y', PADDING_Y + block.index*BLOCK_SEPARATION + BLOCK_SIZE + 2)
             .attr('class', 'infoText')
             .attr('hash', misc.uint8ArrayToHex(block.hash))
@@ -77,6 +78,7 @@ export default {
         rect.on('mouseleave', () => {
           d3.selectAll('.infoText').remove()
         })
+
 
         // backward links display
         block.backlinks.forEach(backlink => {

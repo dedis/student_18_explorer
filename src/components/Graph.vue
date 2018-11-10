@@ -1,5 +1,6 @@
 <template lang="html">
 <v-container>
+  <v-btn @click="fetchAll">Load all blocks</v-btn>
   <v-card :height="PADDING_Y * blocks.length" width="1250px">
     <svg :height="PADDING_Y * blocks.length " width="1250px" />
     <defs>
@@ -36,6 +37,12 @@ export default {
     }
   },
 
+  methods: {
+    fetchAll: function() {
+      this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
+    }
+  },
+  
   mounted: function () {
     const svg = d3.selectAll('svg')
     this.blocks.forEach((block, i) => {

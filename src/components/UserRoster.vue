@@ -31,7 +31,7 @@ export default {
     roster: ''
   }),
   methods: {
-    connect: function() {
+    connect: function () {
       this.dialog = false
       this.connectToCothority(this.roster)
     }

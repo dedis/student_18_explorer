@@ -12,7 +12,7 @@ export default {
     return {
       blocks: [],
       getBlockByIndex: i => {
-        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: i })
+        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: i })
           .then(skipblock => {
             this.blocks.splice(i, 1, { ...skipblock, loaded: true })
           })
@@ -29,13 +29,12 @@ export default {
           /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
           const blocks = data.update.map(b => ({ ...b, loaded: true }))
           console.log(blocks)
-          const allBlocks = new Array(blocks[blocks.length - 1].index+1).fill({}).map((_, i) => {
+          const allBlocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
             const b = blocks.find(block => block.index === i)
             return b || { loaded: false, index: i, height: 1 }
           })
           this.blocks = allBlocks
-        }).catch((err) => {
-		  console.log(err)
+        }).catch(() => {
         })
     }
     getUpdateChain()

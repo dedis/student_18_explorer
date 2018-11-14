@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import { misc, byzcoin } from '@dedis/cothority'
+  import { misc } from '@dedis/cothority'
   import dump from 'buffer-hexdump'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
@@ -109,10 +109,10 @@
     },
     computed: {
       block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
-      /*byzcoin: function () {
+      /* byzcoin: function () {
         //second argument gives us Skipchain's ID, easier this way so we don't need to import chosenSkipchain
         console.log(byzcoin.ByzCoinRPC.fromKnownConfiguration(this.socket, this.blocks[0].hash))
-      }*/
+      } */
     },
     methods: {
       toUUID: function (hex) {

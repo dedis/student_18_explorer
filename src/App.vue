@@ -60,7 +60,8 @@
     </v-navigation-drawer>
 
     <v-footer :fixed="fixed" app>
-      <span>&copy; DEDIS 2018 - Student Project</span>
+      <span style="padding-left: 1rem">&copy; DEDIS 2018 - Student Project</span>
+      <span style="padding-left: 1rem">v.{{version}}</span>
     </v-footer>
   </v-app>
 </template>
@@ -70,11 +71,13 @@ import identity, { net, misc } from '@dedis/cothority'
 import Explorer from './Explorer'
 import UserRoster from './components/UserRoster'
 import defaultRoster from './default-roster'
+import { version } from '../package.json'
 export default {
   name: 'App',
   components: { 'Explorer': Explorer, 'UserRoster': UserRoster },
   data () {
     return {
+      version,
       clipped: false,
       drawer: true,
       fixed: false,

@@ -1,5 +1,11 @@
 <template>
-  <p>0x{{link.from.slice(0, 16)}}... <v-icon>arrow_forward</v-icon><router-link :to="'/blocks/0x' + link.to"> 0x{{link.to}}</router-link></p>
+  <p>
+    0x{{link.from.slice(0, 16)}}...
+    <v-icon>arrow_forward</v-icon>
+    <router-link :to="'/blocks/0x' + link.to">
+      0x{{link.to}}
+    </router-link>
+  </p>
 </template>
 
 
@@ -14,8 +20,7 @@ export default {
     link: function () {
       const link = {
         from: misc.uint8ArrayToHex(this.forwardLink.from),
-        to: misc.uint8ArrayToHex(this.forwardLink.to),
-        signature: misc.uint8ArrayToHex(this.forwardLink.signature.msg)
+        to: misc.uint8ArrayToHex(this.forwardLink.to)
       }
       return link
     }

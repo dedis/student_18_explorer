@@ -42,7 +42,7 @@ export default {
       this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
     }
   },
-  
+
   mounted: function () {
     const svg = d3.selectAll('svg')
     this.blocks.forEach((block, i) => {
@@ -75,15 +75,14 @@ export default {
             .attr('class', 'infoText')
             .attr('hash', misc.uint8ArrayToHex(block.hash))
             .html('Block index: ' + block.index)
-          svg.append('text')
-            .attr('x', PADDING_X + this.blocks[0].maxHeight*BLOCK_SIZE + 10)
-            .attr('y', PADDING_Y + block.index*BLOCK_SEPARATION + BLOCK_SIZE + 2)
-            .attr('class', 'infoText')
-            .attr('hash', misc.uint8ArrayToHex(block.hash))
-            .html('Block hash: 0x' + misc.uint8ArrayToHex(block.hash))
+
         })
         rect.on('mouseleave', () => {
           d3.selectAll('.infoText').remove()
+        })
+
+        rect.on('dblclick', r => {
+          this.$router.push(`/blocks/0x${misc.uint8ArrayToHex(block.hash)}`)
         })
 
 

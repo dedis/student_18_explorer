@@ -1,5 +1,5 @@
 <template>
-  <p>0x{{link.from.slice(0, 16)}}... <v-icon>arrow_forward</v-icon><router-link :to="'/blocks/0x' + link.to"> 0x{{link.to.slice(0, 16)}}...</router-link></p>
+  <p>0x{{link.from.slice(0, 16)}}... <v-icon>arrow_forward</v-icon><router-link :to="'/blocks/0x' + link.to"> 0x{{link.to}}</router-link></p>
 </template>
 
 

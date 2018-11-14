@@ -1,10 +1,10 @@
 <template>
   <!-- Special Roster case as it has many arguments -->
   <span>
-    <p>Roster ID: {{id}}</p>
+    <p>Roster ID: <code>{{ toUUID(id) }}</code></p>
     <ul>
       <li v-for="ros in rost.list" :key="ros.id">
-        Conode {{ros.id}} @ {{ros.address}} ~ {{ros.description}}
+        Conode <code>{{ toUUID(ros.id) }}</code> @ {{ros.address}} ~ {{ros.description}}
       </li>
     </ul>
   </span>
@@ -13,7 +13,7 @@
 <script>
 import { misc } from '@dedis/cothority'
 export default {
-  props: ['roster'],
+  props: ['roster', 'toUUID'],
   computed: {
     id: function () {
       return misc.uint8ArrayToHex(this.roster.id)

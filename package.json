@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "prelint": "standard --plugin html '**/*.{js,vue}'",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@dedis/cothority": "^1.1.20",

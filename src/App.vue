@@ -1,7 +1,8 @@
 <template>
   <v-app>
     <v-toolbar
-      app
+    app
+    extended
       :clipped-left="clipped"
     >
       <router-link to="/" class="title-link">
@@ -10,9 +11,6 @@
 
       <v-spacer></v-spacer>
 
-      <router-link to="/blocks" class="title-link">
-        <v-btn flat>Explorer</v-btn>
-      </router-link>
       <router-link to="/graph" class="title-link">
         <v-btn flat>Graph</v-btn>
       </router-link>
@@ -20,7 +18,7 @@
       <v-spacer></v-spacer>
 
       <!--header -->
-      <v-menu :nudge-width="100">
+      <v-menu :nudge-width="100" slot="extension">
         <v-toolbar-title slot="activator">
           <span>Current Skipchain: 0x{{chosenSkipchain.slice(0, 16)}}...</span>
           <v-icon>arrow_drop_down</v-icon>

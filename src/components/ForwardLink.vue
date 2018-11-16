@@ -8,10 +8,6 @@
   </p>
 </template>
 
-
-
-
-
 <script>
 import { misc } from '@dedis/cothority'
 export default {

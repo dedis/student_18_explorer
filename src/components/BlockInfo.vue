@@ -74,8 +74,9 @@
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
+
   export default {
-    props: ['blocks', 'socket'],
+    props: ['blocks'],
     components: {
       'BlockLink': BlockLink,
       'ForwardLink': ForwardLink,
@@ -109,10 +110,6 @@
     },
     computed: {
       block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
-      /* byzcoin: function () {
-        //second argument gives us Skipchain's ID, easier this way so we don't need to import chosenSkipchain
-        console.log(byzcoin.ByzCoinRPC.fromKnownConfiguration(this.socket, this.blocks[0].hash))
-      } */
     },
     methods: {
       toUUID: function (hex) {

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 const assert = require('assert')
-const Vue = require('vue').default
+const Vue = require('./Vue')
 const BlockLink = require('../../src/components/BlockLink.vue').default
 
 const hash = '0x09a980e059038cd959364252a17ed3de4fb05f58e025b0dda6460febef3c4d1f'

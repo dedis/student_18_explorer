@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import { misc } from '@dedis/cothority'
 const assert = require('assert')
-const Vue = require('vue').default
+const Vue = require('./Vue')
 const BlockInfo = require('../../src/components/BlockInfo.vue').default
 const blocks = require('./blocks.js')
 

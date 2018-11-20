@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 const assert = require('assert')
-const Vue = require('vue').default
+const Vue = require('./Vue')
 const ForwardLink = require('../../src/components/ForwardLink.vue').default
 
 const from = new Uint8Array(Object.values({ '0': 21, '1': 64, '2': 82, '3': 49, '4': 183, '5': 11, '6': 23, '7': 248, '8': 49, '9': 192, '10': 148, '11': 56, '12': 31, '13': 140, '14': 185, '15': 94, '16': 164, '17': 46, '18': 94, '19': 50, '20': 127, '21': 123, '22': 196, '23': 247, '24': 164, '25': 15, '26': 180, '27': 240, '28': 130, '29': 205, '30': 99, '31': 187 }))

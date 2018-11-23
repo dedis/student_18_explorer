@@ -1,8 +1,12 @@
 <template lang="html">
 <v-container>
   <v-btn @click="fetchAll">Load all blocks</v-btn>
-  <v-card :height="PADDING_Y * blocks.length" width="1250px">
-    <svg :height="PADDING_Y * blocks.length " width="1250px" />
+  <br>
+  <v-btn @click="fetchMost">Load higher traversal blocks</v-btn>
+  <br>
+  <v-btn @click="goBottom"> Go to latest Block</v-btn>
+  <v-card :height="60*(this.blocks.length+2)" width="1250px">
+    <svg :height="60*(this.blocks.length+2) " width="1250px" />
     <defs>
   <marker
     id="arrow"
@@ -17,6 +21,7 @@
   </marker>
 </defs>
 </v-card>
+<v-btn @click="goTop"> Go to Genesis Block</v-btn>
 </v-container>
 </template>
 
@@ -26,7 +31,7 @@ import { misc } from '@dedis/cothority'
 
 const BLOCK_SIZE = 20
 const BLOCK_SEPARATION = 60
-const PADDING_X = 500
+//const PADDING_X = 500
 const PADDING_Y = 100
 
 export default {
@@ -40,14 +45,27 @@ export default {
   methods: {
     fetchAll: function () {
       this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
+    },
+    fetchMost: function () {
+      this.blocks.filter(x => (!x.loaded & (x.index % this.blocks[0].maxHeight == 0))).forEach(({ index }) => this.getBlockByIndex(index))
+    },
+    goBottom: function() {
+      document.body.scrollTop = BLOCK_SEPARATION*(this.blocks.length); // For Safari
+      document.documentElement.scrollTop = BLOCK_SEPARATION*(this.blocks.length); // For Chrome, Firefox, IE and Opera
+    },
+    goTop: function() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
     }
+
   },
 
   mounted: function () {
     const svg = d3.selectAll('svg')
     this.blocks.forEach((block, i) => {
       const group = svg.append('g')
-      group.attr('transform', `translate(${PADDING_X}, ${block.index * BLOCK_SEPARATION + PADDING_Y})`)
+      group.attr('transform', `translate(${(Math.log2(this.blocks[0].maxHeight) + 1) * BLOCK_SIZE * 3}, ${block.index * BLOCK_SEPARATION + PADDING_Y})`)
       const rect = group.append('rect')
       rect.attr('width', BLOCK_SIZE * block.height)
         .attr('height', BLOCK_SIZE)
@@ -70,7 +88,7 @@ export default {
         // blocks hash and index display
         rect.on('mouseenter', () => {
           svg.append('text')
-            .attr('x', PADDING_X + this.blocks[0].maxHeight * BLOCK_SIZE + 10)
+            .attr('x', (Math.log2(this.blocks[0].maxHeight) + 1) * BLOCK_SIZE * 3 + this.blocks[0].maxHeight * BLOCK_SIZE + 10)
             .attr('y', PADDING_Y + block.index * BLOCK_SEPARATION + BLOCK_SIZE / 2 - 2)
             .attr('class', 'infoText')
             .attr('hash', misc.uint8ArrayToHex(block.hash))
@@ -142,9 +160,16 @@ export default {
             .attr('stroke-width', 2)
             .attr('stroke', 'blue')
         }
+        // display in another color all blocks that are on higher connection level (fetching them allows faster skipchain traversal)
+        // corresponds to all block that have more than one forward link
       } else {
+        if (block.index % this.blocks[0].maxHeight == 0){
+        rect.attr('fill', 'pink')
+        rect.on('click', () => this.getBlockByIndex(i))
+        }else{
         rect.attr('fill', 'grey')
         rect.on('click', () => this.getBlockByIndex(i))
+      }
       }
     })
   }

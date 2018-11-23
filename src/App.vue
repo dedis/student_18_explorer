@@ -20,7 +20,7 @@
       <!--header -->
       <v-menu :nudge-width="100" slot="extension">
         <v-toolbar-title slot="activator">
-          <span>Current Skipchain: 0x{{chosenSkipchain.slice(0, 16)}}...</span>
+          <span>Current Skipchain: 0x{{this.chosenSkipchain}}</span>
           <v-icon>arrow_drop_down</v-icon>
         </v-toolbar-title>
 
@@ -40,22 +40,6 @@
 
     <Explorer v-if="socket" :socket="socket" :chosenSkipchain="chosenSkipchain" :key="Math.random()"/>
 
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
 
     <v-footer :fixed="fixed" app>
       <span style="padding-left: 1rem">&copy; DEDIS 2018 - Student Project</span>
@@ -65,6 +49,7 @@
 </template>
 
 <script>
+import dump from 'buffer-hexdump'
 import identity, { net, misc } from '@dedis/cothority'
 import Explorer from './Explorer'
 import UserRoster from './components/UserRoster'
@@ -102,6 +87,7 @@ export default {
     chooseSkipchain: function (e) {
       // target.innerText is the parameter that displays the selected skipchain's hash
       this.chosenSkipchain = e.target.innerText
+
     },
 
     connectToCothority: function (roster) {

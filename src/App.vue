@@ -20,7 +20,7 @@
       <!--header -->
       <v-menu :nudge-width="100" slot="extension">
         <v-toolbar-title slot="activator">
-          <span>Current Skipchain: 0x{{this.chosenSkipchain}}</span>
+          <span>Current Skipchain: 0x{{this.chosenSkipchain.slice(0,16)}}...</span>
           <v-icon>arrow_drop_down</v-icon>
         </v-toolbar-title>
 
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import dump from 'buffer-hexdump'
 import identity, { net, misc } from '@dedis/cothority'
 import Explorer from './Explorer'
 import UserRoster from './components/UserRoster'
@@ -87,7 +86,6 @@ export default {
     chooseSkipchain: function (e) {
       // target.innerText is the parameter that displays the selected skipchain's hash
       this.chosenSkipchain = e.target.innerText
-
     },
 
     connectToCothority: function (roster) {

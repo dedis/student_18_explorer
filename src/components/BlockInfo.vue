@@ -6,7 +6,7 @@
       :readonly="readonly"
       expand
     >
-      <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
+      <h3>Block {{$route.params.hash}}...</h3>
 
       <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
         <template slot="header">

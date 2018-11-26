@@ -1,9 +1,10 @@
 <template lang="html">
 <v-container>
-  <v-btn @click="fetchAll">Load all blocks</v-btn>
-  <br>
-  <v-btn @click="fetchMost">Load higher traversal blocks</v-btn>
-  <br>
+  <v-btn
+  @click="fetchAll" color="#922B21">Load all blocks </v-btn>
+  <!--  <img src="./../assets/fetchAll.png" width="200" height="40"> -->
+  <v-btn @click="fetchMost" color="#F5B7B1">Load higher traversal blocks </v-btn>
+  <!-- <img src="./../assets/fetchMost.png" width="200" height="40"> -->
   <v-btn @click="goBottom"> Go to latest Block</v-btn>
   <v-card :height="60*(this.blocks.length+2)" width="1250px">
     <svg :height="60*(this.blocks.length+2) " width="1250px" />
@@ -31,15 +32,14 @@ import { misc } from '@dedis/cothority'
 
 const BLOCK_SIZE = 20
 const BLOCK_SEPARATION = 60
-//const PADDING_X = 500
+// const PADDING_X = 500
 const PADDING_Y = 100
 
 export default {
   props: ['blocks', 'getBlockByIndex'],
   data: function () {
     return {
-      PADDING_Y
-    }
+      PADDING_Y    }
   },
 
   methods: {
@@ -47,16 +47,15 @@ export default {
       this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
     },
     fetchMost: function () {
-      this.blocks.filter(x => (!x.loaded & (x.index % this.blocks[0].maxHeight == 0))).forEach(({ index }) => this.getBlockByIndex(index))
+      this.blocks.filter(x => (!x.loaded & (x.index % this.blocks[0].baseHeight === 0))).forEach(({ index }) => this.getBlockByIndex(index))
     },
-    goBottom: function() {
-      document.body.scrollTop = BLOCK_SEPARATION*(this.blocks.length); // For Safari
-      document.documentElement.scrollTop = BLOCK_SEPARATION*(this.blocks.length); // For Chrome, Firefox, IE and Opera
+    goBottom: function () {
+      document.body.scrollTop = BLOCK_SEPARATION * (this.blocks.length) // For Safari
+      document.documentElement.scrollTop = BLOCK_SEPARATION * (this.blocks.length) // For Chrome, Firefox, IE and Opera
     },
-    goTop: function() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-
+    goTop: function () {
+      document.body.scrollTop = 0 // For Safari
+      document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
     }
 
   },
@@ -163,13 +162,13 @@ export default {
         // display in another color all blocks that are on higher connection level (fetching them allows faster skipchain traversal)
         // corresponds to all block that have more than one forward link
       } else {
-        if (block.index % this.blocks[0].maxHeight == 0){
-        rect.attr('fill', 'pink')
-        rect.on('click', () => this.getBlockByIndex(i))
-        }else{
-        rect.attr('fill', 'grey')
-        rect.on('click', () => this.getBlockByIndex(i))
-      }
+        if (block.index % this.blocks[0].baseHeight === 0) {
+          rect.attr('fill', '#F5B7B1')
+          rect.on('click', () => this.getBlockByIndex(i))
+        } else {
+          rect.attr('fill', 'grey')
+          rect.on('click', () => this.getBlockByIndex(i))
+        }
       }
     })
   }

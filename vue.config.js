@@ -1,3 +1,8 @@
 module.exports = {
-  'baseUrl': '.'
+  'baseUrl': '.',
+  configureWebpack: {
+    module: {
+      exprContextCritical: false
+    }
+  }
 }

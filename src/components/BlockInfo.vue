@@ -19,11 +19,7 @@
               <p v-if="field.display === 'hash'">
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
-              <p v-else-if="field.display === 'hex'">
-                <code>{{dump(block[field.name])}}</code>
-                <br><br>
-               <!-- <code>{{byzcoin}}</code> -->
-              </p>
+              <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
               <p v-else>{{block[field.name]}}</p>
             </v-flex>
           </v-layout>
@@ -57,7 +53,7 @@
               <Roster :toUUID="toUUID" :roster="block[field.name]"/>
             </span>
             <span v-else>
-              {{block[field.name]}}
+              {{dump(block[field.name])}}
             </span>
           </v-card-text>
         </v-card>

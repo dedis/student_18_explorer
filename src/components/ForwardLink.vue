@@ -11,7 +11,6 @@
 <script>
 import { misc } from '@dedis/cothority'
 
-
 export default {
   props: ['forwardLink'],
   computed: {

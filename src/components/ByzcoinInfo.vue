@@ -1,9 +1,8 @@
 <template>
- <h1>{{ WAZAA }}</h1>
+ <h1>WAZAA</h1>
 </template>
 <script>
 import { byzcoin } from '@dedis/cothority'
-const { ByzCoinRPC } = byzcoin
 export default {
   props: ['socket', 'blocks'],
   data: function () {
@@ -11,8 +10,17 @@ export default {
       rpc: {}
     }
   },
-  mounted: async function() {
-    this.rpc = await ByzCoinRPC.fromKnownConfiguration(this.socket, this.blocks[0].hash)
+  mounted: function () {
+    new Promise((resolve, reject) => {
+      try {
+        resolve(byzcoin.ByzCoinRPC.fromKnownConfiguration(this.socket, this.blocks[0].hash))
+      } catch (e) {
+        reject(e)
+      }
+    }).then(function (rpc) {
+      this.rpc = rpc
+      console.log(rpc)
+    }.bind(this))
   }
 }
 </script>

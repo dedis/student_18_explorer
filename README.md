@@ -1,6 +1,8 @@
 # student_18_explorer
 A Skipchain explorer
 
+![build](https://img.shields.io/travis/dedis/student_18_explorer.svg)
+
 ## Project setup
 ```
 yarn install

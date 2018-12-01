@@ -1,13 +1,13 @@
 <template lang="html">
   <v-content>
-    <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex" :socket="socket"></router-view>
+    <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex" :socket="socket" :bzSocket="bzSocket"></router-view>
   </v-content>
 </template>
 
 <script>
 import { misc } from '@dedis/cothority'
 export default {
-  props: ['socket', 'chosenSkipchain'],
+  props: ['socket', 'chosenSkipchain', 'bzSocket'],
   data: function () {
     return {
       blocks: [],

@@ -19,6 +19,7 @@
               <p v-if="field.display === 'hash'">
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
+              <p v-else-if="field.name === 'payload' && isByzcoin"><ByzcoinInfo :socket="bzSocket" :blocks="blocks" /></p>
               <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
               <p v-else>{{block[field.name]}}</p>
             </v-flex>
@@ -52,9 +53,6 @@
             <span v-else-if="field.display === 'roster' && block[field.name]">
               <Roster :toUUID="toUUID" :roster="block[field.name]"/>
             </span>
-            <span v-else>
-              {{dump(block[field.name])}}
-            </span>
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
@@ -70,13 +68,15 @@
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
+  import ByzcoinInfo from './ByzcoinInfo'
 
   export default {
-    props: ['blocks'],
+    props: ['blocks', 'socket', 'bzSocket'],
     components: {
       'BlockLink': BlockLink,
       'ForwardLink': ForwardLink,
-      'Roster': Roster
+      'Roster': Roster,
+      'ByzcoinInfo': ByzcoinInfo
     },
     data: function () {
       return {
@@ -88,7 +88,7 @@
           { name: 'maxHeight', show: 'Max height', display: 'number', display_first: true },
           { name: 'baseHeight', show: 'Base height', display: 'number', display_first: true },
           { name: 'hash', show: 'Hash', display: 'hash', display_first: true },
-          { name: 'payload', show: 'Payload', display: '' },
+          { name: 'payload', show: 'Payload', display: 'hex', display_first: true },
           { name: 'parent', show: 'Parent', display: 'hash', display_first: true },
           { name: 'genesis', show: 'Genesis block', display: 'hash', display_first: true },
           { name: 'data', show: 'Data', display: 'hex', display_first: true },
@@ -105,7 +105,8 @@
       }
     },
     computed: {
-      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
+      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
+      isByzcoin: function () { return true } // TO BE REPLACED WITH BYZCOIN CHECKER
     },
     methods: {
       toUUID: function (hex) {
@@ -125,5 +126,8 @@
 <style>
 .v-expansion-panel__container--disabled {
   color: black !important;
+}
+code::before {
+  content: '';
 }
 </style>

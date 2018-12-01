@@ -1,7 +1,7 @@
 # student_18_explorer
 A Skipchain explorer
 
-![build](https://img.shields.io/travis/dedis/student_18_explorer.svg)
+[![build](https://img.shields.io/travis/dedis/student_18_explorer.svg)](https://travis-ci.org/dedis/student_18_explorer)
 
 ## Project setup
 ```

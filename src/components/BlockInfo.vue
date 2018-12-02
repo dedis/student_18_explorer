@@ -6,7 +6,7 @@
       :readonly="readonly"
       expand
     >
-      <h3>Block {{$route.params.hash}}...</h3>
+      <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
 
       <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
         <template slot="header">
@@ -19,7 +19,11 @@
               <p v-if="field.display === 'hash'">
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
-              <p v-else-if="field.name === 'payload' && isByzcoin"><ByzcoinInfo :socket="bzSocket" :blocks="blocks" /></p>
+              <p v-else-if="field.name === 'payload' && isByzcoin">
+                <ByzcoinInfo :bzsocket="bzSocket" :blocks="blocks" />
+                <br>
+                {{dump(block.payload)}}
+              </p>
               <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
               <p v-else>{{block[field.name]}}</p>
             </v-flex>
@@ -37,7 +41,7 @@
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
               <p v-for="hash in block[field.name]" :key="JSON.stringify(hash)">
-                <BlockLink :hash="misc.uint8ArrayToHex(hash)"/>
+                <BlockLink :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)"/>
               </p>
             </span>
             <span v-else-if="field.display === 'uuid' && block[field.name]">

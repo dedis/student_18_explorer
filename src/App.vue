@@ -38,7 +38,7 @@
     </v-toolbar>
 
 
-    <Explorer v-if="socket" :socket="socket" :bzSocket="bzSocket" :chosenSkipchain="chosenSkipchain" :key="Math.random()"/>
+    <Explorer v-if="socket" :socket="socket" :chosenSkipchain="chosenSkipchain" :key="Math.random()"/>
 
 
     <v-footer :fixed="fixed" app>
@@ -91,7 +91,6 @@ export default {
     connectToCothority: function (roster) {
       console.log(roster)
       const socket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'Skipchain')
-      const bzSocket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'ByzCoin')
       /* get all skipchains IDs and map each of them to its hexadecimal form
          we define the first skipchain from the list as the one to be displayed, and the user can switch */
       socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
@@ -101,7 +100,6 @@ export default {
         }).catch(() => {
         })
       this.socket = socket
-      this.bzSocket = bzSocket
     }
   }
 }

@@ -20,9 +20,7 @@
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
               <p v-else-if="field.name === 'payload' && isByzcoin">
-                <ByzcoinInfo :bzsocket="bzSocket" :blocks="blocks" />
-                <br>
-                {{dump(block.payload)}}
+                <ByzcoinInfo :block="block" />
               </p>
               <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
               <p v-else>{{block[field.name]}}</p>
@@ -69,13 +67,14 @@
 <script>
   import { misc } from '@dedis/cothority'
   import dump from 'buffer-hexdump'
+  import { toUUID } from '../utils'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
   import ByzcoinInfo from './ByzcoinInfo'
 
   export default {
-    props: ['blocks', 'socket', 'bzSocket'],
+    props: ['blocks', 'socket'],
     components: {
       'BlockLink': BlockLink,
       'ForwardLink': ForwardLink,
@@ -113,17 +112,7 @@
       isByzcoin: function () { return true } // TO BE REPLACED WITH BYZCOIN CHECKER
     },
     methods: {
-      toUUID: function (hex) {
-        return hex.slice(0, 8).concat('-').concat(
-          hex.slice(8, 12)
-        ).concat('-').concat(
-          hex.slice(12, 16)
-        ).concat('-').concat(
-          hex.slice(16, 20)
-        ).concat('-').concat(
-          hex.slice(20, 32)
-        )
-      }
+      toUUID
     }
   }
 </script>

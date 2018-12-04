@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "prelint": "standard --plugin html '**/*.{js,vue}'",
     "lint": "vue-cli-service lint",
+    "pretest": "standard --plugin html '**/*.{js,vue}'",
     "test": "vue-cli-service test:unit",
     "coverage": "nyc vue-cli-service test:unit"
   },
@@ -15,6 +16,7 @@
     "buffer-hexdump": "^1.0.0",
     "bufferutil": "^4.0.0",
     "d3": "^5.7.0",
+    "travis": "^0.1.1",
     "utf-8-validate": "^5.0.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",

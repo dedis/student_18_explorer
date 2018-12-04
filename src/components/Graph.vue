@@ -1,11 +1,14 @@
 <template lang="html">
 <v-container>
+  <v-btn @click="goBottom">
+  <v-icon>arrow_downward</v-icon>
+   Go to latest Block</v-btn>
+
   <v-btn
   @click="fetchAll" color="#922B21">Load all blocks </v-btn>
   <!--  <img src="./../assets/fetchAll.png" width="200" height="40"> -->
   <v-btn @click="fetchMost" color="#F5B7B1">Load higher traversal blocks </v-btn>
   <!-- <img src="./../assets/fetchMost.png" width="200" height="40"> -->
-  <v-btn @click="goBottom"> Go to latest Block</v-btn>
   <v-card :height="60*(this.blocks.length+2)" width="1250px">
     <svg :height="60*(this.blocks.length+2) " width="1250px" />
     <defs>
@@ -22,7 +25,10 @@
   </marker>
 </defs>
 </v-card>
-<v-btn @click="goTop"> Go to Genesis Block</v-btn>
+<v-btn @click="goTop">
+  <v-icon>arrow_upward</v-icon>
+   Go to Genesis Block
+ </v-btn>
 </v-container>
 </template>
 
@@ -39,7 +45,7 @@ export default {
   props: ['blocks', 'getBlockByIndex'],
   data: function () {
     return {
-      PADDING_Y    }
+      PADDING_Y }
   },
 
   methods: {
@@ -56,6 +62,11 @@ export default {
     goTop: function () {
       document.body.scrollTop = 0 // For Safari
       document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
+    },
+
+    goTo: function (there) {
+      document.body.scrollTop = there // For Safari
+      document.documentElement.scrollTop = there // For Chrome, Firefox, IE and Opera
     }
 
   },
@@ -140,6 +151,7 @@ export default {
               .attr('stroke-width', 2)
               .attr('fill', 'none')
               .attr('stroke', 'blue')
+            // .on('click', this.goTop()) APPLY THIS BUT ON THE POLYLONE NOT THE GROUP
             // blue arrow
             const [x4, y4] = [-BLOCK_SIZE / 2 - BLOCK_SIZE / 2, indexDiff * BLOCK_SEPARATION + BLOCK_SIZE / 2 - BLOCK_SIZE / 2]
             const [x5, y5] = [-BLOCK_SIZE / 3, indexDiff * BLOCK_SEPARATION + BLOCK_SIZE / 2 - BLOCK_SIZE / 3] // point

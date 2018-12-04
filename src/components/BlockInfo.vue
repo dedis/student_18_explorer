@@ -6,7 +6,7 @@
       :readonly="readonly"
       expand
     >
-      <h3>Block {{$route.params.hash}}...</h3>
+      <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
 
       <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
         <template slot="header">
@@ -19,11 +19,13 @@
               <p v-if="field.display === 'hash'">
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
-              <p v-else-if="field.display === 'hex'">
-                <code>{{dump(block[field.name])}}</code>
-                <br><br>
-               <!-- <code>{{byzcoin}}</code> -->
+              <p v-else-if="field.name === 'payload'">
+                <v-container>
+                  <p v-if="isByzcoin"><ByzcoinInfo :block="block" /></p>
+                  <h2 v-else> Not a Byzcoin block so no payload</h2>
+              </v-container>
               </p>
+              <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
               <p v-else>{{block[field.name]}}</p>
             </v-flex>
           </v-layout>
@@ -40,7 +42,7 @@
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
               <p v-for="hash in block[field.name]" :key="JSON.stringify(hash)">
-                <BlockLink :hash="misc.uint8ArrayToHex(hash)"/>
+                <BlockLink :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)"/>
               </p>
             </span>
             <span v-else-if="field.display === 'uuid' && block[field.name]">
@@ -56,9 +58,6 @@
             <span v-else-if="field.display === 'roster' && block[field.name]">
               <Roster :toUUID="toUUID" :roster="block[field.name]"/>
             </span>
-            <span v-else>
-              {{block[field.name]}}
-            </span>
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
@@ -71,16 +70,19 @@
 <script>
   import { misc } from '@dedis/cothority'
   import dump from 'buffer-hexdump'
+  import { toUUID } from '../utils'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
+  import ByzcoinInfo from './ByzcoinInfo'
 
   export default {
-    props: ['blocks'],
+    props: ['blocks', 'socket'],
     components: {
       'BlockLink': BlockLink,
       'ForwardLink': ForwardLink,
-      'Roster': Roster
+      'Roster': Roster,
+      'ByzcoinInfo': ByzcoinInfo
     },
     data: function () {
       return {
@@ -92,7 +94,7 @@
           { name: 'maxHeight', show: 'Max height', display: 'number', display_first: true },
           { name: 'baseHeight', show: 'Base height', display: 'number', display_first: true },
           { name: 'hash', show: 'Hash', display: 'hash', display_first: true },
-          { name: 'payload', show: 'Payload', display: '' },
+          { name: 'payload', show: 'Payload', display: 'hex', display_first: true },
           { name: 'parent', show: 'Parent', display: 'hash', display_first: true },
           { name: 'genesis', show: 'Genesis block', display: 'hash', display_first: true },
           { name: 'data', show: 'Data', display: 'hex', display_first: true },
@@ -109,25 +111,23 @@
       }
     },
     computed: {
-      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} }
+      //finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
+      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
+      isByzcoin: function () {
+        return this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === "14b74055-89f3-5031-aa63-a2839dbfdbdd")//block.verifiers.
+
+       }
     },
     methods: {
-      toUUID: function (hex) {
-        return hex.slice(0, 8).concat('-').concat(
-          hex.slice(8, 12)
-        ).concat('-').concat(
-          hex.slice(12, 16)
-        ).concat('-').concat(
-          hex.slice(16, 20)
-        ).concat('-').concat(
-          hex.slice(20, 32)
-        )
-      }
+      toUUID
     }
   }
 </script>
 <style>
 .v-expansion-panel__container--disabled {
   color: black !important;
+}
+code::before {
+  content: '';
 }
 </style>

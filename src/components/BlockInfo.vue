@@ -19,8 +19,11 @@
               <p v-if="field.display === 'hash'">
                 0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
               </p>
-              <p v-else-if="field.name === 'payload' && isByzcoin">
-                <ByzcoinInfo :block="block" />
+              <p v-else-if="field.name === 'payload'">
+                <v-container>
+                  <p v-if="isByzcoin"><ByzcoinInfo :block="block" /></p>
+                  <h2 v-else> Not a Byzcoin block so no payload</h2>
+              </v-container>
               </p>
               <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
               <p v-else>{{block[field.name]}}</p>
@@ -108,8 +111,12 @@
       }
     },
     computed: {
+      //finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
       block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
-      isByzcoin: function () { return true } // TO BE REPLACED WITH BYZCOIN CHECKER
+      isByzcoin: function () {
+        return this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === "14b74055-89f3-5031-aa63-a2839dbfdbdd")//block.verifiers.
+
+       }
     },
     methods: {
       toUUID

@@ -28,6 +28,7 @@ export default {
         .then((data) => {
           /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
           const blocks = data.update.map(b => ({ ...b, loaded: true }))
+          console.log(blocks)
           const allBlocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
             const b = blocks.find(block => block.index === i)
             return b || { loaded: false, index: i, height: 1 }

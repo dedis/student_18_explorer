@@ -6,7 +6,7 @@
       :readonly="readonly"
       expand
     >
-      <h3>Block {{$route.params.hash.slice(0, 16)}}...</h3>
+      <h3 color="yellow">Block {{$route.params.hash.slice(0, 16)}}...</h3>
 
       <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
         <template slot="header">
@@ -22,10 +22,21 @@
               <p v-else-if="field.name === 'payload'">
                 <v-container>
                   <p v-if="isByzcoin"><ByzcoinInfo :block="block" /></p>
-                  <h2 v-else> Not a Byzcoin block so no payload</h2>
+                  <h2 v-else> This is not a Byzcoin block</h2>
               </v-container>
               </p>
-              <code v-else-if="field.display === 'hex'">{{dump(block[field.name])}}</code>
+              <p v-else-if="field.display === 'hex'">
+                <v-container>
+                  <p v-if="isByzcoin">
+                    {{dump(block[field.name])}}
+                  </p>
+                  <p v-else>
+                    <code> {{String(dump(block[field.name])).substr(51)}}</code>
+                  </p>
+                </v-container>
+
+
+              </p>
               <p v-else>{{block[field.name]}}</p>
             </v-flex>
           </v-layout>
@@ -70,7 +81,7 @@
 <script>
   import { misc } from '@dedis/cothority'
   import dump from 'buffer-hexdump'
-  import { toUUID } from '../utils'
+  import { toUUID } from '../utils'
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
@@ -111,12 +122,11 @@
       }
     },
     computed: {
-      //finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
+      // finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
       block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
       isByzcoin: function () {
-        return this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === "14b74055-89f3-5031-aa63-a2839dbfdbdd")//block.verifiers.
-
-       }
+        return this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
+      }
     },
     methods: {
       toUUID

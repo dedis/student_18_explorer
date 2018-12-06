@@ -19,6 +19,7 @@
     "travis": "^0.1.1",
     "utf-8-validate": "^5.0.1",
     "vue": "^2.5.17",
+    "vue-carousel-3d": "^0.1.23",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.19"
   },

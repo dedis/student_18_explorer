@@ -1,5 +1,11 @@
 <template>
 <v-layout row>
+  <!-- when we don't have any payload (genesis block for instance)-->
+  <div v-if="body[0] === undefined">
+    No payload to display
+  </div>
+  
+  <div v-else>
   <v-carousel
     delimiter-icon="stop">
   <v-carousel-item xs12
@@ -32,9 +38,16 @@
             @click=""
             >
 
-
-              <v-card-text>
-                Name: {{ arg.name }} - Value: {{ arg.value }}
+              <v-card-text v-if="instruction.invoke.command === 'event'">
+                Name: {{ arg.name }}
+                <br>
+                Value: This block was automatically created during the SkipChain's instantiation.
+                <br>
+              </v-card-text>
+              <v-card-text v-else>
+                Name: {{ arg.name }}
+                <br>
+                Value: {{ arg.value }}
                 <br>
               </v-card-text>
             </v-list-tile>
@@ -45,6 +58,8 @@
   </v-navigation-drawer>
 </v-carousel-item>
 </v-carousel>
+</div>
+
 </v-layout>
 
 </template>
@@ -67,6 +82,8 @@ export default {
 
     const bodyLookup = protobuf.root.lookup('DataBody')
     const body = bodyLookup.decode(this.block.payload)
+
+    console.log(body)
 
     this.header = {
       clienttransactionhash: misc.uint8ArrayToHex(header.clienttransactionhash),

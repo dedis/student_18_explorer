@@ -6,7 +6,7 @@
       :readonly="readonly"
       expand
     >
-      <h3 color="yellow">Block {{$route.params.hash.slice(0, 16)}}...</h3>
+      <h3 color="yellow">Block {{$route.params.hash.slice(0, 16)}}</h3>
 
       <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
         <template slot="header">
@@ -17,7 +17,7 @@
             </v-flex>
             <v-flex xs8>
               <p v-if="field.display === 'hash'">
-                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 16)}}...
+                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name])}}...
               </p>
               <p v-else-if="field.name === 'payload'">
                 <v-container>

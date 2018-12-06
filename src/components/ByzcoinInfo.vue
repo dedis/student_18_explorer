@@ -31,9 +31,6 @@
             :key="arg.value"
             @click=""
             >
-            <v-list-tile-content>
-              <v-list-tile-title>{{ arg.value }}</v-list-tile-title>
-            </v-list-tile-content>
 
 
               <v-card-text>

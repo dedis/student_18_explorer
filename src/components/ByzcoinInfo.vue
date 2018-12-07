@@ -1,25 +1,21 @@
 <template>
 <v-layout row>
+
   <!-- when we don't have any payload (genesis block for instance)-->
-  <div v-if="body[0] === undefined">
-    No payload to display
-  </div>
-  
-  <div v-else>
-  <v-carousel
-    delimiter-icon="stop">
-  <v-carousel-item xs12
-    v-for="(tx, txi) in body"
-    >
-      <v-toolbar color="teal">
-
-        <v-toolbar-title primary-title> Transaction {{ txi }} </v-toolbar-title>
-
-        <v-spacer></v-spacer>
-
-      </v-toolbar>
-
-
+  <v-container v-if="noPayload">
+    <v-alert
+      :value="true"
+      type="warning"
+      >
+        No payload to display.
+    </v-alert>
+  </v-container>
+  <v-container v-else xs12>
+    <v-card
+      v-for="(tx, txi) in body"
+      :key="txi"
+      color="teal">
+      <v-card-title primary-title> Transaction {{ txi }} </v-card-title>
 <v-navigation-drawer width="100%">
         <v-list>
           <v-list-group
@@ -31,10 +27,10 @@
               <v-list-tile-title>Command: {{ instruction.invoke.command }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-
           <v-list-tile
+            v-if="instruction.invoke"
             v-for="arg in instruction.invoke.args"
-            :key="arg.value"
+            :key="arg.name"
             @click=""
             >
 
@@ -51,14 +47,12 @@
                 <br>
               </v-card-text>
             </v-list-tile>
-            </v-card>
 
     </v-list-group>
   </v-list>
   </v-navigation-drawer>
-</v-carousel-item>
-</v-carousel>
-</div>
+</v-card>
+</v-container>
 
 </v-layout>
 
@@ -73,6 +67,7 @@ export default {
       body: {},
       panel: [true, true, false],
       disabled: false,
+      noPayload: false,
       readonly: false
     }
   },
@@ -93,23 +88,44 @@ export default {
     }
 
     const decoder = new TextDecoder('utf-8')
+    console.log(body)
+    console.log(this.noPayload)
+    console.log('mama')
+
+    /*  if( (body.txresults.find(tx => tx === undefined)) ||
+        (body.txresults.find(tx => tx.clienttransaction.instructions.find(inst => inst.invoke === null))) ||
+        (body.find(tx => tx.clienttransaction.instructions.find(inst => inst.invoke.args.find(arg => arg === undefined))))) {
+      this.noPayload = true
+    }else{ */
+    if (!body.txresults[0].clienttransaction.instructions[0].invoke) {
+      this.noPayload = true
+      return
+    }
 
     this.body = body.txresults.map(tx => ({
       accepted: tx.accepted,
       instructions: tx.clienttransaction.instructions.map(instr => ({
         index: instr.index,
         signatures: instr.signatures.map(s => toUUID(misc.uint8ArrayToHex(s.signature))),
-        invoke: {
+        invoke: instr.invoke && {
           command: instr.invoke.command,
           args: instr.invoke.args.map(arg => ({
             name: arg.name,
-            value: decoder.decode(arg.value).slice(13)
+            value: arg.name === 'coins'
+              ? parseInt('0x' + misc.uint8ArrayToHex(arg.value))
+              : arg.name === 'destination' || arg.name === 'darc'
+                ? '0x' + misc.uint8ArrayToHex(arg.value).slice(0, 15) + '...'
+                : arg.name === 'event'
+                  ? arg.value.constructor === Uint8Array
+                    ? '0x' + misc.uint8ArrayToHex(arg.value)
+                    : decoder.decode(arg.value).slice(13)
+                  : arg.value
           }))
         }
       }))
     }))
-
-    console.log(this.body)
+    // }
+    console.log(this.noPayload)
   }
 }
 </script>

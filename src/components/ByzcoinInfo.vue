@@ -98,11 +98,6 @@ export default {
     const decoder = new TextDecoder('utf-8')
     console.log(body)
 
-    /*  if( (body.txresults.find(tx => tx === undefined)) ||
-        (body.txresults.find(tx => tx.clienttransaction.instructions.find(inst => inst.invoke === null))) ||
-        (body.find(tx => tx.clienttransaction.instructions.find(inst => inst.invoke.args.find(arg => arg === undefined))))) {
-      this.noPayload = true
-    }else{ */
     if (!body.txresults[0].clienttransaction.instructions[0].invoke) {
       this.noPayload = true
       return
@@ -140,5 +135,8 @@ export default {
   .nav-drawer {
     background-color: white;
 
+  }
+  .container {
+    padding: 0px
   }
 </style>

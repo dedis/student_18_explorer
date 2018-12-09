@@ -39,6 +39,7 @@
                 <br>
                 Value: This block was automatically created during the SkipChain's instantiation.
                 <br>
+                <br>
               </v-card-text>
               <v-card-text v-else>
                 Name: {{ arg.name }}
@@ -68,9 +69,16 @@ export default {
       panel: [true, true, false],
       disabled: false,
       noPayload: false,
-      readonly: false
+      readonly: false,
+      coins_stringified: '',
+      coins_display: 0
     }
   },
+  methods: {
+    expo: function(x, f) {
+      return Number.parseFloat(x).toExponential(f)
+    }
+},
   mounted: function () {
     const headerLookup = protobuf.root.lookup('DataHeader')
     const header = headerLookup.decode(this.block.data)
@@ -89,8 +97,6 @@ export default {
 
     const decoder = new TextDecoder('utf-8')
     console.log(body)
-    console.log(this.noPayload)
-    console.log('mama')
 
     /*  if( (body.txresults.find(tx => tx === undefined)) ||
         (body.txresults.find(tx => tx.clienttransaction.instructions.find(inst => inst.invoke === null))) ||
@@ -112,9 +118,9 @@ export default {
           args: instr.invoke.args.map(arg => ({
             name: arg.name,
             value: arg.name === 'coins'
-              ? parseInt('0x' + misc.uint8ArrayToHex(arg.value))
+              ? this.expo(parseInt('0x' + misc.uint8ArrayToHex(arg.value)), 2)
               : arg.name === 'destination' || arg.name === 'darc'
-                ? '0x' + misc.uint8ArrayToHex(arg.value).slice(0, 15) + '...'
+                ? '0x' + misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
                 : arg.name === 'event'
                   ? arg.value.constructor === Uint8Array
                     ? '0x' + misc.uint8ArrayToHex(arg.value)
@@ -124,8 +130,9 @@ export default {
         }
       }))
     }))
+    console.log(this.body)
+    console.log(this.coins_display)
     // }
-    console.log(this.noPayload)
   }
 }
 </script>

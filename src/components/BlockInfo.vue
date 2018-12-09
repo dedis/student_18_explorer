@@ -6,6 +6,7 @@
       :readonly="readonly"
       expand
     >
+
       <h3 color="yellow">Block {{$route.params.hash.slice(0, 16)}}...</h3>
 
       <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
@@ -22,7 +23,13 @@
               <p v-else-if="field.name === 'payload'">
                 <v-container>
                   <p v-if="isByzcoin"><ByzcoinInfo :block="block" /></p>
-                  <h2 v-else> This is not a Byzcoin block</h2>
+                  <h2 v-else>
+                    <v-alert
+                        :value="true"
+                        type="warning"
+                        >
+                          This is not a Byzcoin Block.
+                      </v-alert></h2>
               </v-container>
               </p>
               <p v-else-if="field.display === 'hex'">

@@ -26,6 +26,7 @@ export default {
     const getUpdateChain = () => {
       this.socket.send('GetUpdateChain', 'GetUpdateChainReply', { latestID: misc.hexToUint8Array(this.chosenSkipchain) })
         .then((data) => {
+          console.log(this.roughSize(data))
           /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
           const blocks = data.update.map(b => ({ ...b, loaded: true }))
           console.log(blocks)
@@ -49,6 +50,41 @@ export default {
         })
     }
     getNextBlockRecur(0) */
+  },
+  methods: {
+    roughSize: function( object ) {
+
+      var objectList = [];
+      var stack = [ object ];
+      var bytes = 0;
+
+      while ( stack.length ) {
+          var value = stack.pop();
+
+          if ( typeof value === 'boolean' ) {
+              bytes += 4;
+          }
+          else if ( typeof value === 'string' ) {
+              bytes += value.length * 2;
+          }
+          else if ( typeof value === 'number' ) {
+              bytes += 8;
+          }
+          else if
+          (
+              typeof value === 'object'
+              && objectList.indexOf( value ) === -1
+          )
+          {
+              objectList.push( value );
+
+              for( var i in value ) {
+                  stack.push( value[ i ] );
+              }
+          }
+      }
+      return bytes;
+    }
   }
 }
 </script>

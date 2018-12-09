@@ -2,6 +2,8 @@
   <v-container>
 
   <h1>Latest Blocks</h1>
+  <v-btn @click="fetchAll">Load all blocks</v-btn>
+
   <br>
   <v-data-table
     :headers="headers"
@@ -28,7 +30,7 @@
 <script>
   import { misc } from '@dedis/cothority'
   export default {
-    props: ['blocks'],
+    props: ['blocks', 'getBlockByIndex'],
     data () {
       return {
         headers: [
@@ -49,7 +51,11 @@
     methods: {
       goToBlock: function (hash) {
         this.$router.push(`/blocks/${hash}`) /* To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL. */
+      },
+      fetchAll: function () {
+        this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
       }
     }
+
   }
 </script>

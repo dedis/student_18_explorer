@@ -1,8 +1,48 @@
 <template>
   <v-container>
 
-  <h1>Latest Blocks</h1>
-  <v-btn @click="fetchAll">Load all blocks</v-btn>
+  <h1>Latest Blocks
+    <v-btn
+    @click="dialog=true">
+      Load all blocks
+    </v-btn>
+
+    <v-dialog
+      @keydown.esc="dialog = false"
+      v-model="dialog"
+      max-width="290"
+        >
+  <v-card>
+    <v-card-title class="headline">Are you sure?</v-card-title>
+
+    <v-card-text>
+      Before loading all blocks, be sure that your roster is sufficient enough to support these requests. Worst case scenario your Web Browser might go down.
+    </v-card-text>
+
+    <v-card-actions>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        color="green darken-1"
+        flat="flat"
+        @click="dialog=false; fetchAll()"
+      >
+        Agree
+      </v-btn>
+
+      <v-btn
+        color="green darken-1"
+        flat="flat"
+        @click="dialog = false"
+      >
+        Disagree
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+  </h1>
+
+
 
   <br>
   <v-data-table
@@ -33,6 +73,7 @@
     props: ['blocks', 'getBlockByIndex'],
     data () {
       return {
+        dialog: false,
         headers: [
           {
             text: 'Block Index',

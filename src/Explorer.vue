@@ -39,17 +39,7 @@ export default {
         })
     }
     getUpdateChain()
-    /* const getNextBlockRecur = index => {
-      this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: index })
-        .then((data) => {
-          // data is a JS object
-          this.blocks[index] = data.reply
-          getNextBlockRecur(index + 1)
-        }).catch((e) => {
-          console.log(e)
-        })
-    }
-    getNextBlockRecur(0) */
+
   },
   methods: {
     roughSize: function( object ) {

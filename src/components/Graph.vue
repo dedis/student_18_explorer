@@ -3,12 +3,48 @@
   <v-btn @click="goBottom">
   <v-icon>arrow_downward</v-icon>
    Go to latest Block</v-btn>
-
-  <v-btn
-  @click="fetchAll" color="#922B21">Load all blocks </v-btn>
-  <!--  <img src="./../assets/fetchAll.png" width="200" height="40"> -->
   <v-btn @click="fetchMost" color="#F5B7B1">Load higher traversal blocks </v-btn>
-  <!-- <img src="./../assets/fetchMost.png" width="200" height="40"> -->
+  <v-btn
+  @click="dialog=true"
+  color="#922B21">
+    Load all blocks
+  </v-btn>
+
+  <v-dialog
+    @keydown.esc="dialog = false"
+    v-model="dialog"
+    max-width="290"
+      >
+<v-card>
+  <v-card-title class="headline">Are you sure?</v-card-title>
+
+  <v-card-text>
+    Before loading all blocks, be sure that your roster is sufficient enough to support these requests. Worst case scenario your Web Browser might go down.
+  </v-card-text>
+
+  <v-card-actions>
+    <v-spacer></v-spacer>
+
+    <v-btn
+      color="green darken-1"
+      flat="flat"
+      @click="dialog=false; fetchAll()"
+    >
+      Agree
+    </v-btn>
+
+    <v-btn
+      color="green darken-1"
+      flat="flat"
+      @click="dialog = false"
+    >
+      Disagree
+    </v-btn>
+  </v-card-actions>
+</v-card>
+</v-dialog>
+
+
   <v-card :height="60*(this.blocks.length+2)" width="1250px">
     <svg :height="60*(this.blocks.length+2) " width="1250px" />
     <defs>
@@ -45,6 +81,7 @@ export default {
   props: ['blocks', 'getBlockByIndex'],
   data: function () {
     return {
+      dialog: false,
       PADDING_Y }
   },
 

@@ -1,5 +1,6 @@
 <template lang="html">
   <v-content>
+    <br>
     <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex" :socket="socket"></router-view>
   </v-content>
 </template>
@@ -39,41 +40,35 @@ export default {
         })
     }
     getUpdateChain()
-
   },
   methods: {
-    roughSize: function( object ) {
+    roughSize: function (object) {
+      var objectList = []
+      var stack = [ object ]
+      var bytes = 0
 
-      var objectList = [];
-      var stack = [ object ];
-      var bytes = 0;
+      while (stack.length) {
+        var value = stack.pop()
 
-      while ( stack.length ) {
-          var value = stack.pop();
+        if (typeof value === 'boolean') {
+          bytes += 4
+        } else if (typeof value === 'string') {
+          bytes += value.length * 2
+        } else if (typeof value === 'number') {
+          bytes += 8
+        } else if
+        (
+          typeof value === 'object' &&
+              objectList.indexOf(value) === -1
+        ) {
+          objectList.push(value)
 
-          if ( typeof value === 'boolean' ) {
-              bytes += 4;
+          for (var i in value) {
+            stack.push(value[ i ])
           }
-          else if ( typeof value === 'string' ) {
-              bytes += value.length * 2;
-          }
-          else if ( typeof value === 'number' ) {
-              bytes += 8;
-          }
-          else if
-          (
-              typeof value === 'object'
-              && objectList.indexOf( value ) === -1
-          )
-          {
-              objectList.push( value );
-
-              for( var i in value ) {
-                  stack.push( value[ i ] );
-              }
-          }
+        }
       }
-      return bytes;
+      return bytes
     }
   }
 }

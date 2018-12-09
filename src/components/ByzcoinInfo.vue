@@ -14,7 +14,7 @@
     <v-card
       v-for="(tx, txi) in body"
       :key="txi"
-      color="teal">
+      color="#D4916A">
       <v-card-title primary-title> Transaction {{ txi }} </v-card-title>
 <v-navigation-drawer width="100%">
         <v-list>
@@ -69,16 +69,14 @@ export default {
       panel: [true, true, false],
       disabled: false,
       noPayload: false,
-      readonly: false,
-      coins_stringified: '',
-      coins_display: 0
+      readonly: false
     }
   },
   methods: {
-    expo: function(x, f) {
+    expo: function (x, f) {
       return Number.parseFloat(x).toExponential(f)
     }
-},
+  },
   mounted: function () {
     const headerLookup = protobuf.root.lookup('DataHeader')
     const header = headerLookup.decode(this.block.data)
@@ -118,7 +116,7 @@ export default {
                 ? '0x' + misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
                 : arg.name === 'event'
                   ? arg.value.constructor === Uint8Array
-                    ? '0x' + misc.uint8ArrayToHex(arg.value)
+                    ? '0x' + misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
                     : decoder.decode(arg.value).slice(13)
                   : arg.value
           }))
@@ -126,7 +124,6 @@ export default {
       }))
     }))
     console.log(this.body)
-    console.log(this.coins_display)
     // }
   }
 }

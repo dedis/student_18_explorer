@@ -1,6 +1,5 @@
 <template>
 <v-layout row>
-
   <!-- when we don't have any payload (genesis block for instance)-->
   <v-container v-if="noPayload">
     <v-alert
@@ -17,62 +16,26 @@
       v-for="(tx, txi) in body"
       :key="txi"
       color="#D4916A">
+
       <v-card-title primary-title>
-        <p v-if="tx.accepted">
-        <v-chip color="teal" text-color="white">
-          <v-avatar>
-            <v-icon>check_circle</v-icon>
-          </v-avatar>
-          Accepted
-        </v-chip>
-
-        Transaction {{ txi }}
-      </p>
-      <p v-else>
-        <v-chip color="red" text-color="white">
-          <v-avatar>
-            <v-icon>clear</v-icon>
-          </v-avatar>
-          Rejected
-        </v-chip>
-        Transaction {{ txi }}
-      </p>
-
+        <AcceptedChip :tx="tx" :txi="txi" />
       </v-card-title>
-<v-navigation-drawer width="100%">
-        <v-list>
-          <v-list-group
-            v-for="instruction in tx.instructions"
-            :key="instruction.index"
-          >
-          <v-list-tile slot="activator">
-            <v-list-tile-content>
-              <v-list-tile-title>
-                Command {{ instruction.index + 1}}/{{ tx.instructions.length}}: {{ instruction.invoke.command }}
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile
-            v-if="instruction.invoke"
-            v-for="arg in instruction.invoke.args"
-            :key="arg.name"
-            @click=""
-            >
 
-              <v-card-text v-if="instruction.invoke.command === 'event'">
-                Name: {{ arg.name }}
-                <br>
-                Value: This block was automatically created during the SkipChain's instantiation.
-                <br>
-                <br>
-              </v-card-text>
-              <v-card-text v-else>
-                Name: {{ arg.name }}
-                <br>
-                Value: {{ arg.value }}
-                <br>
-              </v-card-text>
-            </v-list-tile>
+  <v-navigation-drawer width="100%">
+      <v-list>
+        <v-list-group
+          v-for="instruction in tx.instructions"
+          :key="instruction.index"
+        >
+        <v-list-tile slot="activator">
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Command {{ instruction.index + 1}}/{{ tx.instructions.length }}: {{ instruction.invoke.command }}
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <InstructionInvoke :instruction="instruction"/>
 
     </v-list-group>
   </v-list>
@@ -91,58 +54,27 @@
     v-for="(tx, txi) in body"
     :key="txi"
     color="#D4916A">
-    <v-card-title primary-title>
-      <p v-if="tx.accepted">
-      <v-chip color="teal" text-color="white">
-        <v-avatar>
-          <v-icon>check_circle</v-icon>
-        </v-avatar>
-        Accepted
-      </v-chip>
-      Transaction {{ txi }}
-    </p>
-    <p v-else>
-      <v-chip color="red" text-color="white">
-        <v-avatar>
-          <v-icon>clear</v-icon>
-        </v-avatar>
-        Rejected
-      </v-chip>
-      Transaction {{ txi }}
-    </p>
 
-    </v-card-title>
-<v-navigation-drawer width="100%">
-      <v-list>
-        <v-list-group
-          v-for="instruction in tx.instructions"
-          :key="instruction.index"
-        >
+      <AcceptedChip :tx="tx" :txi="txi" />
+
+  <v-navigation-drawer width="100%">
+    <v-list>
+      <v-list-group
+        v-for="instruction in tx.instructions"
+        :key="instruction.index"
+          >
         <v-list-tile slot="activator">
           <v-list-tile-content>
             <v-list-tile-title>Contract id: {{ instruction.spawn.contractid }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile
-          v-if="instruction.spawn"
-          v-for="arg in instruction.spawn.args"
-          :key="arg.name"
-          @click=""
-          >
-            <v-card-text>
-              Name: {{ arg.name }}
-              <br>
-              Value: {{ arg.value }}
-              <br>
-            </v-card-text>
-          </v-list-tile>
+        <InstructionSpawn :instruction="instruction" :length="tx.instructions.length"/>
 
-  </v-list-group>
-</v-list>
-</v-navigation-drawer>
+    </v-list-group>
+  </v-list>
+  </v-navigation-drawer>
 
-<!-- List signatures -->
-<Signatures :instructions="tx.instructions"/>
+  <Signatures :instructions="tx.instructions"/>
 
 </v-card>
 </v-container>
@@ -154,10 +86,17 @@
 import { protobuf, misc } from '@dedis/cothority'
 import { toUUID } from '../utils'
 import Signatures from './Signatures'
+import InstructionInvoke from './InstructionInvoke'
+import InstructionSpawn from './InstructionSpawn'
+import AcceptedChip from './AcceptedChip'
+
 export default {
   props: ['block'],
   components: {
-    'Signatures': Signatures
+    'Signatures': Signatures,
+    'InstructionSpawn': InstructionSpawn,
+    'InstructionInvoke': InstructionInvoke,
+    'AcceptedChip': AcceptedChip
   },
   data: function () {
     return {
@@ -176,21 +115,10 @@ export default {
     }
   },
   mounted: function () {
-    const headerLookup = protobuf.root.lookup('DataHeader')
-    const header = headerLookup.decode(this.block.data)
 
     const bodyLookup = protobuf.root.lookup('DataBody')
     const body = bodyLookup.decode(this.block.payload)
 
-    console.log(body)
-    console.log(header)
-
-    this.header = {
-      clienttransactionhash: misc.uint8ArrayToHex(header.clienttransactionhash),
-      statechangehash: misc.uint8ArrayToHex(header.statechangeshash),
-      trieroot: misc.uint8ArrayToHex(header.trieroot),
-      timestamp: new Date(header.timestamp)
-    }
 
     const decoder = new TextDecoder('utf-8')
 

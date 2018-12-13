@@ -7,60 +7,24 @@
       expand
     >
 
-      <h3>Block {{$route.params.hash.slice(0, 15)}}...</h3>
-
-      <v-expansion-panel-content disabled v-for="field in fields.filter(x => x.display_first)" v-bind:key="field.name">
-        <template slot="header">
-
-          <v-layout row>
-            <v-flex xs4>
-              <p>{{field.show}}</p>
-            </v-flex>
-            <v-flex xs8>
-              <p v-if="field.display === 'hash'">
-                0x{{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 15)}}...
-              </p>
-              <p v-else-if="field.name === 'payload'">
-                <v-container>
-                  <p v-if="isByzcoin"><ByzcoinInfo :block="block" /></p>
-                  <h2 v-else>
-                    <v-alert
-                        :value="true"
-                        type="warning"
-                        >
-                          This is not a Byzcoin Block.
-                      </v-alert></h2>
-              </v-container>
-              </p>
-              <p v-else-if="field.display === 'hex'">
-                <v-container>
-                  <p v-if="isByzcoin">
-                    <code>{{dump(block[field.name])}}</code>
-                  </p>
-                  <p v-else>
-                    <code> {{String(dump(block[field.name])).substr(51)}}</code>
-                  </p>
-                </v-container>
-
-
-              </p>
-              <p v-else>{{block[field.name]}}</p>
-            </v-flex>
-          </v-layout>
-        </template>
-      </v-expansion-panel-content>
-
+      <h3>
+        <v-btn flat small > <v-icon> arrow_back </v-icon> </v-btn>
+          Block {{block.index}}, {{$route.params.hash}}
+        <v-btn flat small> <v-icon> arrow_forward </v-icon> </v-btn>
+      </h3>
       <v-expansion-panel-content
-        v-for="field in fields.filter(x => !x.display_first)"
+        v-for="field in fields.filter(x => x.display_first)"
         v-bind:key="field.name"
+
+
       >
         <div slot="header">{{field.show}}</div>
         <v-card>
           <v-card-text class="grey lighten-3">
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
-              <p v-for="hash in block[field.name]" :key="JSON.stringify(hash)">
-                <BlockLink :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)"/>
+              <p v-for="(hash, hashi) in block[field.name]" :key="JSON.stringify(hash)">
+                <BlockLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex"/>
               </p>
             </span>
             <span v-else-if="field.display === 'uuid' && block[field.name]">
@@ -68,9 +32,31 @@
                 <code>{{ toUUID(misc.uint8ArrayToHex(hash)) }}</code>
               </p>
             </span>
+            <p v-else-if="field.display === 'payload'">
+              <v-container>
+                <p v-if="isByzcoin"><ByzcoinPayload :block="block" /></p>
+                <h2 v-else>
+                  <v-alert
+                      :value="true"
+                      type="warning"
+                      >
+                        This is not a Byzcoin Block.
+                    </v-alert></h2>
+            </v-container>
+            </p>
+            <p v-else-if="field.display === 'hex'">
+              <v-container>
+                <p v-if="isByzcoin">
+                  <ByzcoinData :block="block"/>
+                </p>
+                <p v-else>
+                  <code> {{String(dump(block[field.name])).substr(51)}}</code>
+                </p>
+              </v-container>
+            </p>
             <span v-else-if="field.display === 'forward' && block[field.name]">
-              <p v-for="forwardLink in block[field.name]" :key="JSON.stringify(forwardLink)">
-                <ForwardLink :forwardLink="forwardLink"/>
+              <p v-for="(forwardLink, forwardi) in block[field.name]" :key="JSON.stringify(forwardLink)">
+                <ForwardLink :forwardLink="forwardLink" :forwardi="forwardi" :block="block" :getBlockByIndex="getBlockByIndex"/>
               </p>
             </span>
             <span v-else-if="field.display === 'roster' && block[field.name]">
@@ -79,6 +65,26 @@
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
+
+      <v-expansion-panel-content disabled v-for="field in fields.filter(x => !x.display_first)" v-bind:key="field.name">
+        <template slot="header">
+
+          <v-layout row>
+            <v-flex xs4>
+              <p>{{field.show}}</p>
+            </v-flex>
+            <v-flex xs8>
+              <p v-if="field.display === 'hash'">
+                {{block[field.name] && misc.uint8ArrayToHex(block[field.name]).slice(0, 15)}}...
+              </p>
+
+              <p v-else>{{block[field.name]}}</p>
+            </v-flex>
+          </v-layout>
+        </template>
+      </v-expansion-panel-content>
+
+
 
     </v-expansion-panel>
   </v-container>
@@ -92,34 +98,32 @@
   import BlockLink from './BlockLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
-  import ByzcoinInfo from './ByzcoinInfo'
+  import ByzcoinPayload from './ByzcoinPayload'
+  import ByzcoinData from './ByzcoinData'
 
   export default {
-    props: ['blocks', 'socket'],
+    props: ['blocks', 'socket', 'getBlockByIndex'],
     components: {
       'BlockLink': BlockLink,
       'ForwardLink': ForwardLink,
       'Roster': Roster,
-      'ByzcoinInfo': ByzcoinInfo
+      'ByzcoinPayload': ByzcoinPayload,
+      'ByzcoinData': ByzcoinData
     },
     data: function () {
       return {
         /* 'show' is the name to be displayed, 'display' is the format
         Forward links and the Roster are both special cases */
         fields: [
-          { name: 'index', show: 'Index', display: 'number', display_first: true },
-          { name: 'height', show: 'Height', display: 'number', display_first: true },
-          { name: 'maxHeight', show: 'Max height', display: 'number', display_first: true },
-          { name: 'baseHeight', show: 'Base height', display: 'number', display_first: true },
-          { name: 'hash', show: 'Hash', display: 'hash', display_first: true },
-          { name: 'payload', show: 'Payload', display: 'hex', display_first: true },
-          { name: 'parent', show: 'Parent', display: 'hash', display_first: true },
-          { name: 'genesis', show: 'Genesis block', display: 'hash', display_first: true },
+          { name: 'height', show: 'Height', display: 'number' },
+          { name: 'maxHeight', show: 'Max height', display: 'number' },
+          { name: 'baseHeight', show: 'Base height', display: 'number' },
+          { name: 'backlinks', show: 'Backward links', display: 'array', display_first: true },
+          { name: 'forward', show: 'Forward links', display: 'forward', display_first: true },
+          { name: 'payload', show: 'Payload', display: 'payload', display_first: true },
           { name: 'data', show: 'Data', display: 'hex', display_first: true },
-          { name: 'backlinks', show: 'Backward links', display: 'array' },
-          { name: 'forward', show: 'Forward links', display: 'forward' },
-          { name: 'verifiers', show: 'Verifiers', display: 'uuid' },
-          { name: 'roster', show: 'Roster', display: 'roster' }
+          { name: 'verifiers', show: 'Verifiers', display: 'uuid', display_first: true },
+          { name: 'roster', show: 'Roster', display: 'roster', display_first: true }
         ],
         misc: misc,
         panel: [true, true, false],
@@ -130,13 +134,16 @@
     },
     computed: {
       // finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
-      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && '0x' + misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
+      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
       isByzcoin: function () {
         return this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
       }
     },
     methods: {
-      toUUID
+      toUUID,
+      fetchBlock: function () {
+        this.getBlockByIndex(this.block.index - 1)
+      }
     }
   }
 </script>

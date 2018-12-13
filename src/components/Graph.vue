@@ -146,7 +146,7 @@ export default {
         })
 
         rect.on('dblclick', r => {
-          this.$router.push(`/blocks/0x${misc.uint8ArrayToHex(block.hash)}`)
+          this.$router.push(`/blocks/${misc.uint8ArrayToHex(block.hash)}`)
         })
 
         // backward links display

@@ -53,9 +53,9 @@
   >
 
     <template slot="items" slot-scope="props">
-      <tr v-on:click="goToBlock('0x' + misc.uint8ArrayToHex(props.item.hash))">
+      <tr v-on:click="goToBlock(misc.uint8ArrayToHex(props.item.hash))">
         <td>{{ props.item.index }}</td>
-        <td class="text-xs-left">0x{{ misc.uint8ArrayToHex(props.item.hash).slice(0, 8) }}...</td>
+        <td class="text-xs-left">{{ misc.uint8ArrayToHex(props.item.hash).slice(0, 8) }}...</td>
         <td class="text-xs-left">{{ props.item.transactionNumber }}</td>
         <td class="text-xs-left">{{ props.item.verifiers.length }}</td>
         <td class="text-xs-left">{{ props.item.height }}</td>

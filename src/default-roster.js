@@ -1,13 +1,12 @@
-export default `
+export default/* `
 [[servers]]
   Address = "tls://gasser.blue:7002"
   Public = "036bf316e1ea6e7e99e0bb713419d16c0b6794bf9dc442cc4cf36c3f935e93cf"
   Description = "EPFL Cothority-server"
+` */
+
+// for skipchain testing:
 `
-
-/*
-for local skipchain testing:
-
 [[servers]]
     Address = "tls://localhost:7002"
     Suite = "Ed25519"
@@ -23,4 +22,4 @@ for local skipchain testing:
     Suite = "Ed25519"
     Public = "b21216372ea04f3c7d25e9386f94d58a564266ff7bd85d7acf79385e076e5f39"
     Description = "Conode_3"
-*/
+`

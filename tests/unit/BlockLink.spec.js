@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 const assert = require('assert')
 const Vue = require('./Vue')
-const BlockLink = require('../../src/components/BlockLink.vue').default
+const BackwardLink = require('../../src/components/BackwardLink.vue').default
 
 const hash = '09a980e059038cd'
 const block = 'b0b469ea6b5c0e62152d0d0de320863b940a23e5f2d4292f3a34385191307255'
@@ -10,7 +10,7 @@ var vm
 
 // Mount the instance
 before(function () {
-  const Constructor = Vue.extend(BlockLink)
+  const Constructor = Vue.extend(BackwardLink)
   vm = new Constructor({
     propsData: {
       block,

@@ -25,7 +25,7 @@
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
               <p v-for="(hash, hashi) in block[field.name]" :key="JSON.stringify(hash)">
-                <BlockLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
+                <BackwardLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
               </p>
             </span>
             <span v-else-if="field.display === 'verifier' && block[field.name]">
@@ -94,7 +94,7 @@
   import { misc } from '@dedis/cothority'
   import dump from 'buffer-hexdump'
   import { toUUID } from '../utils'
-  import BlockLink from './BlockLink'
+  import BackwardLink from './BackwardLink'
   import ForwardLink from './ForwardLink'
   import Roster from './Roster'
   import ByzcoinPayload from './ByzcoinPayload'
@@ -104,7 +104,7 @@
   export default {
     props: ['blocks', 'socket', 'getBlockByIndex'],
     components: {
-      'BlockLink': BlockLink,
+      'BackwardLink': BackwardLink,
       'ForwardLink': ForwardLink,
       'Roster': Roster,
       'ByzcoinPayload': ByzcoinPayload,

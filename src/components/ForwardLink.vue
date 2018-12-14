@@ -1,8 +1,8 @@
 <template>
   <p>
-    Level {{forwardi}} link: {{ link.from.slice(0, 15) }}...
+    Level {{ forwardi }} link: {{ link.from.slice(0, 15) }}...
     <v-icon color="#2F52E0">arrow_forward</v-icon>
-    <router-link v-on:click.native="fetchBlock" :to="`/${chain}/blocks/${block.index + 1}`">
+    <router-link v-on:click="fetchBlock" :to="`/${chain}/blocks/${block.index + 1}`">
       {{link.to}}
     </router-link>
   </p>

@@ -6,7 +6,7 @@
       :key="arg.name"
       @click=""
       >
-        <v-card-text>
+        <v-card-text style="overflow-x=visible">
           Name: {{ arg.name }}
           <br>
           Value: {{ arg.value }}

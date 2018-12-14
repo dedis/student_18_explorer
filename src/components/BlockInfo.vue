@@ -28,9 +28,9 @@
                 <BlockLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
               </p>
             </span>
-            <span v-else-if="field.display === 'uuid' && block[field.name]">
+            <span v-else-if="field.display === 'verifier' && block[field.name]">
               <p v-for="hash in block[field.name]" :key="JSON.stringify(hash)">
-                <code>{{ toUUID(misc.uint8ArrayToHex(hash)) }}</code>
+                <Verifier :uuid="toUUID(misc.uint8ArrayToHex(hash))" />
               </p>
             </span>
             <p v-else-if="field.display === 'payload'">
@@ -99,6 +99,7 @@
   import Roster from './Roster'
   import ByzcoinPayload from './ByzcoinPayload'
   import ByzcoinData from './ByzcoinData'
+  import Verifier from './Verifier'
 
   export default {
     props: ['blocks', 'socket', 'getBlockByIndex'],
@@ -107,7 +108,8 @@
       'ForwardLink': ForwardLink,
       'Roster': Roster,
       'ByzcoinPayload': ByzcoinPayload,
-      'ByzcoinData': ByzcoinData
+      'ByzcoinData': ByzcoinData,
+      'Verifier': Verifier
     },
     data: function () {
       return {
@@ -121,7 +123,7 @@
           { name: 'forward', show: 'Forward links', display: 'forward', display_first: true },
           { name: 'payload', show: 'Payload', display: 'payload', display_first: true },
           { name: 'data', show: 'Data', display: 'hex', display_first: true },
-          { name: 'verifiers', show: 'Verifiers', display: 'uuid', display_first: true },
+          { name: 'verifiers', show: 'Verifiers', display: 'verifier', display_first: true },
           { name: 'roster', show: 'Roster', display: 'roster', display_first: true }
         ],
         misc: misc,

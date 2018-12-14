@@ -65,7 +65,7 @@
           >
         <v-list-tile slot="activator">
           <v-list-tile-content>
-            <v-list-tile-title>Contract id: {{ instruction.spawn.contractid }}</v-list-tile-title>
+            <v-list-tile-title>{{ instruction.spawn.contractid }} {{ instruction.instanceid }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <InstructionSpawn :instruction="instruction" :length="tx.instructions.length"/>
@@ -135,7 +135,7 @@ export default {
       accepted: tx.accepted,
       instructions: tx.clienttransaction.instructions.map(instr => ({
         index: instr.index,
-        instanceid: instr.instanceid,
+        instanceid: parseInt(misc.uint8ArrayToHex(instr.instanceid)) >= 0 ? parseInt(misc.uint8ArrayToHex(instr.instanceid)) : misc.uint8ArrayToHex(instr.instanceid),
         signatures: instr.signatures.map(s => ({
           signature: toUUID(misc.uint8ArrayToHex(s.signature)),
           signer: s.signer
@@ -156,7 +156,7 @@ export default {
             name: arg.name,
             value: arg.name === 'coins'
               ? this.expo(parseInt(misc.uint8ArrayToHex(arg.value)), 2)
-              : arg.name === 'destination' || arg.name === 'darc'
+              : arg.name === 'destination' || arg.name === 'darc' || arg.name === 'Service' || arg.name === 'FinalStatement'
                 ? misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
                 : arg.name === 'event'
                   ? arg.value.constructor === Uint8Array
@@ -167,6 +167,7 @@ export default {
         }
       }))
     }))
+    console.log(body)
   }
 }
 </script>

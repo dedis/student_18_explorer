@@ -38,7 +38,7 @@
     </v-toolbar>
 
 
-    <Explorer v-if="socket" :socket="socket" :key="Math.random()"/>
+    <Explorer v-if="socket" :socket="socket" :key="JSON.stringify(blocks)"/>
 
 
     <v-footer :fixed="fixed" app>

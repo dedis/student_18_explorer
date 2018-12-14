@@ -42,7 +42,7 @@ export default {
       clienttransactionhash: misc.uint8ArrayToHex(header.clienttransactionhash),
       statechangehash: misc.uint8ArrayToHex(header.statechangeshash),
       trieroot: misc.uint8ArrayToHex(header.trieroot),
-      timestamp: header.timestamp
+      timestamp: Date(header.timestamp)
     }
   }
 }

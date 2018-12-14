@@ -115,10 +115,8 @@ export default {
     }
   },
   mounted: function () {
-
     const bodyLookup = protobuf.root.lookup('DataBody')
     const body = bodyLookup.decode(this.block.payload)
-
 
     const decoder = new TextDecoder('utf-8')
 

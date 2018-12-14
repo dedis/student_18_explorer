@@ -23,7 +23,7 @@ describe('A simple explorer page with one block', function () {
     assert.ok(text.includes(blocks[0].index))
   })
   it('chooses the right hash to display', function () {
-    assert.ok(text.includes('0x44a47649'))
+    assert.ok(text.includes('44a47649'))
   })
   it('chooses the right collective signing', function () {
     assert.ok(text.includes(blocks[0].verifiers.length))

@@ -13,7 +13,7 @@ export default {
   props: ['block', 'hash', 'hashi', 'getBlockByIndex', 'blockIndex'],
   methods: {
     fetchBlock: function () {
-      if (this.blockIndex > 0) {
+      if (this.blockIndex > 0) {
         this.getBlockByIndex(this.blockIndex - 1)
       }
     }

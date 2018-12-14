@@ -16,7 +16,7 @@ before(function () {
       blocks,
       $route: {
         params: {
-          hash: '0x44a47649ce686afb399d81f199d81acfad46e68bfde1420b6379886b97a9f88f'
+          hash: '44a47649ce686afb399d81f199d81acfad46e68bfde1420b6379886b97a9f88f'
         }
       }
     },
@@ -32,13 +32,13 @@ describe('A simple block info page', function () {
     assert.deepStrictEqual(block.hash, blocks[0].hash)
   })
   it('displays the hash of the block', function () {
-    assert.ok(text.includes('0x44a47649ce686a'))
+    assert.ok(text.includes('44a47649ce686a'))
   })
   it('displays the block data hex dump', function () {
     assert.ok(text.includes('one'))
   })
   it('displays the hash of the backwards link', function () {
-    assert.ok(text.includes('0xe61a2e2dd878d176767f783593871d052287f7f684a4c0350cd9caafecba6d4c'))
+    assert.ok(text.includes('e61a2e2dd878d176767f783593871d052287f7f684a4c0350cd9caafecba6d4c'))
   })
   it('displays the uuid of the verifier', function () {
     assert.ok(text.includes('a7f6cdb7-47f8-56b4-aff5-ece35a882489'))

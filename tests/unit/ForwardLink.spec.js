@@ -23,13 +23,13 @@ before(function () {
 
 // Inspect the render output
 describe('A simple forward link', function () {
-  it('displays the first 16 characters of the ´from´ hash', function () {
+  it('displays the first 15 characters of the ´from´ hash', function () {
     const text = vm.$el.textContent
-    assert.ok(text.includes('0x15405231b70b17f8'))
+    assert.ok(text.includes('15405231b70b17f'))
   })
 
   it('displays the whole ´to´ hash', function () {
     const text = vm.$el.textContent
-    assert.ok(text.includes('0x09a980e059038cd959364252a17ed3de4fb05f58e025b0dda6460febef3c4d1f'))
+    assert.ok(text.includes('09a980e059038cd959364252a17ed3de4fb05f58e025b0dda6460febef3c4d1f'))
   })
 })

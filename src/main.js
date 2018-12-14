@@ -12,10 +12,10 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
-    { path: '/', redirect: '/blocks' },
-    { path: '/blocks', component: LatestBlocks },
-    { path: '/blocks/:hash', component: BlockInfo },
-    { path: '/graph', component: Graph }
+    { path: '/:chain', redirect: '/:chain/blocks' },
+    { path: '/:chain/blocks', component: LatestBlocks },
+    { path: '/:chain/blocks/:blockIndex', component: BlockInfo },
+    { path: '/:chain/graph', component: Graph }
   ]
 })
 

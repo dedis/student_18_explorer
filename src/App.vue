@@ -5,13 +5,13 @@
     extended
       :clipped-left="clipped"
     >
-      <router-link to="/" class="title-link">
+      <router-link :to="`/${$route.params.chain || ''}`" class="title-link">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </router-link>
 
       <v-spacer></v-spacer>
 
-      <router-link to="/graph" class="title-link">
+      <router-link :to="`/${$route.params.chain}/graph:`" class="title-link">
         <v-btn flat>Graph</v-btn>
       </router-link>
 
@@ -20,7 +20,7 @@
       <!--header -->
       <v-menu :nudge-width="100" slot="extension">
         <v-toolbar-title slot="activator">
-          <span>Current Skipchain: 0x{{this.chosenSkipchain.slice(0,16)}}...</span>
+          <span>Current Skipchain: {{chosenSkipchain && chosenSkipchain.slice(0,16)}}...</span>
           <v-icon>arrow_drop_down</v-icon>
         </v-toolbar-title>
 
@@ -38,7 +38,7 @@
     </v-toolbar>
 
 
-    <Explorer v-if="socket" :socket="socket" :chosenSkipchain="chosenSkipchain" :key="Math.random()"/>
+    <Explorer v-if="socket" :socket="socket" :key="Math.random()"/>
 
 
     <v-footer :fixed="fixed" app>
@@ -74,7 +74,7 @@ export default {
       socket: null,
       blocks: [],
       skipchains: [],
-      chosenSkipchain: ''
+      chosenSkipchain: this.$route.params.chain
     }
   },
   /* -- my local roster, to be updated once we'll be dealing with DEDIS' skipchains */
@@ -82,10 +82,14 @@ export default {
     this.connectToCothority(defaultRoster)
   },
   methods: {
-
     chooseSkipchain: function (e) {
+      const v = e.target.innerText.slice(0, 64)
+      this.$router.push(`/${v}`)
+      this.chosenSkipchain = v
+      this.connectToCothority(defaultRoster)
+      this.$forceUpdate()
       // target.innerText is the parameter that displays the selected skipchain's hash
-      this.chosenSkipchain = e.target.innerText
+      // this.chosenSkipchain = e.target.innerText
     },
 
     connectToCothority: function (roster) {
@@ -96,7 +100,6 @@ export default {
       socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
         .then((data) => {
           this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))
-          this.chosenSkipchain = this.skipchains[0]
         }).catch(() => {
         })
       this.socket = socket

@@ -13,11 +13,16 @@ before(function () {
   const Constructor = Vue.extend(ForwardLink)
   vm = new Constructor({
     propsData: {
+      chain: '',
       forwardLink: {
         from: from,
         to: to
+      },
+      block: {
+        index: 0
       }
-    }
+    },
+    props: ['forwardLink', 'chain', 'block']
   }).$mount()
 })
 

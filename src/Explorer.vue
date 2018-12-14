@@ -8,12 +8,13 @@
 <script>
 import { misc } from '@dedis/cothority'
 export default {
-  props: ['socket', 'chosenSkipchain'],
+  props: ['socket'],
   data: function () {
     return {
       blocks: [],
+      chosenSkipchain: this.$route.params.chain,
       getBlockByIndex: i => {
-        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.chosenSkipchain), index: i })
+        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.$route.params.chain), index: i })
           .then(skipblock => {
             this.blocks.splice(i, 1, { ...skipblock, loaded: true })
           })
@@ -35,6 +36,7 @@ export default {
             const b = blocks.find(block => block.index === i)
             return b || { loaded: false, index: i, height: 1 }
           })
+          console.log(allBlocks)
           this.blocks = allBlocks
         }).catch(() => {
         })

@@ -53,7 +53,7 @@
   >
 
     <template slot="items" slot-scope="props">
-      <tr v-on:click="goToBlock(misc.uint8ArrayToHex(props.item.hash))">
+      <tr v-on:click="goToBlock(props.item.index)">
         <td>{{ props.item.index }}</td>
         <td class="text-xs-left">{{ misc.uint8ArrayToHex(props.item.hash).slice(0, 8) }}...</td>
         <td class="text-xs-left">{{ props.item.transactionNumber }}</td>
@@ -90,8 +90,8 @@
       }
     },
     methods: {
-      goToBlock: function (hash) {
-        this.$router.push(`/blocks/${hash}`) /* To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL. */
+      goToBlock: function (index) {
+        this.$router.push(`${this.$route.fullPath}/${index}`) /* To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL. */
       },
       fetchAll: function () {
         this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))

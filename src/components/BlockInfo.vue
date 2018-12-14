@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <v-expansion-panel
+      v-if="block.hash"
       v-model="panel"
       :disabled="disabled"
       :readonly="readonly"
@@ -8,9 +9,9 @@
     >
 
       <h3>
-        <v-btn flat small > <v-icon> arrow_back </v-icon> </v-btn>
-          Block {{block.index}}, {{$route.params.hash}}
-        <v-btn flat small> <v-icon> arrow_forward </v-icon> </v-btn>
+        <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
+          Block {{block.index}}, {{misc.uint8ArrayToHex(block.hash)}}
+        <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
       </h3>
       <v-expansion-panel-content
         v-for="field in fields.filter(x => x.display_first)"
@@ -24,7 +25,7 @@
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
               <p v-for="(hash, hashi) in block[field.name]" :key="JSON.stringify(hash)">
-                <BlockLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex"/>
+                <BlockLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
               </p>
             </span>
             <span v-else-if="field.display === 'uuid' && block[field.name]">
@@ -56,7 +57,7 @@
             </p>
             <span v-else-if="field.display === 'forward' && block[field.name]">
               <p v-for="(forwardLink, forwardi) in block[field.name]" :key="JSON.stringify(forwardLink)">
-                <ForwardLink :forwardLink="forwardLink" :forwardi="forwardi" :block="block" :getBlockByIndex="getBlockByIndex"/>
+                <ForwardLink :forwardLink="forwardLink" :forwardi="forwardi" :block="block" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
               </p>
             </span>
             <span v-else-if="field.display === 'roster' && block[field.name]">
@@ -83,8 +84,6 @@
           </v-layout>
         </template>
       </v-expansion-panel-content>
-
-
 
     </v-expansion-panel>
   </v-container>
@@ -132,17 +131,23 @@
         dump
       }
     },
+    mounted: function () {
+      this.getBlockByIndex(parseInt(this.$route.params.blockIndex))
+    },
     computed: {
       // finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
-      block: function () { return this.blocks.length ? this.blocks.find(({ hash, loaded }) => (loaded && misc.uint8ArrayToHex(hash)) === this.$route.params.hash) : {} },
+      block: function () { return this.blocks.length ? this.blocks.find(({ index }) => (index === parseInt(this.$route.params.blockIndex))) : {} },
       isByzcoin: function () {
-        return this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
+        return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(misc.uint8ArrayToHex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
       }
     },
     methods: {
       toUUID,
-      fetchBlock: function () {
-        this.getBlockByIndex(this.block.index - 1)
+      goToBlock: function (relativeIndex) {
+        const i = parseInt(this.$route.params.blockIndex) + relativeIndex
+        if (i < 0 || i > this.blocks.length - 1) return
+        this.getBlockByIndex(i)
+        this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
       }
     }
   }

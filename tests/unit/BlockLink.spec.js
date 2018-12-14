@@ -14,8 +14,11 @@ before(function () {
   vm = new Constructor({
     propsData: {
       block,
-      hash
-    }
+      hash,
+      blockIndex: 0,
+      chain: ''
+    },
+    props: ['chain', 'blockIndex', 'hash', 'block']
   }).$mount()
 })
 

@@ -16,11 +16,12 @@ before(function () {
       blocks,
       $route: {
         params: {
-          hash: '44a47649ce686afb399d81f199d81acfad46e68bfde1420b6379886b97a9f88f'
+          blockIndex: 0
         }
-      }
+      },
+      getBlockByIndex: () => {}
     },
-    props: ['blocks', '$route']
+    props: ['blocks', '$route', 'getBlockByIndex']
   }).$mount()
   text = vm.$el.textContent
 })

@@ -11,11 +11,16 @@
 
       <v-spacer></v-spacer>
 
-      <router-link :to="`/${$route.params.chain}/graph:`" class="title-link">
+      <router-link :to="`/${$route.params.chain}/graph`" class="title-link">
         <v-btn flat>Graph</v-btn>
       </router-link>
 
       <v-spacer></v-spacer>
+
+      <router-link :to="`/${$route.params.chain}/measurements`" class="title-link">
+        <v-btn flat>Measurements</v-btn>
+      </router-link>
+
 
       <!--header -->
       <v-menu :nudge-width="100" slot="extension">

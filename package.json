@@ -16,6 +16,7 @@
     "buffer-hexdump": "^1.0.0",
     "bufferutil": "^4.0.0",
     "d3": "^5.7.0",
+    "perf_hooks": "^0.0.1",
     "travis": "^0.1.1",
     "utf-8-validate": "^5.0.1",
     "vue": "^2.5.17",

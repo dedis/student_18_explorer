@@ -144,7 +144,7 @@ export default {
         spawn: instr.spawn && {
           args: instr.spawn.args.map(arg => ({
             name: arg.name,
-            value: misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
+            value: misc.uint8ArrayToHex(arg.value)
           })
 
           ),
@@ -156,13 +156,10 @@ export default {
             name: arg.name,
             value: arg.name === 'coins'
               ? this.expo(parseInt(misc.uint8ArrayToHex(arg.value)), 2)
-              : arg.name === 'destination' || arg.name === 'darc' || arg.name === 'Service' || arg.name === 'FinalStatement'
-                ? misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
-                : arg.name === 'event'
-                  ? arg.value.constructor === Uint8Array
-                    ? misc.uint8ArrayToHex(arg.value).slice(0, 6) + '...'
-                    : decoder.decode(arg.value).slice(13)
-                  : arg.value
+              : arg.value.constructor === Uint8Array
+                ? misc.uint8ArrayToHex(arg.value)
+                : decoder.decode(arg.value)
+
           }))
         }
       }))

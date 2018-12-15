@@ -6,7 +6,7 @@
     :key="arg.name"
     @click=""
     >
-      <v-card-text>
+      <v-card-text class="scroll">
         Name: {{ arg.name }}
         <br>
         Value: {{ arg.value }}
@@ -22,5 +22,8 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style>
+.scroll {
+   overflow-y: auto;
+ }
 </style>

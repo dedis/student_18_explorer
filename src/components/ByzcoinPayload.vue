@@ -15,7 +15,7 @@
     <v-card
       v-for="(tx, txi) in body"
       :key="txi"
-      color="#D4916A">
+      color="#C15B5B">
 
       <v-card-title primary-title>
         <AcceptedChip :tx="tx" :txi="txi" />
@@ -154,12 +154,9 @@ export default {
           command: instr.invoke.command,
           args: instr.invoke.args.map(arg => ({
             name: arg.name,
-            value: arg.name === 'coins'
-              ? this.expo(parseInt(misc.uint8ArrayToHex(arg.value)), 2)
-              : arg.value.constructor === Uint8Array
-                ? misc.uint8ArrayToHex(arg.value)
-                : decoder.decode(arg.value)
-
+            value: arg.value.constructor === Uint8Array
+              ? misc.uint8ArrayToHex(arg.value)
+              : decoder.decode(arg.value)
           }))
         }
       }))
@@ -176,4 +173,8 @@ export default {
   .container {
     padding: 0px
   }
+  .v-card__title {
+    padding: 10px;
+  }
+
 </style>

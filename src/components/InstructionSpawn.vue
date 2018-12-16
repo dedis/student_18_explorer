@@ -1,5 +1,5 @@
 <template lang="html">
-<p>
+<p class="margin">
   <v-list-tile
     v-if="instruction.spawn"
     v-for="arg in instruction.spawn.args"
@@ -25,5 +25,9 @@ export default {
 <style>
 .scroll {
    overflow-y: auto;
+ },
+ p {
+     margin-bottom: 4px;
+     margin-top: 4px;
  }
 </style>

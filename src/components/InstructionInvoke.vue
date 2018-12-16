@@ -25,4 +25,8 @@ export default {
 .scroll {
    overflow-y: auto;
  }
+ p {
+     margin-bottom: 4px;
+     margin-top: 4px;
+ }
 </style>

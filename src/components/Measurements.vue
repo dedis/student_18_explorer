@@ -37,10 +37,9 @@ export default {
     timeToFetchAll: function () {
       console.log(this.blocks.length)
       console.log(this.$route.params.chain)
-      var t0 = performance.now()
+      console.time('fetchAll')
       this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
-      var t1 = performance.now()
-      console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.')
+      console.timeEnd('fetchAll')
     }
   }
 }

@@ -43,7 +43,7 @@
     </v-toolbar>
 
 
-    <Explorer v-if="socket" :socket="socket" :key="JSON.stringify(blocks)"/>
+    <Explorer v-if="socket" :socket="socket" :key="JSON.stringify(chosenSkipchain)"/>
 
 
     <v-footer :fixed="fixed" app>
@@ -100,8 +100,7 @@ export default {
     connectToCothority: function (roster) {
       console.log(roster)
       const socket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'Skipchain')
-      /* get all skipchains IDs and map each of them to its hexadecimal form
-         we define the first skipchain from the list as the one to be displayed, and the user can switch */
+      /* get all skipchains IDs and map each of them to its hexadecimal form */
       socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
         .then((data) => {
           this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))

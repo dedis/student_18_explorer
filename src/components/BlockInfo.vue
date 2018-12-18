@@ -127,7 +127,7 @@
           { name: 'roster', show: 'Roster', display: 'roster', display_first: true }
         ],
         misc: misc,
-        panel: [true, true, false],
+        panel: [false, false, true, true],
         disabled: false,
         readonly: false,
         dump

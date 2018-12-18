@@ -56,7 +56,6 @@
       <tr v-on:click="goToBlock(props.item.index)">
         <td>{{ props.item.index }}</td>
         <td class="text-xs-left">{{ misc.uint8ArrayToHex(props.item.hash).slice(0, 8) }}...</td>
-        <td class="text-xs-left">{{ props.item.transactionNumber }}</td>
         <td class="text-xs-left">{{ props.item.verifiers.length }}</td>
         <td class="text-xs-left">{{ props.item.height }}</td>
       </tr>
@@ -82,7 +81,6 @@
             value: 'index'
           },
           { text: 'Hash', value: 'hash' },
-          { text: 'Transactions', value: 'transactionNumber' },
           { text: 'Collective Signing', value: 'verifiers.length' },
           { text: 'Height', value: 'height' }
         ],

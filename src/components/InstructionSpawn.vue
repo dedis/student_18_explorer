@@ -1,5 +1,5 @@
 <template lang="html">
-<p class="margin">
+<p>
   <v-list-tile
     v-if="instruction.spawn"
     v-for="arg in instruction.spawn.args"
@@ -10,7 +10,6 @@
         Name: {{ arg.name }}
         <br>
         Value: {{ arg.value }}
-        <br>
       </v-card-text>
     </v-list-tile>
   </p>

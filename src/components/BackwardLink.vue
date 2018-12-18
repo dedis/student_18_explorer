@@ -1,8 +1,9 @@
 <template>
 <div class="">
+  <p v-if="blockIndex === 0">This is a FAKE LINK</p>
   Level {{hashi}} link: {{ block.slice(0, 15) }}...
   <v-icon color="green"> arrow_forward </v-icon>
-  <router-link v-on:click.native="fetchBlock" :to="`/${chain}/blocks/${blockIndex - 1}`">{{hash}}</router-link>
+  <a @click="fetchBlock()">{{hash}}</a>
 </div>
 </template>
 
@@ -10,11 +11,13 @@
 
 <script>
 export default {
-  props: ['block', 'hash', 'hashi', 'getBlockByIndex', 'blockIndex', 'chain'],
+  props: ['block', 'hash', 'hashi', 'getBlockByHash', 'blockIndex', 'chain'],
   methods: {
     fetchBlock: function () {
       if (this.blockIndex > 0) {
-        this.getBlockByIndex(this.blockIndex - 1)
+        this.getBlockByHash(this.hash).then(i =>
+          this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+        )
       }
     }
   }

@@ -1,7 +1,7 @@
 <template lang="html">
   <v-content>
     <br>
-    <router-view :key="JSON.stringify(blocks)" v-bind:blocks="blocks" v-bind:getBlockByIndex="getBlockByIndex" :socket="socket"></router-view>
+    <router-view :key="JSON.stringify(blocks)" :blocks="blocks" :getBlockByIndex="getBlockByIndex" :getBlockByHash="getBlockByHash" :socket="socket"></router-view>
   </v-content>
 </template>
 
@@ -17,6 +17,13 @@ export default {
         this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.$route.params.chain), index: i })
           .then(skipblock => {
             this.blocks.splice(i, 1, { ...skipblock, loaded: true })
+          })
+      },
+      getBlockByHash: hash => {
+        return this.socket.send('GetSingleBlock', 'SkipBlock', { id: misc.hexToUint8Array(hash) })
+          .then(skipblock => {
+            this.blocks.splice(skipblock.index, 1, { ...skipblock, loaded: true })
+            return skipblock.index
           })
       }
     }

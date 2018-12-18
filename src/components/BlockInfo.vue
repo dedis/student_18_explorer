@@ -25,7 +25,7 @@
             <!-- enters the if only if block[field.name] is defined -->
             <span v-if="field.display === 'array' && block[field.name]">
               <p v-for="(hash, hashi) in block[field.name]" :key="JSON.stringify(hash)">
-                <BackwardLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
+                <BackwardLink :blockIndex="block.index" :block="misc.uint8ArrayToHex(block.hash)" :hash="misc.uint8ArrayToHex(hash)" :hashi="hashi" :getBlockByHash="getBlockByHash" :chain="$route.params.chain"/>
               </p>
             </span>
             <span v-else-if="field.display === 'verifier' && block[field.name]">
@@ -57,7 +57,7 @@
             </p>
             <span v-else-if="field.display === 'forward' && block[field.name]">
               <p v-for="(forwardLink, forwardi) in block[field.name]" :key="JSON.stringify(forwardLink)">
-                <ForwardLink :forwardLink="forwardLink" :forwardi="forwardi" :block="block" :getBlockByIndex="getBlockByIndex" :chain="$route.params.chain"/>
+                <ForwardLink :forwardLink="forwardLink" :forwardi="forwardi" :block="block" :getBlockByHash="getBlockByHash" :chain="$route.params.chain"/>
               </p>
             </span>
             <span v-else-if="field.display === 'roster' && block[field.name]">
@@ -102,7 +102,7 @@
   import Verifier from './Verifier'
 
   export default {
-    props: ['blocks', 'socket', 'getBlockByIndex'],
+    props: ['blocks', 'socket', 'getBlockByIndex', 'getBlockByHash'],
     components: {
       'BackwardLink': BackwardLink,
       'ForwardLink': ForwardLink,

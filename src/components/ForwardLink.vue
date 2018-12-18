@@ -2,9 +2,9 @@
   <p>
     Level {{ forwardi }} link: {{ link.from.slice(0, 15) }}...
     <v-icon color="#2F52E0">arrow_forward</v-icon>
-    <router-link v-on:click="fetchBlock" :to="`/${chain}/blocks/${block.index + 1}`">
+    <a @click="fetchBlock()">
       {{link.to}}
-    </router-link>
+    </a>
   </p>
 </template>
 
@@ -12,7 +12,7 @@
 import { misc } from '@dedis/cothority'
 
 export default {
-  props: ['forwardLink', 'forwardi', 'getBlockByIndex', 'block', 'chain'],
+  props: ['forwardLink', 'forwardi', 'getBlockByHash', 'block', 'chain'],
   computed: {
     link: function () {
       const link = {
@@ -24,7 +24,9 @@ export default {
   },
   methods: {
     fetchBlock: function () {
-      this.getBlockByIndex(this.block.index + 1)
+      this.getBlockByHash(this.link.to).then(i =>
+        this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+      )
     }
   }
 }

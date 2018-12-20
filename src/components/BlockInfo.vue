@@ -33,7 +33,7 @@
                 <Verifier :uuid="toUUID(misc.uint8ArrayToHex(hash))" />
               </p>
             </span>
-            <p v-else-if="field.display === 'payload'">
+            <p v-else-if="field.display === 'payload'":key="JSON.stringify(block.payload)">
               <v-container>
                 <p v-if="isByzcoin"><ByzcoinPayload :block="block" /></p>
                 <h2 v-else>

@@ -1,7 +1,7 @@
 <template>
 
 <v-card-title primary-title>
-  <p v-if="tx.accepted">
+  <p v-if="tx.accepted && spawnExists">
     <v-chip color="teal" text-color="white">
       <v-avatar>
         <v-icon>check_circle</v-icon>
@@ -9,16 +9,34 @@
       Accepted
     </v-chip>
 
-    Transaction {{ txi }}
+    Spawn Transaction {{ txi }}
   </p>
-  <p v-else>
+  <p v-else-if="tx.accepted && !spawnExists" >
+    <v-chip color="teal" text-color="white">
+      <v-avatar>
+        <v-icon>check_circle</v-icon>
+      </v-avatar>
+      Accepted
+    </v-chip>
+    Invoke Transaction {{ txi }}
+  </p>
+  <p v-else-if="!tx.accepted && spawnExists" >
     <v-chip color="red" text-color="white">
       <v-avatar>
         <v-icon>clear</v-icon>
       </v-avatar>
       Rejected
     </v-chip>
-    Transaction {{ txi }}
+    Spawn Transaction {{ txi }}
+  </p>
+  <p v-else-if="!tx.accepted && !spawnExists" >
+    <v-chip color="red" text-color="white">
+      <v-avatar>
+        <v-icon>clear</v-icon>
+      </v-avatar>
+      Rejected
+    </v-chip>
+    Invoke Transaction {{ txi }}
   </p>
 </v-card-title>
 
@@ -26,7 +44,7 @@
 
 <script>
 export default {
-  props: ['tx', 'txi']
+  props: ['tx', 'txi', 'spawnExists']
 }
 </script>
 

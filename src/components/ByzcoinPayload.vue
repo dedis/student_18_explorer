@@ -15,11 +15,9 @@
     <v-card
       v-for="(tx, txi) in body"
       :key="txi"
-      color="#C15B5B">
+      color="#D4916A">
 
-      <v-card-title primary-title>
-        <AcceptedChip :tx="tx" :txi="txi" />
-      </v-card-title>
+        <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists" />
 
   <v-navigation-drawer width="100%">
       <v-list>
@@ -55,7 +53,7 @@
     :key="txi"
     color="#D4916A">
 
-      <AcceptedChip :tx="tx" :txi="txi" />
+      <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists"/>
 
   <v-navigation-drawer width="100%">
     <v-list>

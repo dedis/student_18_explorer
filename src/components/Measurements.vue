@@ -38,8 +38,9 @@ export default {
       console.log(this.blocks.length)
       console.log(this.$route.params.chain)
       console.time('fetchAll')
-      this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
+      this.blocks.forEach(({ index }) => this.getBlockByIndex(index))
       console.timeEnd('fetchAll')
+      console.log(this.blocks)
     }
   }
 }

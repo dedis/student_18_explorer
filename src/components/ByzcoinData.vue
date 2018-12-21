@@ -3,7 +3,7 @@
   <v-list>
      <v-list-tile
        v-for="(elem, elemi) in header"
-       :key="elem"
+       :key="elemi"
        avatar
        @click=""
      >
@@ -42,7 +42,7 @@ export default {
       clienttransactionhash: misc.uint8ArrayToHex(header.clienttransactionhash),
       statechangehash: misc.uint8ArrayToHex(header.statechangeshash),
       trieroot: misc.uint8ArrayToHex(header.trieroot),
-      timestamp: Date(header.timestamp)
+      timestamp: new Date(parseInt(header.timestamp / 1000000))
     }
   }
 }

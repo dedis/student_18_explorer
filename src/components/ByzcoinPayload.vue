@@ -87,6 +87,7 @@ import Signatures from './Signatures'
 import InstructionInvoke from './InstructionInvoke'
 import InstructionSpawn from './InstructionSpawn'
 import AcceptedChip from './AcceptedChip'
+import dump from 'buffer-hexdump'
 
 export default {
   props: ['block'],
@@ -104,7 +105,8 @@ export default {
       noPayload: false,
       invokeExists: false,
       spawnExists: false,
-      readonly: false
+      readonly: false,
+      dump
     }
   },
   methods: {
@@ -153,13 +155,16 @@ export default {
           args: instr.invoke.args.map(arg => ({
             name: arg.name,
             value: arg.value.constructor === Uint8Array
-              ? misc.uint8ArrayToHex(arg.value)
+              ? (arg.value.length) > 15
+                ? misc.uint8ArrayToHex(arg.value).slice(0, 15) + '...'
+                : misc.uint8ArrayToHex(arg.value)
               : decoder.decode(arg.value)
           }))
         }
       }))
     }))
     console.log(body)
+    console.log(body.txresults)
   }
 }
 </script>

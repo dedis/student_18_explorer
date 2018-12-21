@@ -8,9 +8,14 @@
       expand
     >
 
-      <h3>
+      <h3 v-if="windowSize()>872">
         <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
           Block {{block.index}}, {{misc.uint8ArrayToHex(block.hash)}}
+        <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
+      </h3>
+      <h3 v-else>
+        <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
+          Block {{block.index}}, {{misc.uint8ArrayToHex(block.hash).slice(0, 10)}}...
         <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
       </h3>
       <v-expansion-panel-content
@@ -144,6 +149,9 @@
       }
     },
     methods: {
+      windowSize: function () {
+        return window.innerWidth
+      },
       toUUID,
       goToBlock: function (relativeIndex) {
         const i = parseInt(this.$route.params.blockIndex) + relativeIndex

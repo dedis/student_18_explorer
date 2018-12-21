@@ -16,10 +16,16 @@
             :key="JSON.stringify(s)"
             @click=""
             >
-              <v-card-text>
+              <v-card-text v-if="s.signer.ed25519">
                 Signature: {{ s.signature}}
                 <br>
-                Signer: {{ s.signer }}
+                Signer: ed25519
+                <br>
+              </v-card-text>
+              <v-card-text v-else>
+                Signature: {{ s.signature}}
+                <br>
+                Signer: No signer <!--{{ s.signer }}-->
                 <br>
               </v-card-text>
             </v-list-tile>

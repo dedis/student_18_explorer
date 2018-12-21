@@ -122,13 +122,10 @@ export default {
 
     if (!body.txresults[0].clienttransaction.instructions[0].invoke && !body.txresults[0].clienttransaction.instructions[0].spawn) {
       this.noPayload = true
-      console.log('no payload')
     } else if (!body.txresults[0].clienttransaction.instructions[0].invoke) {
       this.spawnExists = true
-      console.log('spawn block')
     } else {
       this.invokeExists = true
-      console.log('invoke block')
     }
 
     this.body = body.txresults.map(tx => ({
@@ -163,8 +160,6 @@ export default {
         }
       }))
     }))
-    console.log(body)
-    console.log(body.txresults)
   }
 }
 </script>

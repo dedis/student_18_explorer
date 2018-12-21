@@ -98,7 +98,6 @@ export default {
     },
 
     connectToCothority: function (roster) {
-      console.log(roster)
       const socket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'Skipchain')
       /* get all skipchains IDs and map each of them to its hexadecimal form */
       socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})

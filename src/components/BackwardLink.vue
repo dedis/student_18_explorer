@@ -15,8 +15,8 @@ export default {
   methods: {
     fetchBlock: function () {
       if (this.blockIndex > 0) {
-        this.getBlockByHash(this.hash).then(i =>
-          this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+        this.getBlockByHash(this.hash).then(({ index }) =>
+          this.$router.push(`/${this.$route.params.chain}/blocks/${index}`)
         )
       }
     }

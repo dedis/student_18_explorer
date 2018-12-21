@@ -13,17 +13,18 @@ export default {
     return {
       blocks: [],
       chosenSkipchain: this.$route.params.chain,
-      getBlockByIndex: i => {
-        this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.$route.params.chain), index: i })
+      getBlockByIndex: (i, shouldNotUpdateBlocks) => {
+        return this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.$route.params.chain), index: i })
           .then(skipblock => {
-            this.blocks.splice(i, 1, { ...skipblock, loaded: true })
+            if (!shouldNotUpdateBlocks) { this.blocks.splice(i, 1, { ...skipblock, loaded: true }) }
+            return skipblock
           })
       },
-      getBlockByHash: hash => {
+      getBlockByHash: (hash, shouldNotUpdateBlocks) => {
         return this.socket.send('GetSingleBlock', 'SkipBlock', { id: misc.hexToUint8Array(hash) })
           .then(skipblock => {
-            this.blocks.splice(skipblock.index, 1, { ...skipblock, loaded: true })
-            return skipblock.index
+            if (!shouldNotUpdateBlocks) { this.blocks.splice(skipblock.index, 1, { ...skipblock, loaded: true }) }
+            return skipblock
           })
       }
     }
@@ -37,12 +38,10 @@ export default {
         .then((data) => {
           /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
           const blocks = data.update.map(b => ({ ...b, loaded: true }))
-          console.log(blocks)
           const allBlocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
             const b = blocks.find(block => block.index === i)
             return b || { loaded: false, index: i, height: 1 }
           })
-          console.log(allBlocks)
           this.blocks = allBlocks
         }).catch(() => {
         })

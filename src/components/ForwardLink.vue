@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     fetchBlock: function () {
-      this.getBlockByHash(this.link.to).then(i =>
-        this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+      this.getBlockByHash(this.link.to).then(({ index }) =>
+        this.$router.push(`/${this.$route.params.chain}/blocks/${index}`)
       )
     }
   }

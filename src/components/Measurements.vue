@@ -1,6 +1,6 @@
 <template>
   <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 sm8 offset-sm3>
         <v-card>
           <v-card-title primary-title>
             <div :key="glob">
@@ -21,7 +21,14 @@
 
           <v-slide-y-transition>
             <v-card-text v-show="show">
-              In this case, we are interested in seeing how much time it takes to fetch all blocks from the Skipchain {{this.$route.params.chain.slice(0, 15)}}...
+              In this case, we are interested in seeing how much time it takes to fetch blocks from the following Skipchain: {{this.$route.params.chain.slice(0, 15)}}...
+              <br>
+              <strong>First</strong> we have the time it takes to traverse each layer of forward links starting at the genesis block {{this.$route.params.chain.slice(0, 15)}}... starting at the lowest level.
+              The traversal is done with getBlockByHash
+              <br>
+              <strong>Then</strong> we download all blocks one by one starting at the genesis block via getBlockByIndex.
+              <br>
+              <strong>Finally</strong>, we traverse the chain, i.e get from the genesis block to the latest block, using the highest forward link layers as available.
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -78,6 +85,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-</style>

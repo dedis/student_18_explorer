@@ -8,7 +8,7 @@
       expand
     >
 
-      <h3 :key="windowSize()" v-if="windowSize()>872">
+      <h3 :key="windowSize()"v-if="windowSize()>872">
         <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
           Block {{block.index}}, {{misc.uint8ArrayToHex(block.hash)}}
         <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>

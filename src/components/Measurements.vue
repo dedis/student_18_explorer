@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { misc } from '@dedis/cothority'
+import { bytes2Hex } from '../utils'
+
 export default {
   props: ['blocks', 'getBlockByIndex', 'chosenSkipchain', 'getBlockByHash'],
   data: () => ({
@@ -54,7 +55,7 @@ export default {
         const time = Date.now()
         const f = this.blocks[0].forward[j]
         const getBlockRecur = x => new Promise((resolve, reject) => {
-          this.getBlockByHash(misc.uint8ArrayToHex(x.to), true).then(skipblock => {
+          this.getBlockByHash(bytes2Hex(x.to), true).then(skipblock => {
             const next = skipblock.forward[j]
             if (next) getBlockRecur(next).then(resolve)
             else resolve()
@@ -78,7 +79,7 @@ export default {
       var block = this.blocks[0]
       while (block.index < this.blocks.length - 1) {
         const forward = block.forward
-        block = await this.getBlockByHash(misc.uint8ArrayToHex(forward[forward.length - 1].to), true)
+        block = await this.getBlockByHash(bytes2Hex(forward[forward.length - 1].to), true)
       }
       this.traversal = Date.now() - trav
     }

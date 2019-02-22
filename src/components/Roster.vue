@@ -11,18 +11,18 @@
 </template>
 
 <script>
-import { misc } from '@dedis/cothority'
+import { bytes2Hex } from '../utils'
 export default {
   props: ['roster', 'toUUID'],
   computed: {
     id: function () {
-      return misc.uint8ArrayToHex(this.roster.id)
+      return bytes2Hex(this.roster.id)
     },
     rost: function () {
       const rost = {
-        id: misc.uint8ArrayToHex(this.roster.id),
+        id: bytes2Hex(this.roster.id),
         list: this.roster.list.map(({ id, signature, description, address }) => ({
-          id: misc.uint8ArrayToHex(id),
+          id: bytes2Hex(id),
           signature: signature,
           description: description,
           address: address

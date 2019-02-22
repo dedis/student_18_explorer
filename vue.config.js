@@ -1,5 +1,6 @@
 module.exports = {
-  'baseUrl': '.',
+  publicPath: '.',
+  chainWebpack: config => config.resolve.symlinks(false),
   configureWebpack: {
     module: {
       exprContextCritical: false

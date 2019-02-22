@@ -12,7 +12,8 @@
     "coverage": "nyc vue-cli-service test:unit"
   },
   "dependencies": {
-    "@dedis/cothority": "^1.1.20",
+    "@dedis/cothority": "^3.0.0-pre3",
+    "buffer": "^5.2.1",
     "buffer-hexdump": "^1.0.0",
     "bufferutil": "^4.0.0",
     "d3": "^5.7.0",

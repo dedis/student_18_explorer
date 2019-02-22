@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { protobuf, misc } from '@dedis/cothority'
+import { DataHeader } from '@dedis/cothority/byzcoin/proto'
+import { bytes2Hex } from '../utils'
 
 export default {
   props: ['block'],
@@ -35,13 +36,12 @@ export default {
     }
   },
   mounted: function () {
-    const headerLookup = protobuf.root.lookup('DataHeader')
-    const header = headerLookup.decode(this.block.data)
+    const header = DataHeader.decode(this.block.data)
 
     this.header = {
-      clienttransactionhash: misc.uint8ArrayToHex(header.clienttransactionhash),
-      statechangehash: misc.uint8ArrayToHex(header.statechangeshash),
-      trieroot: misc.uint8ArrayToHex(header.trieroot),
+      clienttransactionhash: bytes2Hex(header.clientTransactionHash),
+      statechangehash: bytes2Hex(header.stateChangeHash),
+      trieroot: bytes2Hex(header.trieRoot),
       timestamp: new Date(parseInt(header.timestamp / 1000000))
     }
   }

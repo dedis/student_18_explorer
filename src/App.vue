@@ -54,11 +54,14 @@
 </template>
 
 <script>
-import identity, { net, misc } from '@dedis/cothority'
+import { Roster } from '@dedis/cothority/network'
+import { SkipchainRPC } from '@dedis/cothority/skipchain'
 import Explorer from './Explorer'
 import UserRoster from './components/UserRoster'
 import defaultRoster from './default-roster'
+import { bytes2Hex } from './utils'
 import { version } from '../package.json'
+
 export default {
   name: 'App',
   components: { 'Explorer': Explorer, 'UserRoster': UserRoster },
@@ -97,14 +100,20 @@ export default {
       // this.chosenSkipchain = e.target.innerText
     },
 
-    connectToCothority: function (roster) {
-      const socket = new net.RosterSocket(identity.Roster.fromTOML(roster), 'Skipchain')
+    connectToCothority: function (ro) {
+      const roster = Roster.fromTOML(ro)
+      const socket = new SkipchainRPC(roster)
+
       /* get all skipchains IDs and map each of them to its hexadecimal form */
-      socket.send('GetAllSkipChainIDs', 'GetAllSkipChainIDsReply', {})
-        .then((data) => {
-          this.skipchains = data.skipChainIDs.map(x => misc.uint8ArrayToHex(x))
-        }).catch(() => {
-        })
+      socket.getAllSkipChainIDs().then(
+        (ids) => {
+          this.skipchains = ids.map(bytes2Hex)
+        },
+        (e) => {
+          // TODO: do something with the error
+        }
+      )
+
       this.socket = socket
     }
   }

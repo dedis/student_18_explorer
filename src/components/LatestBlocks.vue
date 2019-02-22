@@ -55,7 +55,7 @@
     <template slot="items" slot-scope="props">
       <tr v-on:click="goToBlock(props.item.index)">
         <td>{{ props.item.index }}</td>
-        <td class="text-xs-left">{{ misc.uint8ArrayToHex(props.item.hash).slice(0, 8) }}...</td>
+        <td class="text-xs-left">{{ bytes2Hex(props.item.hash).slice(0, 8) }}...</td>
         <td class="text-xs-left">{{ props.item.verifiers.length }}</td>
         <td class="text-xs-left">{{ props.item.height }}</td>
       </tr>
@@ -67,7 +67,8 @@
 </template>
 
 <script>
-  import { misc } from '@dedis/cothority'
+  import { bytes2Hex } from '../utils'
+
   export default {
     props: ['blocks', 'getBlockByIndex'],
     data () {
@@ -84,7 +85,7 @@
           { text: 'Collective Signing', value: 'verifiers.length' },
           { text: 'Height', value: 'height' }
         ],
-        misc: misc
+        bytes2Hex
       }
     },
     methods: {

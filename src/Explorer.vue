@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import { misc } from '@dedis/cothority'
+import { hex2Bytes } from './utils'
+
 export default {
   props: ['socket'],
   data: function () {
@@ -14,18 +15,22 @@ export default {
       blocks: [],
       chosenSkipchain: this.$route.params.chain,
       getBlockByIndex: (i, shouldNotUpdateBlocks) => {
-        return this.socket.send('GetSingleBlockByIndex', 'SkipBlock', { genesis: misc.hexToUint8Array(this.$route.params.chain), index: i })
-          .then(skipblock => {
-            if (!shouldNotUpdateBlocks) { this.blocks.splice(i, 1, { ...skipblock, loaded: true }) }
-            return skipblock
-          })
+        return this.socket.getSkipBlockByIndex(hex2Bytes(this.$route.params.chain), i).then((reply) => {
+          const { skipblock } = reply
+
+          if (!shouldNotUpdateBlocks) {
+            this.blocks.splice(i, 1, { ...skipblock, loaded: true })
+          }
+          return skipblock
+        })
       },
       getBlockByHash: (hash, shouldNotUpdateBlocks) => {
-        return this.socket.send('GetSingleBlock', 'SkipBlock', { id: misc.hexToUint8Array(hash) })
-          .then(skipblock => {
-            if (!shouldNotUpdateBlocks) { this.blocks.splice(skipblock.index, 1, { ...skipblock, loaded: true }) }
-            return skipblock
-          })
+        return this.socket.getSkipBlock(hex2Bytes(hash)).then((block) => {
+          if (!shouldNotUpdateBlocks) {
+            this.blocks.splice(block.index, 1, { ...block, loaded: true })
+          }
+          return block
+        })
       }
     }
   },
@@ -33,20 +38,22 @@ export default {
     /* the if case stands for when the component is mounted for the first time it might take chosenSkipchain
       as the empty string. So we want mounted to be called only when chosenSkipchain exists */
     if (!this.chosenSkipchain) return
-    const getUpdateChain = () => {
-      this.socket.send('GetUpdateChain', 'GetUpdateChainReply', { latestID: misc.hexToUint8Array(this.chosenSkipchain) })
-        .then((data) => {
-          /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax */
-          const blocks = data.update.map(b => ({ ...b, loaded: true }))
-          const allBlocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
-            const b = blocks.find(block => block.index === i)
-            return b || { loaded: false, index: i, height: 1 }
-          })
-          this.blocks = allBlocks
-        }).catch(() => {
+
+    this.socket.getUpdateChain(hex2Bytes(this.chosenSkipchain)).then(
+      (blocks) => {
+        this.blocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
+          if (blocks.length > 0 && blocks[0].index === i) {
+            return { loaded: true, ...blocks.shift() }
+          }
+
+          return { loaded: false, index: i, height: 1 }
         })
-    }
-    getUpdateChain()
+      },
+      (e) => {
+        console.error(e)
+        // TODO: do something with the error
+      }
+    )
   }
 }
 </script>

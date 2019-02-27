@@ -13,10 +13,18 @@ const toUUID = hex => {
 }
 
 function bytes2Hex (bytes) {
+  if (!bytes) {
+    return ''
+  }
+
   return Array.prototype.map.call(bytes, x => ('00' + x.toString(16)).slice(-2)).join('')
 }
 
 function hex2Bytes (hex) {
+  if (!hex) {
+    return Buffer.allocUnsafe(0)
+  }
+
   return Buffer.from(hex, 'hex')
 }
 

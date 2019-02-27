@@ -7,6 +7,7 @@
 
 <script>
 import { hex2Bytes } from './utils'
+import { SkipchainRPC } from '@dedis/cothority/skipchain'
 
 export default {
   props: ['socket'],
@@ -14,8 +15,32 @@ export default {
     return {
       blocks: [],
       chosenSkipchain: this.$route.params.chain,
+      getBlockRoster: (index) => {
+        const target = this.blocks[index]
+
+        for (let i = index - 1; i >= 0; i--) {
+          const block = this.blocks[i]
+
+          if (block.loaded) {
+            for (let k = 0; k < block.forward.length; k++) {
+              const fl = block.forward[k]
+              if (target.hash && fl.to.equals(target.hash) && fl.newRoster) {
+                return fl.newRoster
+              }
+            }
+
+            return block.roster
+          }
+        }
+
+        return this.blocks[0].roster
+      },
       getBlockByIndex: (i, shouldNotUpdateBlocks) => {
-        return this.socket.getSkipBlockByIndex(hex2Bytes(this.$route.params.chain), i).then((reply) => {
+        const idx = this.blocks.findIndex(b => b.index === i)
+        // get the most updated roster
+        const socket = new SkipchainRPC(this.getBlockRoster(idx))
+
+        return socket.getSkipBlockByIndex(hex2Bytes(this.$route.params.chain), i).then((reply) => {
           const { skipblock } = reply
 
           if (!shouldNotUpdateBlocks) {
@@ -25,7 +50,11 @@ export default {
         })
       },
       getBlockByHash: (hash, shouldNotUpdateBlocks) => {
-        return this.socket.getSkipBlock(hex2Bytes(hash)).then((block) => {
+        const idx = this.blocks.findIndex(b => b.hash.equals(hash))
+        // get the most updated roster
+        const socket = new SkipchainRPC(this.getBlockRoster(idx))
+
+        return socket.getSkipBlock(hex2Bytes(hash)).then((block) => {
           if (!shouldNotUpdateBlocks) {
             this.blocks.splice(block.index, 1, { ...block, loaded: true })
           }
@@ -39,7 +68,7 @@ export default {
       as the empty string. So we want mounted to be called only when chosenSkipchain exists */
     if (!this.chosenSkipchain) return
 
-    this.socket.getUpdateChain(hex2Bytes(this.chosenSkipchain)).then(
+    this.socket.getUpdateChain(hex2Bytes(this.chosenSkipchain), false).then(
       (blocks) => {
         this.blocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
           if (blocks.length > 0 && blocks[0].index === i) {

@@ -138,7 +138,9 @@
       }
     },
     mounted: function () {
-      this.getBlockByIndex(parseInt(this.$route.params.blockIndex))
+      if (!this.block || !this.block.loaded) {
+        this.getBlockByIndex(parseInt(this.$route.params.blockIndex))
+      }
     },
     computed: {
       // finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link

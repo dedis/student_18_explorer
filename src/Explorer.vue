@@ -1,5 +1,5 @@
 <template lang="html">
-  <v-content>
+  <v-content v-if="loaded">
     <br>
     <router-view :key="JSON.stringify(blocks)" :blocks="blocks" :getBlockByIndex="getBlockByIndex" :getBlockByHash="getBlockByHash" :socket="socket"></router-view>
   </v-content>
@@ -13,6 +13,7 @@ export default {
   props: ['socket'],
   data: function () {
     return {
+      loaded: false,
       blocks: [],
       chosenSkipchain: this.$route.params.chain,
       getBlockRoster: (index) => {
@@ -77,6 +78,8 @@ export default {
 
           return { loaded: false, index: i, height: 1 }
         })
+
+        this.loaded = true
       },
       (e) => {
         console.error(e)

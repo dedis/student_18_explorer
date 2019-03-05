@@ -15,12 +15,13 @@
         <v-btn flat>Graph</v-btn>
       </router-link>
 
-      <v-spacer></v-spacer>
-
       <router-link :to="`/${$route.params.chain}/measurements`" class="title-link">
         <v-btn flat>Measurements</v-btn>
       </router-link>
 
+      <router-link :to="`/${$route.params.chain}/status`" class="title-link">
+        <v-btn flat>Status</v-btn>
+      </router-link>
 
       <!--header -->
       <v-menu :nudge-width="100" slot="extension">
@@ -42,9 +43,7 @@
       <UserRoster :connectToCothority="connectToCothority" />
     </v-toolbar>
 
-
-    <Explorer v-if="socket" :socket="socket" :key="JSON.stringify(chosenSkipchain)"/>
-
+    <Explorer v-if="socket" :roster="roster" :socket="socket" :key="JSON.stringify(chosenSkipchain)"/>
 
     <v-footer :fixed="fixed" app>
       <span style="padding-left: 1rem">&copy; DEDIS 2018 - Student Project</span>
@@ -114,6 +113,7 @@ export default {
         }
       )
 
+      this.roster = roster
       this.socket = socket
     }
   }

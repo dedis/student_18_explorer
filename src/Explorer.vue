@@ -50,12 +50,13 @@ export default {
           return skipblock
         })
       },
-      getBlockByHash: (hash, shouldNotUpdateBlocks) => {
-        const idx = this.blocks.findIndex(b => b.hash.equals(hash))
+      getBlockByHash: (hex, shouldNotUpdateBlocks) => {
+        const hash = hex2Bytes(hex)
+        const idx = this.blocks.findIndex(b => b.hash && b.hash.equals(hash))
         // get the most updated roster
         const socket = new SkipchainRPC(this.getBlockRoster(idx))
 
-        return socket.getSkipBlock(hex2Bytes(hash)).then((block) => {
+        return socket.getSkipBlock(hash).then((block) => {
           if (!shouldNotUpdateBlocks) {
             this.blocks.splice(block.index, 1, { ...block, loaded: true })
           }

@@ -9,22 +9,22 @@
 </template>
 
 <script>
-import { misc } from '@dedis/cothority'
+import { bytes2Hex } from '../utils'
 
 export default {
   props: ['forwardLink', 'forwardi', 'getBlockByHash', 'block', 'chain'],
   computed: {
     link: function () {
       const link = {
-        from: misc.uint8ArrayToHex(this.forwardLink.from),
-        to: misc.uint8ArrayToHex(this.forwardLink.to)
+        from: bytes2Hex(this.forwardLink.from),
+        to: bytes2Hex(this.forwardLink.to)
       }
       return link
     }
   },
   methods: {
     fetchBlock: function () {
-      this.getBlockByHash(this.link.to).then(({ index }) =>
+      this.getBlockByHash(this.forwardLink.to).then(({ index }) =>
         this.$router.push(`/${this.$route.params.chain}/blocks/${index}`)
       )
     }

@@ -14,9 +14,8 @@
             v-if="instruction.signatures.length > 0"
             v-for="s in instruction.signatures"
             :key="JSON.stringify(s)"
-            @click=""
             >
-              <v-card-text v-if="s.signer.ed25519">
+              <v-card-text v-if="s.signer && s.signer.ed25519">
                 Signature: {{ s.signature}}
                 <br>
                 Signer: ed25519

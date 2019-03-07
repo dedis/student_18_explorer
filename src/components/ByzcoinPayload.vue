@@ -81,8 +81,8 @@
 
 </template>
 <script>
-import { protobuf, misc } from '@dedis/cothority'
-import { toUUID } from '../utils'
+import { DataBody } from '@dedis/cothority/byzcoin/proto'
+import { toUUID, bytes2Hex } from '../utils'
 import Signatures from './Signatures'
 import InstructionInvoke from './InstructionInvoke'
 import InstructionSpawn from './InstructionSpawn'
@@ -115,9 +115,7 @@ export default {
     }
   },
   mounted: function () {
-    const bodyLookup = protobuf.root.lookup('DataBody')
-    const body = bodyLookup.decode(this.block.payload)
-
+    const body = DataBody.decode(this.block.payload)
     const decoder = new TextDecoder('utf-8')
 
     if (!body.txresults[0].clienttransaction.instructions[0].invoke && !body.txresults[0].clienttransaction.instructions[0].spawn) {
@@ -132,16 +130,16 @@ export default {
       accepted: tx.accepted,
       instructions: tx.clienttransaction.instructions.map(instr => ({
         index: instr.index,
-        instanceid: parseInt(misc.uint8ArrayToHex(instr.instanceid)) >= 0 ? parseInt(misc.uint8ArrayToHex(instr.instanceid)) : misc.uint8ArrayToHex(instr.instanceid),
+        instanceid: parseInt(bytes2Hex(instr.instanceID)) >= 0 ? parseInt(bytes2Hex(instr.instanceID)) : bytes2Hex(instr.instanceID),
         signatures: instr.signatures.map(s => ({
-          signature: toUUID(misc.uint8ArrayToHex(s.signature)),
+          signature: toUUID(bytes2Hex(s.signature)),
           signer: s.signer
         })
         ),
         spawn: instr.spawn && {
           args: instr.spawn.args.map(arg => ({
             name: arg.name,
-            value: misc.uint8ArrayToHex(arg.value)
+            value: bytes2Hex(arg.value)
           })
 
           ),
@@ -153,8 +151,8 @@ export default {
             name: arg.name,
             value: arg.value.constructor === Uint8Array
               ? (arg.value.length) > 15
-                ? misc.uint8ArrayToHex(arg.value).slice(0, 15) + '...'
-                : misc.uint8ArrayToHex(arg.value)
+                ? bytes2Hex(arg.value).slice(0, 15) + '...'
+                : bytes2Hex(arg.value)
               : decoder.decode(arg.value)
           }))
         }

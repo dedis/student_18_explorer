@@ -70,7 +70,7 @@
 
 <script>
 import * as d3 from 'd3'
-import { misc } from '@dedis/cothority'
+import { bytes2Hex } from '../utils'
 
 const BLOCK_SIZE = 20
 const BLOCK_SEPARATION = 60
@@ -138,7 +138,7 @@ export default {
             .attr('x', (Math.log2(this.blocks[0].maxHeight) + 1) * BLOCK_SIZE * 3 + this.blocks[0].maxHeight * BLOCK_SIZE + 10)
             .attr('y', PADDING_Y + block.index * BLOCK_SEPARATION + BLOCK_SIZE / 2 - 2)
             .attr('class', 'infoText')
-            .attr('hash', misc.uint8ArrayToHex(block.hash))
+            .attr('hash', bytes2Hex(block.hash))
             .html('Block index: ' + block.index)
         })
         rect.on('mouseleave', () => {
@@ -152,7 +152,7 @@ export default {
         // backward links display
         block.backlinks.forEach(backlink => {
           // for each backlink of each block
-          const to = this.blocks.find(b => b.hash && misc.uint8ArrayCompare(backlink, b.hash))
+          const to = this.blocks.find(b => b.hash && backlink.equals(b.hash))
           if (to) {
             const indexDiff = (block.index - to.index)
             const minHeight = Math.min(block.height, to.height) + 1
@@ -176,7 +176,7 @@ export default {
         // forward links display
         let maxDiff = 0
         block.forward.forEach(forward => {
-          const to = this.blocks.find(b => b.hash && misc.uint8ArrayCompare(forward.to, b.hash))
+          const to = this.blocks.find(b => b.hash && forward.to.equals(b.hash))
           if (to) {
             const indexDiff = (to.index - block.index)
             maxDiff = indexDiff > maxDiff ? indexDiff : maxDiff

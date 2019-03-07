@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import { misc } from '@dedis/cothority'
+import { bytes2Hex } from '../../src/utils'
 const assert = require('assert')
 const Vue = require('./Vue')
 const BlockInfo = require('../../src/components/BlockInfo.vue').default
@@ -49,6 +49,6 @@ describe('A simple block info page', function () {
   })
   it('has a working toUUID method', function () {
     const toUUID = vm.$el.__vue__.toUUID
-    assert.strictEqual(toUUID(misc.uint8ArrayToHex(blocks[0].verifiers[0])), 'a7f6cdb7-47f8-56b4-aff5-ece35a882489')
+    assert.strictEqual(toUUID(bytes2Hex(blocks[0].verifiers[0])), 'a7f6cdb7-47f8-56b4-aff5-ece35a882489')
   })
 })

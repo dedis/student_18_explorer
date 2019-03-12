@@ -128,8 +128,8 @@ export default {
 
     this.body = body.txresults.map(tx => ({
       accepted: tx.accepted,
-      instructions: tx.clienttransaction.instructions.map(instr => ({
-        index: instr.index,
+      instructions: tx.clienttransaction.instructions.map((instr, idx) => ({
+        index: idx,
         instanceid: parseInt(bytes2Hex(instr.instanceID)) >= 0 ? parseInt(bytes2Hex(instr.instanceID)) : bytes2Hex(instr.instanceID),
         signatures: instr.signatures.map(s => ({
           signature: toUUID(bytes2Hex(s.signature)),

@@ -5,7 +5,6 @@
        v-for="(elem, elemi) in header"
        :key="elemi"
        avatar
-       @click=""
      >
 
        <v-list-tile-content>

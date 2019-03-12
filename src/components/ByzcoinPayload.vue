@@ -66,7 +66,7 @@
             <v-list-tile-title>{{ instruction.spawn.contractid }} {{ instruction.instanceid }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <InstructionSpawn :instruction="instruction" :length="tx.instructions.length"/>
+        <InstructionSpawn v-if="instruction.spawn" :instruction="instruction" :length="tx.instructions.length"/>
 
     </v-list-group>
   </v-list>
@@ -131,18 +131,12 @@ export default {
       instructions: tx.clienttransaction.instructions.map((instr, idx) => ({
         index: idx,
         instanceid: parseInt(bytes2Hex(instr.instanceID)) >= 0 ? parseInt(bytes2Hex(instr.instanceID)) : bytes2Hex(instr.instanceID),
-        signatures: instr.signatures.map(s => ({
-          signature: toUUID(bytes2Hex(s.signature)),
-          signer: s.signer
-        })
-        ),
+        signatures: instr.signatures.map((s, idx) => ({
+          signature: toUUID(bytes2Hex(s)),
+          signer: instr.signerIdentities[idx].toString()
+        })),
         spawn: instr.spawn && {
-          args: instr.spawn.args.map(arg => ({
-            name: arg.name,
-            value: bytes2Hex(arg.value)
-          })
-
-          ),
+          args: instr.spawn.args,
           contractid: instr.spawn.contractid
         },
         invoke: instr.invoke && {

@@ -10,24 +10,11 @@
               <v-list-tile-title>Signatures ({{instruction.signatures.length}})</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile
-            v-if="instruction.signatures.length > 0"
-            v-for="s in instruction.signatures"
-            :key="JSON.stringify(s)"
-            >
-              <v-card-text v-if="s.signer && s.signer.ed25519">
-                Signature: {{ s.signature}}
-                <br>
-                Signer: ed25519
-                <br>
-              </v-card-text>
-              <v-card-text v-else>
-                Signature: {{ s.signature}}
-                <br>
-                Signer: No signer <!--{{ s.signer }}-->
-                <br>
-              </v-card-text>
-            </v-list-tile>
+          <v-list-tile v-for="s in instruction.signatures" :key="s.signer">
+            <v-card-text>
+              Signer: {{ s.signer }}
+            </v-card-text>
+          </v-list-tile>
 
     </v-list-group>
   </v-list>

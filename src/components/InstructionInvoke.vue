@@ -1,19 +1,15 @@
 <template>
-  <p>
-    <v-list-tile
-      v-if="instruction.invoke"
-      v-for="arg in instruction.invoke.args"
-      :key="arg.name"
-      @click=""
-      >
-        <v-card-text class="scroll">
+  <v-list class="invoke-instruction-list">
+    <v-list-tile v-for="arg in instruction.invoke.args" :key="arg.name">
+      <v-list-tile-content>
+        <v-card-text>
           Name: {{ arg.name }}
           <br>
           Value: {{ arg.value }}
-          <br>
         </v-card-text>
-      </v-list-tile>
-    </p>
+      </v-list-tile-content>
+    </v-list-tile>
+  </v-list>
 </template>
 
 <script>
@@ -21,12 +17,10 @@ export default {
   props: ['instruction', 'length']
 }
 </script>
-<style media="screen">
-.scroll {
-   overflow-y: auto;
- }
- p {
-     margin-bottom: 4px;
-     margin-top: 4px;
- }
+
+<style>
+.invoke-instruction-list .v-list__tile {
+  height: auto;
+}
 </style>
+

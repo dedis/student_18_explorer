@@ -1,17 +1,15 @@
 <template lang="html">
-<p>
-  <v-list-tile
-    v-for="arg in args"
-    :key="arg.name"
-    @click=""
-    >
-      <v-card-text class="scroll">
-        {{ arg.name }}
-        <br>
-        {{ arg.value  }}
-      </v-card-text>
+  <v-list class="spawn-instruction-list">
+    <v-list-tile v-for="arg in args" :key="arg.name">
+      <v-list-tile-content>
+        <v-card-text>
+          {{ arg.name }}
+          <br>
+          {{ arg.value  }}
+        </v-card-text>
+      </v-list-tile-content>
     </v-list-tile>
-  </p>
+  </v-list>
 </template>
 
 <script>
@@ -42,12 +40,8 @@ export default {
 </script>
 
 <style>
-.scroll {
-   overflow-y: auto;
- }
-
- p {
-     margin-bottom: 4px;
-     margin-top: 4px;
- }
+.spawn-instruction-list .v-list__tile {
+  height: auto;
+}
 </style>
+

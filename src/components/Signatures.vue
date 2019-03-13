@@ -1,24 +1,21 @@
 <template>
-  <v-navigation-drawer width="100%">
-        <v-list>
-          <v-list-group
-            v-for="instruction in instructions"
-            :key="instruction.index"
-          >
-          <v-list-tile slot="activator">
-            <v-list-tile-content>
-              <v-list-tile-title>Signatures ({{instruction.signatures.length}})</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile v-for="s in instruction.signatures" :key="s.signer">
+  <v-expansion-panel expand>
+    <v-expansion-panel-content v-for="instruction in instructions" :key="instruction.index">
+      <template slot="header">
+        <div><strong>Signatures ({{instruction.signatures.length}})</strong></div>
+      </template>
+
+      <v-list>
+        <v-list-tile v-for="s in instruction.signatures" :key="s.signer">
+          <v-list-tile-content>
             <v-card-text>
               Signer: {{ s.signer }}
             </v-card-text>
-          </v-list-tile>
-
-    </v-list-group>
-  </v-list>
-  </v-navigation-drawer>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
 </template>
 
 <script>

@@ -17,65 +17,42 @@
       :key="txi"
       color="#D4916A">
 
-        <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists" />
+      <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists" />
 
-  <v-navigation-drawer width="100%">
-      <v-list>
-        <v-list-group
-          v-for="instruction in tx.instructions"
-          :key="instruction.index"
-        >
-        <v-list-tile slot="activator">
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Command {{ instruction.index + 1}}/{{ tx.instructions.length }}: {{ instruction.invoke.command }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+      <v-expansion-panel>
+        <v-expansion-panel-content v-for="inst in tx.instructions" :key="inst.index">
+          <template slot="header">
+            <div><strong>Command {{ inst.index + 1}}/{{ tx.instructions.length }}: {{ inst.invoke.command }}</strong></div>
+          </template>
 
-        <InstructionInvoke :instruction="instruction"/>
+          <InstructionInvoke :instruction="inst"/>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
 
-    </v-list-group>
-  </v-list>
-  </v-navigation-drawer>
-
-<!-- Signatures -->
-<Signatures :instructions="tx.instructions"/>
-</v-card>
-</v-container>
+      <!-- Signatures -->
+      <Signatures :instructions="tx.instructions"/>
+    </v-card>
+  </v-container>
 
 
-<!-- When we have payload with SPAWN-->
-
-<v-container v-else-if="spawnExists" xs12>
-  <v-card
-    v-for="(tx, txi) in body"
-    :key="txi"
-    color="#D4916A">
-
+  <!-- When we have payload with SPAWN-->
+  <v-container v-else-if="spawnExists" xs12>
+    <v-card v-for="(tx, txi) in body" :key="txi" color="#D4916A">
       <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists"/>
 
-  <v-navigation-drawer width="100%">
-    <v-list>
-      <v-list-group
-        v-for="instruction in tx.instructions"
-        :key="instruction.index"
-          >
-        <v-list-tile slot="activator">
-          <v-list-tile-content>
-            <v-list-tile-title>{{ instruction.spawn.contractid }} {{ instruction.instanceid }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <InstructionSpawn v-if="instruction.spawn" :instruction="instruction" :length="tx.instructions.length"/>
+      <v-expansion-panel expand>
+        <v-expansion-panel-content v-for="inst in tx.instructions" :key="inst.index">
+          <template slot="header">
+            <div><strong>{{ inst.spawn.contractid }} {{ inst.instanceid }}</strong></div>
+          </template>
 
-    </v-list-group>
-  </v-list>
-  </v-navigation-drawer>
+          <InstructionSpawn v-if="inst.spawn" :instruction="inst" :length="tx.instructions.length"/>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
 
-  <Signatures :instructions="tx.instructions"/>
-
-</v-card>
-</v-container>
+      <Signatures :instructions="tx.instructions"/>
+    </v-card>
+  </v-container>
 
 </v-layout>
 

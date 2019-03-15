@@ -9,8 +9,8 @@ import Graph from './components/Graph'
 import Measurements from './components/Measurements'
 import Status from './components/Status'
 
-if (window.location.protocol === "https:") {
-  window.location.protocol = "http:";
+if (window.location.protocol === 'https:') {
+  window.location.protocol = 'http:'
 }
 
 Vue.config.productionTip = false

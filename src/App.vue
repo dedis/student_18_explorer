@@ -90,12 +90,12 @@ export default {
   },
   methods: {
     chooseSkipchain: function (e) {
-	  var v
-	  if (typeof e === "string") {
-	  	 v = e
-	  } else {
-         v = e.target.innerText.slice(0, 64)
-	  }
+      var v
+      if (typeof e === 'string') {
+        v = e
+      } else {
+        v = e.target.innerText.slice(0, 64)
+      }
       this.$router.push(`/${v}`)
       this.chosenSkipchain = v
       this.$forceUpdate()
@@ -109,13 +109,13 @@ export default {
       socket.getAllSkipChainIDs().then(
         (ids) => {
           this.skipchains = ids.map(bytes2Hex)
-		  if (this.skipchains.length == 1) {
-		    console.log("auto choose 1st skipchain")
-		    this.chooseSkipchain(this.skipchains[0])
-		  }
+          if (this.skipchains.length === 1) {
+            console.log('auto choose 1st skipchain')
+            this.chooseSkipchain(this.skipchains[0])
+          }
         },
         (e) => {
-		  console.log('could not get all skipchains', e)
+          console.log('could not get all skipchains', e)
         }
       )
 

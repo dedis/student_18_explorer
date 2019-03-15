@@ -7,6 +7,6 @@ build:
 	yarn install
 	yarn build
 
-deploy: dist
-	rsync -v -essh -a dist/* status2@status.dedis.ch:www/ng
+deploy: build
+	rsync -v -essh -a dist/* status2@status.dedis.ch:www
 

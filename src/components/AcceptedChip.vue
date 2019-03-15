@@ -1,6 +1,6 @@
 <template>
 
-<v-card-title primary-title>
+<v-card-title primary-title class="accepted-chip">
   <p v-if="tx.accepted && spawnExists">
     <v-chip color="teal" text-color="white">
       <v-avatar>
@@ -49,4 +49,7 @@ export default {
 </script>
 
 <style lang="css">
+.accepted-chip p {
+  margin: 0;
+}
 </style>

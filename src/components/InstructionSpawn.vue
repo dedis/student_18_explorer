@@ -1,32 +1,47 @@
 <template lang="html">
-<p>
-  <v-list-tile
-    v-if="instruction.spawn"
-    v-for="arg in instruction.spawn.args"
-    :key="arg.name"
-    @click=""
-    >
-      <v-card-text class="scroll">
-        Name: {{ arg.name }}
-        <br>
-        Value: {{ arg.value }}
-      </v-card-text>
+  <v-list class="spawn-instruction-list">
+    <v-list-tile v-for="arg in args" :key="arg.name">
+      <v-list-tile-content>
+        <v-card-text>
+          {{ arg.name }}
+          <br>
+          {{ arg.value  }}
+        </v-card-text>
+      </v-list-tile-content>
     </v-list-tile>
-  </p>
+  </v-list>
 </template>
 
 <script>
+import { Darc } from '@dedis/cothority/darc'
+import { bytes2Hex } from '../utils'
+
 export default {
-  props: ['instruction', 'length']
+  props: ['instruction', 'length'],
+  computed: {
+    args: function () {
+      return this.instruction.spawn.args.map((arg) => {
+        let value = arg.value
+        if (arg.name === 'darc') {
+          const darc = Darc.decode(value)
+          value = `Description: ${darc.description.toString()} ${darc.rules.toString()}`
+        } else {
+          value = `Value: ${bytes2Hex(value)}`
+        }
+
+        return {
+          name: `Name: ${arg.name}`,
+          value
+        }
+      })
+    }
+  }
 }
 </script>
 
 <style>
-.scroll {
-   overflow-y: auto;
- },
- p {
-     margin-bottom: 4px;
-     margin-top: 4px;
- }
+.spawn-instruction-list .v-list__tile {
+  height: auto;
+}
 </style>
+

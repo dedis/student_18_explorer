@@ -89,14 +89,21 @@ export default {
     this.connectToCothority(defaultRoster)
   },
   methods: {
-    chooseSkipchain: function (e) {
+    chooseSkipchain: function (e, status) {
       var v
       if (typeof e === 'string') {
         v = e
       } else {
         v = e.target.innerText.slice(0, 64)
       }
-      this.$router.push(`/${v}`)
+
+      // Make it possible for connectToCothority to request that we jump
+      // directly tot he status page.
+      if (status !== undefined) {
+        this.$router.push(`/${v}/status`)
+      } else {
+        this.$router.push(`/${v}`)
+      }
       this.chosenSkipchain = v
       this.$forceUpdate()
     },
@@ -111,7 +118,7 @@ export default {
           this.skipchains = ids.map(bytes2Hex)
           if (this.skipchains.length === 1) {
             console.log('auto choose 1st skipchain')
-            this.chooseSkipchain(this.skipchains[0])
+            this.chooseSkipchain(this.skipchains[0], 'status')
           }
         },
         (e) => {

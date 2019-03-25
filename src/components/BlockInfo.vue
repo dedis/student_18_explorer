@@ -22,7 +22,6 @@
         v-for="field in fields.filter(x => x.display_first)"
         v-bind:key="field.name"
 
-
       >
         <div slot="header">{{field.show}}</div>
         <v-card>
@@ -96,72 +95,72 @@
 </template>
 
 <script>
-  import dump from 'buffer-hexdump'
-  import { toUUID, bytes2Hex } from '../utils'
-  import BackwardLink from './BackwardLink'
-  import ForwardLink from './ForwardLink'
-  import Roster from './Roster'
-  import ByzcoinPayload from './ByzcoinPayload'
-  import ByzcoinData from './ByzcoinData'
-  import Verifier from './Verifier'
+import dump from 'buffer-hexdump'
+import { toUUID, bytes2Hex } from '../utils'
+import BackwardLink from './BackwardLink'
+import ForwardLink from './ForwardLink'
+import Roster from './Roster'
+import ByzcoinPayload from './ByzcoinPayload'
+import ByzcoinData from './ByzcoinData'
+import Verifier from './Verifier'
 
-  export default {
-    props: ['blocks', 'socket', 'getBlockByIndex', 'getBlockByHash'],
-    components: {
-      'BackwardLink': BackwardLink,
-      'ForwardLink': ForwardLink,
-      'Roster': Roster,
-      'ByzcoinPayload': ByzcoinPayload,
-      'ByzcoinData': ByzcoinData,
-      'Verifier': Verifier
-    },
-    data: function () {
-      return {
-        /* 'show' is the name to be displayed, 'display' is the format
+export default {
+  props: ['blocks', 'socket', 'getBlockByIndex', 'getBlockByHash'],
+  components: {
+    'BackwardLink': BackwardLink,
+    'ForwardLink': ForwardLink,
+    'Roster': Roster,
+    'ByzcoinPayload': ByzcoinPayload,
+    'ByzcoinData': ByzcoinData,
+    'Verifier': Verifier
+  },
+  data: function () {
+    return {
+      /* 'show' is the name to be displayed, 'display' is the format
         Forward links and the Roster are both special cases */
-        fields: [
-          { name: 'height', show: 'Height', display: 'number' },
-          { name: 'maxHeight', show: 'Max height', display: 'number' },
-          { name: 'baseHeight', show: 'Base height', display: 'number' },
-          { name: 'backlinks', show: 'Backward links', display: 'array', display_first: true },
-          { name: 'forward', show: 'Forward links', display: 'forward', display_first: true },
-          { name: 'payload', show: 'Payload', display: 'payload', display_first: true },
-          { name: 'data', show: 'Data', display: 'hex', display_first: true },
-          { name: 'verifiers', show: 'Verifiers', display: 'verifier', display_first: true },
-          { name: 'roster', show: 'Roster', display: 'roster', display_first: true }
-        ],
-        bytes2Hex,
-        panel: [false, false, true, true],
-        disabled: false,
-        readonly: false,
-        dump
-      }
+      fields: [
+        { name: 'height', show: 'Height', display: 'number' },
+        { name: 'maxHeight', show: 'Max height', display: 'number' },
+        { name: 'baseHeight', show: 'Base height', display: 'number' },
+        { name: 'backlinks', show: 'Backward links', display: 'array', display_first: true },
+        { name: 'forward', show: 'Forward links', display: 'forward', display_first: true },
+        { name: 'payload', show: 'Payload', display: 'payload', display_first: true },
+        { name: 'data', show: 'Data', display: 'hex', display_first: true },
+        { name: 'verifiers', show: 'Verifiers', display: 'verifier', display_first: true },
+        { name: 'roster', show: 'Roster', display: 'roster', display_first: true }
+      ],
+      bytes2Hex,
+      panel: [false, false, true, true],
+      disabled: false,
+      readonly: false,
+      dump
+    }
+  },
+  mounted: function () {
+    if (!this.block || !this.block.loaded) {
+      this.getBlockByIndex(parseInt(this.$route.params.blockIndex))
+    }
+  },
+  computed: {
+    // finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
+    block: function () { return this.blocks.length ? this.blocks.find(({ index }) => (index === parseInt(this.$route.params.blockIndex))) : {} },
+    isByzcoin: function () {
+      return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
+    }
+  },
+  methods: {
+    windowSize: function () {
+      return window.innerWidth
     },
-    mounted: function () {
-      if (!this.block || !this.block.loaded) {
-        this.getBlockByIndex(parseInt(this.$route.params.blockIndex))
-      }
-    },
-    computed: {
-      // finds the corresponding block whose infos need to be displayed on the page according to the block hash showed in page link
-      block: function () { return this.blocks.length ? this.blocks.find(({ index }) => (index === parseInt(this.$route.params.blockIndex))) : {} },
-      isByzcoin: function () {
-        return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
-      }
-    },
-    methods: {
-      windowSize: function () {
-        return window.innerWidth
-      },
-      toUUID,
-      goToBlock: function (relativeIndex) {
-        const i = parseInt(this.$route.params.blockIndex) + relativeIndex
-        if (i < 0 || i > this.blocks.length - 1) return
-        this.getBlockByIndex(i)
-        this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
-      }
+    toUUID,
+    goToBlock: function (relativeIndex) {
+      const i = parseInt(this.$route.params.blockIndex) + relativeIndex
+      if (i < 0 || i > this.blocks.length - 1) return
+      this.getBlockByIndex(i)
+      this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
     }
   }
+}
 </script>
 <style>
 .v-expansion-panel__container--disabled {

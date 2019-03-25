@@ -12,8 +12,6 @@
 </div>
 </template>
 
-
-
 <script>
 export default {
   props: ['block', 'hash', 'hashi', 'getBlockByHash', 'blockIndex', 'chain'],

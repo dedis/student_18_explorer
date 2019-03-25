@@ -5,7 +5,7 @@
     extended
       :clipped-left="clipped"
     >
-      <router-link :to="`/${$route.params.chain || ''}`" class="title-link">
+      <router-link :to="`/${$route.params.chain || ''}`" class="title-link">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </router-link>
 

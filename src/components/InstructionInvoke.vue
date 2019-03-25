@@ -3,7 +3,7 @@
     <v-list-tile v-for="arg in instruction.invoke.args" :key="arg.name">
       <v-list-tile-content>
         <v-card-text>
-          Name: {{ arg.name }}
+          Name: {{ arg.name }}
           <br>
           Value: {{ arg.value }}
         </v-card-text>
@@ -23,4 +23,3 @@ export default {
   height: auto;
 }
 </style>
-

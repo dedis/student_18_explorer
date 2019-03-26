@@ -4,7 +4,7 @@
       <small>{{maxNumServer}} servers</small>
     </h1>
 
-    <v-data-table :headers="headers" :items="items">
+    <v-data-table :headers="headers" :items="items" :rows-per-page-items="[{text:'all', value: -1}, 10]">
       <template slot="items" slot-scope="props">
         <tr>
           <td>

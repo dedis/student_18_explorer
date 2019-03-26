@@ -6,7 +6,7 @@
             <div :key="glob">
               <div class="headline">Time to fetch all blocks</div>
               <span class="grey--text">{{ blocks.length }} blocks</span>
-              <p>Time to fetch every layer by hash: {{ layers.map(x => x /1000 + 's').join('  |  ') }}</p>
+              <p>Time to fetch every layer by hash: {{ layers.map(x => x /1000 + 's').join('  |  ') }}</p>
               <p>Time to get all blocks by index: {{ glob / 1000 }}s</p>
               <p>Time to traverse chain: {{ traversal / 1000 }}s</p>
             </div>

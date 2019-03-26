@@ -3,7 +3,7 @@
     <v-list-tile v-for="arg in args" :key="arg.name">
       <v-list-tile-content>
         <v-card-text>
-          {{ arg.name }}
+          {{ arg.name }}
           <br>
           {{ arg.value  }}
         </v-card-text>
@@ -44,4 +44,3 @@ export default {
   height: auto;
 }
 </style>
-

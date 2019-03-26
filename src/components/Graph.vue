@@ -44,7 +44,6 @@
 </v-card>
 </v-dialog>
 
-
   <v-card :height="60*(this.blocks.length+2)" width="1250px">
     <svg :height="60*(this.blocks.length+2) " width="1250px" />
     <defs>

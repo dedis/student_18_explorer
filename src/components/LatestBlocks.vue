@@ -42,8 +42,6 @@
 </v-dialog>
   </h1>
 
-
-
   <br>
   <v-data-table
     :headers="headers"
@@ -67,35 +65,35 @@
 </template>
 
 <script>
-  import { bytes2Hex } from '../utils'
+import { bytes2Hex } from '../utils'
 
-  export default {
-    props: ['blocks', 'getBlockByIndex'],
-    data () {
-      return {
-        dialog: false,
-        headers: [
-          {
-            text: 'Block Index',
-            align: 'left',
-            sortable: true,
-            value: 'index'
-          },
-          { text: 'Hash', value: 'hash' },
-          { text: 'Collective Signing', value: 'verifiers.length' },
-          { text: 'Height', value: 'height' }
-        ],
-        bytes2Hex
-      }
-    },
-    methods: {
-      goToBlock: function (index) {
-        this.$router.push(`${this.$route.fullPath}/${index}`) /* To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL. */
-      },
-      fetchAll: function () {
-        this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
-      }
+export default {
+  props: ['blocks', 'getBlockByIndex'],
+  data () {
+    return {
+      dialog: false,
+      headers: [
+        {
+          text: 'Block Index',
+          align: 'left',
+          sortable: true,
+          value: 'index'
+        },
+        { text: 'Hash', value: 'hash' },
+        { text: 'Collective Signing', value: 'verifiers.length' },
+        { text: 'Height', value: 'height' }
+      ],
+      bytes2Hex
     }
-
+  },
+  methods: {
+    goToBlock: function (index) {
+      this.$router.push(`${this.$route.fullPath}/${index}`) /* To navigate to a different URL, use router.push. This method pushes a new entry into the history stack, so when the user clicks the browser back button they will be taken to the previous URL. */
+    },
+    fetchAll: function () {
+      this.blocks.filter(x => !x.loaded).forEach(({ index }) => this.getBlockByIndex(index))
+    }
   }
+
+}
 </script>

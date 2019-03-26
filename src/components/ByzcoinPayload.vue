@@ -34,7 +34,6 @@
     </v-card>
   </v-container>
 
-
   <!-- When we have payload with SPAWN-->
   <v-container v-else-if="spawnExists" xs12>
     <v-card v-for="(tx, txi) in body" :key="txi" color="#D4916A">

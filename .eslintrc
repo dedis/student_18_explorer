@@ -1,6 +1,6 @@
 {
   "extends": ["plugin:vue/base"],
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 9
   }
 }

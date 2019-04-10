@@ -26,7 +26,7 @@ export default {
           signature: signature,
           description: description,
           address: address,
-          url: url,
+          url: url
         }))
       }
       return rost

@@ -677,10 +677,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@dedis/cothority@3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-3.0.2.tgz#99b57467c9d62f06c39a21f03c0a30ea3a35aa72"
-  integrity sha512-Lgx11Hlq+fgqvAwGFN4LcZxjrVDEZYlt4G2w2gJeSFWbnu3i8IsbPfCYbt4j35st4lfwM5GFdC6mcxRo8LmC0g==
+"@dedis/cothority@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-3.0.4.tgz#57d02c02edeb5f3f91862e09d70860934e223dd8"
+  integrity sha512-yji6VINtn4BeP2by5o2+9iIQaAjDfzDymGfNXphVY20MDz8Wp58JeGgxW3nzT5Mx4DF3GeuFPEgXjvJGvqrZCQ==
   dependencies:
     "@babel/polyfill" "^7.2.5"
     "@dedis/kyber" "^3.0.1"

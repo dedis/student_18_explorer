@@ -4,7 +4,7 @@
     <p>Roster ID: <code>{{ toUUID(id) }}</code></p>
     <ul>
       <li v-for="ros in rost.list" :key="ros.id">
-        Conode <code>{{ toUUID(ros.id) }}</code> @ {{ros.address}} ~ {{ros.description}}
+        Conode <code>{{ toUUID(ros.id) }}</code> @ {{ros.address}} ~ {{ros.description}} ~ {{ros.url}}
       </li>
     </ul>
   </span>
@@ -21,11 +21,12 @@ export default {
     rost: function () {
       const rost = {
         id: bytes2Hex(this.roster.id),
-        list: this.roster.list.map(({ id, signature, description, address }) => ({
+        list: this.roster.list.map(({ id, signature, description, address, url }) => ({
           id: bytes2Hex(id),
           signature: signature,
           description: description,
-          address: address
+          address: address,
+          url: url,
         }))
       }
       return rost

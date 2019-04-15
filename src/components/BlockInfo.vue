@@ -8,15 +8,17 @@
       expand
     >
 
-      <h3 :key="windowSize()" v-if="windowSize()>872">
+      <h3 :key="windowSize()" v-if="windowSize()>872" style="position: relative;">
         <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
           Block {{block.index}}, {{bytes2Hex(block.hash)}}
         <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
+        <p style="font-size: 10px; position: absolute; top: -10px; right: 10px;" v-if="infos.next">{{ infos.next }}</p>
       </h3>
-      <h3 v-else>
+      <h3 v-else style="position: relative;">
         <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
           Block {{block.index}}, {{bytes2Hex(block.hash).slice(0, 10)}}...
         <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
+        <p style="font-size: 10px; position: absolute; top: -10px; right: 10px;" v-if="infos.next">{{ infos.next }}</p>
       </h3>
       <v-expansion-panel-content
         v-for="field in fields.filter(x => x.display_first)"
@@ -96,7 +98,7 @@
 
 <script>
 import dump from 'buffer-hexdump'
-import { toUUID, bytes2Hex } from '../utils'
+import { toUUID, bytes2Hex, hex2Bytes } from '../utils'
 import BackwardLink from './BackwardLink'
 import ForwardLink from './ForwardLink'
 import Roster from './Roster'
@@ -133,7 +135,8 @@ export default {
       panel: [false, false, true, true],
       disabled: false,
       readonly: false,
-      dump
+      dump,
+      infos: { next: '' }
     }
   },
   mounted: function () {
@@ -155,9 +158,36 @@ export default {
     toUUID,
     goToBlock: function (relativeIndex) {
       const i = parseInt(this.$route.params.blockIndex) + relativeIndex
-      if (i < 0 || i > this.blocks.length - 1) return
-      this.getBlockByIndex(i)
-      this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+      if (i < 0) return
+      // In the case we want to fetch a block whose index is greater than the
+      // current number of loaded block, we have to check if one or more blocks
+      // have been added. To do so, we query the last stored block in the chain
+      // and compare its hash with our last local stored block. If the hash
+      // match, we can be sur that no new blocks were added. Otherwise we can
+      // safely fetch the i+1 block.
+      if (i > this.blocks.length - 1) {
+        this.socket.getLatestBlock(hex2Bytes(this.$route.params.chain), false).then(
+          (latestBlock) => {
+            if (bytes2Hex(latestBlock.hash) !== bytes2Hex(this.block.hash)) {
+              this.getBlockByIndex(i).then(_ => {
+                this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+              })
+            } else {
+              this.infos.next = 'No new blocks detected.'
+              setTimeout(_ => {
+                this.infos.next = ''
+              }, 2000)
+            }
+          },
+          (e) => {
+            console.error(e)
+            // TODO: do something with the error
+          }
+        )
+      } else {
+        this.getBlockByIndex(i)
+        this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+      }
     }
   }
 }

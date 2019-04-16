@@ -8,17 +8,17 @@
       expand
     >
 
-      <h3 :key="windowSize()" v-if="windowSize()>872" style="position: relative;">
+      <h3 :key="windowSize()" v-if="windowSize()>872" class="block-info">
         <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
           Block {{block.index}}, {{bytes2Hex(block.hash)}}
         <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
-        <p style="font-size: 10px; position: absolute; top: -10px; right: 10px;" v-if="infos.next">{{ infos.next }}</p>
+        <p v-if="infos.next">{{ infos.next }}</p>
       </h3>
-      <h3 v-else style="position: relative;">
+      <h3 v-else class="block-info">
         <v-btn flat small @click="goToBlock(-1)"> <v-icon> arrow_back </v-icon> </v-btn>
           Block {{block.index}}, {{bytes2Hex(block.hash).slice(0, 10)}}...
         <v-btn flat small @click="goToBlock(1)"> <v-icon> arrow_forward </v-icon> </v-btn>
-        <p style="font-size: 10px; position: absolute; top: -10px; right: 10px;" v-if="infos.next">{{ infos.next }}</p>
+        <p v-if="infos.next">{{ infos.next }}</p>
       </h3>
       <v-expansion-panel-content
         v-for="field in fields.filter(x => x.display_first)"
@@ -168,13 +168,13 @@ export default {
       if (i > this.blocks.length - 1) {
         this.socket.getLatestBlock(hex2Bytes(this.$route.params.chain), false).then(
           (latestBlock) => {
-            if (bytes2Hex(latestBlock.hash) !== bytes2Hex(this.block.hash)) {
-              this.getBlockByIndex(i).then(_ => {
+            if (!latestBlock.hash.equals(this.block.hash)) {
+              this.getBlockByIndex(i).then(() => {
                 this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
               })
             } else {
               this.infos.next = 'No new blocks detected.'
-              setTimeout(_ => {
+              setTimeout(() => {
                 this.infos.next = ''
               }, 2000)
             }
@@ -199,4 +199,14 @@ export default {
 code::before {
   content: '';
 }
+h3.block-info {
+  position: relative;
+}
+  h3.block-info > p {
+    font-size: 10px;
+    position: absolute;
+    top: -10px;
+    right: 10px;
+  }
+
 </style>

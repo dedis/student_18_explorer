@@ -47,10 +47,6 @@ export default {
           if (!shouldNotUpdateBlocks) {
             this.blocks.splice(i, 1, { ...skipblock, loaded: true })
           }
-
-          return new Promise(function (resolve) {
-            resolve(skipblock)
-          })
         })
       },
       getBlockByHash: (hex, shouldNotUpdateBlocks) => {

@@ -202,11 +202,11 @@ code::before {
 h3.block-info {
   position: relative;
 }
-  h3.block-info > p {
-    font-size: 10px;
-    position: absolute;
-    top: -10px;
-    right: 10px;
-  }
+h3.block-info > p {
+  font-size: 10px;
+  position: absolute;
+  top: -10px;
+  right: 10px;
+}
 
 </style>

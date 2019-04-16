@@ -47,6 +47,7 @@ export default {
           if (!shouldNotUpdateBlocks) {
             this.blocks.splice(i, 1, { ...skipblock, loaded: true })
           }
+          return skipblock
         })
       },
       getBlockByHash: (hex, shouldNotUpdateBlocks) => {

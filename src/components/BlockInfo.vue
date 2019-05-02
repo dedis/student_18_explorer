@@ -105,6 +105,7 @@ import Roster from './Roster'
 import ByzcoinPayload from './ByzcoinPayload'
 import ByzcoinData from './ByzcoinData'
 import Verifier from './Verifier'
+import { SkipchainRPC } from '@dedis/cothority/skipchain'
 
 export default {
   props: ['blocks', 'socket', 'getBlockByIndex', 'getBlockByHash'],
@@ -166,12 +167,18 @@ export default {
       // match, we can be sur that no new blocks were added. Otherwise we can
       // safely fetch the i+1 block.
       if (i > this.blocks.length - 1) {
-        this.socket.getLatestBlock(hex2Bytes(this.$route.params.chain), false).then(
-          (latestBlock) => {
-            if (!latestBlock.hash.equals(this.block.hash)) {
-              this.getBlockByIndex(i).then(() => {
+        this.socket.getUpdateChain(hex2Bytes(this.block.hash), false).then(
+          (blocks) => {
+            if (blocks.length > 1) {
+              // If getUpdateChain returned the next block, use it without another network access.
+              if (blocks[1].index === i) {
+                this.blocks.splice(i, 1, { ...blocks[1], loaded: true })
                 this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
-              })
+              } else {
+                this.getBlockByIndex(i).then(() => {
+                  this.$router.push(`/${this.$route.params.chain}/blocks/${i}`)
+                })
+              }
             } else {
               this.infos.next = 'No new blocks detected.'
               setTimeout(() => {
@@ -181,7 +188,6 @@ export default {
           },
           (e) => {
             console.error(e)
-            // TODO: do something with the error
           }
         )
       } else {

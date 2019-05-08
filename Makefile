@@ -8,5 +8,5 @@ build:
 	yarn build
 
 deploy: build
-	rsync -v -essh -a dist/* status2@status.dedis.ch:www
+	rsync -v -essh -a dist/* root@voting-web-prod.epfl.ch:/var/www/html
 

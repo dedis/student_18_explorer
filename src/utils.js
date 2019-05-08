@@ -28,8 +28,51 @@ function hex2Bytes (hex) {
   return Buffer.from(hex, 'hex')
 }
 
+import { Darc } from '@dedis/cothority/darc'
+import { Roster } from '@dedis/cothority/network'
+import { ChainConfig } from '@dedis/cothority/byzcoin'
+import moment from 'moment'
+import varint from 'varint'
+
+function formatArg(name, value) {
+  try {
+    if (name === 'config.darc' || name === 'darc.darc' || name === 'evolve_unrestricted.darc') {
+      const darc = Darc.decode(value)
+      return `DARC: ${darc.description.toString()}, rules: ${darc.rules.toString()}`
+    }
+    
+    if (name === 'config.roster') {
+      const r = Roster.decode(value)
+      return r.list.map(x => `${x.description} ~ ${x.getWebSocketAddress()}`).join(', ')
+    }
+    
+    if (name === 'config.block_interval') {
+      const i = varint.decode(value)
+      return `Value: ${moment.duration(i / 1000000).seconds()} seconds`
+    }
+    
+    if (name === 'config.max_block_size') {
+      const i = varint.decode(value)
+      return `Value: ${i} bytes`
+    }
+    if (name === 'update_config.config') {
+      const c = ChainConfig.decode(value)
+      console.log('chainconfig', c)
+      return `Value: ${c.toString()}`
+    }
+  } catch (e) {
+    // If we fail to format specially, then do nothing; fall thru to default format.
+    console.log('failed to format value', value, 'err', e)
+    return `Value: ${bytes2Hex(value)}`
+  }
+
+  // default formatting: hex
+  return `Value: ${bytes2Hex(value)}`
+}
+
 export {
   toUUID,
   bytes2Hex,
-  hex2Bytes
+  hex2Bytes,
+  formatArg
 }

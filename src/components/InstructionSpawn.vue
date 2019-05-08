@@ -13,25 +13,18 @@
 </template>
 
 <script>
-import { Darc } from '@dedis/cothority/darc'
-import { bytes2Hex } from '../utils'
+import { bytes2Hex, formatArg } from '../utils'
 
 export default {
   props: ['instruction', 'length'],
   computed: {
     args: function () {
       return this.instruction.spawn.args.map((arg) => {
-        let value = arg.value
-        if (arg.name === 'darc') {
-          const darc = Darc.decode(value)
-          value = `Description: ${darc.description.toString()} ${darc.rules.toString()}`
-        } else {
-          value = `Value: ${bytes2Hex(value)}`
-        }
-
+        var contract = this.instruction.spawn.contractid
+        console.log('formatting', arg)
         return {
           name: `Name: ${arg.name}`,
-          value
+          value: formatArg(`${contract}.${arg.name}`, arg.value)
         }
       })
     }

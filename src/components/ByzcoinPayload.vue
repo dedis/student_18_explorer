@@ -10,7 +10,7 @@
     </v-alert>
   </v-container>
 
-  <!-- When we have payload with INVOKE-->
+  <!-- Invoke instruction -->
   <v-container v-else-if="invokeExists" xs12>
     <v-card
       v-for="(tx, txi) in body"
@@ -25,7 +25,7 @@
             <div><strong>Command {{ inst.index + 1}}/{{ tx.instructions.length }}: {{ inst.invoke.command }}</strong></div>
           </template>
 
-          <InstructionInvoke :instruction="inst"/>
+          <InstructionInvoke v-if="inst.invoke" :instruction="inst"/>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -34,7 +34,7 @@
     </v-card>
   </v-container>
 
-  <!-- When we have payload with SPAWN-->
+  <!-- Spawn instruction -->
   <v-container v-else-if="spawnExists" xs12>
     <v-card v-for="(tx, txi) in body" :key="txi" color="#D4916A">
       <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists"/>
@@ -45,7 +45,7 @@
             <div><strong>{{ inst.spawn.contractid }} {{ inst.instanceid }}</strong></div>
           </template>
 
-          <InstructionSpawn v-if="inst.spawn" :instruction="inst" :length="tx.instructions.length"/>
+          <InstructionSpawn v-if="inst.spawn" :instruction="inst"/>
         </v-expansion-panel-content>
       </v-expansion-panel>
 

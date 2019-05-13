@@ -12,9 +12,10 @@ import { SkipchainRPC, SkipBlock } from '@dedis/cothority/skipchain'
 const { localStorage } = window
 
 // Defines how many entries the local storage should have at maximum.
-const STORAGE_THRESHOLD = 10
+const STORAGE_THRESHOLD = 3
+const STORAGE_PREFIX = 'dedis_cache_'
 
-const REGEX_SKIPCHAIN_ID = /^[0-9a-f]+$/
+const REGEX_SKIPCHAIN_ID = /^dedis_cache_[0-9a-f]+$/
 
 /**
  * Encode the blocks as a string and store them at the given index which
@@ -27,10 +28,13 @@ function storeBlocks (id, blocks) {
   if (localStorage.length > STORAGE_THRESHOLD) {
     let minLength = Number.MAX_SAFE_INTEGER
     let minIndex = -1
+    // Look for the smallest update chain stored inside the local
+    // storage to remove it because we're above the threshold number
+    // of elements in the local storage.
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
 
-      if (REGEX_SKIPCHAIN_ID.test(key)) {
+      if (REGEX_SKIPCHAIN_ID.test(key) && key !== `${STORAGE_PREFIX}${id}`) {
         const data = localStorage.getItem(key)
         if (!data || data.length < minLength) {
           minLength = data.length
@@ -51,7 +55,7 @@ function storeBlocks (id, blocks) {
 
     return null
   })
-  localStorage.setItem(id, data.join(':'))
+  localStorage.setItem(`${STORAGE_PREFIX}${id}`, data.join(':'))
 }
 
 /**
@@ -63,7 +67,7 @@ function storeBlocks (id, blocks) {
  * @returns {Array<SkipBlock>}
  */
 function loadBlocks (id) {
-  const data = localStorage.getItem(id)
+  const data = localStorage.getItem(`${STORAGE_PREFIX}${id}`)
   if (!data) {
     return []
   }
@@ -80,7 +84,7 @@ function loadBlocks (id) {
     })
   } catch (e) {
     // corrupted so we clean it
-    localStorage.removeItem(id)
+    localStorage.removeItem(`${STORAGE_PREFIX}${id}`)
     return []
   }
 }

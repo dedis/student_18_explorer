@@ -19,7 +19,7 @@ const REGEX_SKIPCHAIN_ID = /^dedis_cache_[0-9a-f]+$/
 
 /**
  * Encode the blocks as a string and store them at the given index which
- * is the ID of the skipchain
+ * is the ID of the skipchain.
  *
  * @param {string} id               The ID of the skipchain
  * @param {Array<SkipBlock>} blocks The list of blocks to store
@@ -59,9 +59,9 @@ function storeBlocks (id, blocks) {
 }
 
 /**
- * load the blocks from the local storage at the given index which
+ * Loads the blocks from the local storage at the given index which
  * is the skipchain ID. It returns an empty array when it doesn't
- * exist or is occrupted.
+ * exist or is corrupted.
  *
  * @param {string} id The skipchain ID
  * @returns {Array<SkipBlock>}

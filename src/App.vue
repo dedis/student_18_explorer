@@ -61,10 +61,20 @@ import defaultRoster from './default-roster'
 import { bytes2Hex } from './utils'
 import { version } from '../package.json'
 
+const STORE_KEY_SKIPCHAINS = 'dedis_cache_skipchains'
+
 export default {
   name: 'App',
   components: { 'Explorer': Explorer, 'UserRoster': UserRoster },
   data () {
+    let skipchains = []
+    try {
+      const cache = window.localStorage.getItem(STORE_KEY_SKIPCHAINS)
+      skipchains = JSON.parse(cache) || []
+    } catch (e) {
+      // not set, ignoring the error
+    }
+
     return {
       version,
       clipped: false,
@@ -80,7 +90,7 @@ export default {
       title: 'SkipChain Explorer',
       socket: null,
       blocks: [],
-      skipchains: [],
+      skipchains,
       chosenSkipchain: this.$route.params.chain
     }
   },
@@ -109,13 +119,15 @@ export default {
     },
 
     connectToCothority: function (ro) {
-      const roster = Roster.fromTOML(ro)
-      const socket = new SkipchainRPC(roster)
+      this.roster = Roster.fromTOML(ro)
+      this.socket = new SkipchainRPC(this.roster)
 
       /* get all skipchains IDs and map each of them to its hexadecimal form */
-      socket.getAllSkipChainIDs().then(
+      this.socket.getAllSkipChainIDs().then(
         (ids) => {
           this.skipchains = ids.map(bytes2Hex)
+          window.localStorage.setItem(STORE_KEY_SKIPCHAINS, JSON.stringify(this.skipchains))
+
           if (this.skipchains.length >= 1 && !this.$route.params.chain) {
             console.log('auto choose 1st skipchain')
             this.chooseSkipchain(this.skipchains[0], 'status')
@@ -125,9 +137,6 @@ export default {
           console.log('could not get all skipchains', e)
         }
       )
-
-      this.roster = roster
-      this.socket = socket
     }
   }
 }

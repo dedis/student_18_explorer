@@ -7,7 +7,87 @@
 
 <script>
 import { hex2Bytes } from './utils'
-import { SkipchainRPC } from '@dedis/cothority/skipchain'
+import { SkipchainRPC, SkipBlock } from '@dedis/cothority/skipchain'
+
+const { localStorage } = window
+
+// Defines how many entries the local storage should have at maximum.
+const STORAGE_THRESHOLD = 3
+const STORAGE_PREFIX = 'dedis_cache_'
+
+const REGEX_SKIPCHAIN_ID = /^dedis_cache_[0-9a-f]+$/
+
+/**
+ * Encode the blocks as a string and store them at the given index which
+ * is the ID of the skipchain.
+ *
+ * @param {string} id               The ID of the skipchain
+ * @param {Array<SkipBlock>} blocks The list of blocks to store
+ */
+function storeBlocks (id, blocks) {
+  if (localStorage.length > STORAGE_THRESHOLD) {
+    let minLength = Number.MAX_SAFE_INTEGER
+    let minIndex = -1
+    // Look for the smallest update chain stored inside the local
+    // storage to remove it because we're above the threshold number
+    // of elements in the local storage.
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+
+      if (REGEX_SKIPCHAIN_ID.test(key) && key !== `${STORAGE_PREFIX}${id}`) {
+        const data = localStorage.getItem(key)
+        if (!data || data.length < minLength) {
+          minLength = data.length
+          minIndex = i
+        }
+      }
+    }
+
+    if (minIndex >= 0) {
+      localStorage.removeItem(localStorage.key(minIndex))
+    }
+  }
+
+  const data = blocks.map((b) => {
+    if (b && b.loaded) {
+      return Buffer.from(SkipBlock.encode(b).finish()).toString('hex')
+    }
+
+    return null
+  })
+  localStorage.setItem(`${STORAGE_PREFIX}${id}`, data.join(':'))
+}
+
+/**
+ * Loads the blocks from the local storage at the given index which
+ * is the skipchain ID. It returns an empty array when it doesn't
+ * exist or is corrupted.
+ *
+ * @param {string} id The skipchain ID
+ * @returns {Array<SkipBlock>}
+ */
+function loadBlocks (id) {
+  const data = localStorage.getItem(`${STORAGE_PREFIX}${id}`)
+  if (!data) {
+    return []
+  }
+
+  try {
+    const encoded = data.split(':')
+
+    return encoded.map((b, i) => {
+      if (b) {
+        return { ...SkipBlock.decode(Buffer.from(b, 'hex')), loaded: true }
+      }
+
+      return { loaded: false, index: i, height: 1 }
+    })
+  } catch (e) {
+    // corrupted so we clean it
+    localStorage.removeItem(`${STORAGE_PREFIX}${id}`)
+    return []
+  }
+}
 
 export default {
   props: ['socket'],
@@ -70,16 +150,29 @@ export default {
       as the empty string. So we want mounted to be called only when chosenSkipchain exists */
     if (!this.chosenSkipchain) return
 
-    this.socket.getUpdateChain(hex2Bytes(this.chosenSkipchain), false).then(
-      (blocks) => {
-        this.blocks = new Array(blocks[blocks.length - 1].index + 1).fill({}).map((_, i) => {
-          if (blocks.length > 0 && blocks[0].index === i) {
-            return { loaded: true, ...blocks.shift() }
+    this.blocks = []
+    try {
+      this.blocks = loadBlocks(this.chosenSkipchain)
+    } catch (e) {
+      // key not set, ignoring the error
+    }
+
+    const last = this.blocks[this.blocks.length - 1]
+    const lastID = last ? last.hash : hex2Bytes(this.chosenSkipchain)
+
+    this.socket.getUpdateChain(lastID, false).then(
+      (update) => {
+        const newLength = update[update.length - 1].index + 1 - this.blocks.length
+        const newBlocks = new Array(newLength).fill({}).map((_, i) => {
+          if (update.length > 0 && update[0].index === i) {
+            return { loaded: true, ...update.shift() }
           }
 
           return { loaded: false, index: i, height: 1 }
         })
 
+        this.blocks = [...this.blocks, ...newBlocks]
+        storeBlocks(this.chosenSkipchain, this.blocks)
         this.loaded = true
       },
       (e) => {

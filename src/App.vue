@@ -61,17 +61,17 @@ import defaultRoster from './default-roster'
 import { bytes2Hex } from './utils'
 import { version } from '../package.json'
 
-const STORE_KEY_SKIPCHAINS = 'dedis_cache_skipchains';
+const STORE_KEY_SKIPCHAINS = 'dedis_cache_skipchains'
 
 export default {
   name: 'App',
   components: { 'Explorer': Explorer, 'UserRoster': UserRoster },
   data () {
-    let skipchains = [];
+    let skipchains = []
     try {
-      const cache = localStorage.getItem(STORE_KEY_SKIPCHAINS);
-      skipchains = JSON.parse(cache) || [];
-    } catch(e) {
+      const cache = window.localStorage.getItem(STORE_KEY_SKIPCHAINS)
+      skipchains = JSON.parse(cache) || []
+    } catch (e) {
       // not set, ignoring the error
     }
 
@@ -126,7 +126,7 @@ export default {
       this.socket.getAllSkipChainIDs().then(
         (ids) => {
           this.skipchains = ids.map(bytes2Hex)
-          localStorage.setItem(STORE_KEY_SKIPCHAINS, JSON.stringify(this.skipchains))
+          window.localStorage.setItem(STORE_KEY_SKIPCHAINS, JSON.stringify(this.skipchains))
 
           if (this.skipchains.length >= 1 && !this.$route.params.chain) {
             console.log('auto choose 1st skipchain')

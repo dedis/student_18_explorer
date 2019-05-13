@@ -105,7 +105,6 @@ import Roster from './Roster'
 import ByzcoinPayload from './ByzcoinPayload'
 import ByzcoinData from './ByzcoinData'
 import Verifier from './Verifier'
-import { SkipchainRPC } from '@dedis/cothority/skipchain'
 
 export default {
   props: ['blocks', 'socket', 'getBlockByIndex', 'getBlockByHash'],

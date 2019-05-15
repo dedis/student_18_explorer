@@ -42,22 +42,18 @@
             <p v-else-if="field.display === 'payload'" :key="JSON.stringify(block.payload)">
               <v-container>
                 <p v-if="isByzcoin"><ByzcoinPayload :block="block" /></p>
-                <h2 v-else>
-                  <v-alert
-                      :value="true"
-                      type="warning"
-                      >
-                        This is not a Byzcoin Block.
-                    </v-alert></h2>
-            </v-container>
+              </v-container>
             </p>
             <p v-else-if="field.display === 'hex'">
               <v-container>
                 <p v-if="isByzcoin">
                   <ByzcoinData :block="block"/>
                 </p>
+                <p v-if="isEvoting">
+                  <Evoting :block="block" :roster="block.roster"/>
+                </p>
                 <p v-else>
-                  <code> {{String(dump(block[field.name])).substr(51)}}</code>
+                  <code>{{String(dump(block[field.name]))}}</code>
                 </p>
               </v-container>
             </p>
@@ -104,6 +100,7 @@ import ForwardLink from './ForwardLink'
 import Roster from './Roster'
 import ByzcoinPayload from './ByzcoinPayload'
 import ByzcoinData from './ByzcoinData'
+import Evoting from './Evoting'
 import Verifier from './Verifier'
 
 export default {
@@ -114,6 +111,7 @@ export default {
     'Roster': Roster,
     'ByzcoinPayload': ByzcoinPayload,
     'ByzcoinData': ByzcoinData,
+    'Evoting': Evoting,
     'Verifier': Verifier
   },
   data: function () {
@@ -149,6 +147,9 @@ export default {
     block: function () { return this.blocks.length ? this.blocks.find(({ index }) => (index === parseInt(this.$route.params.blockIndex))) : {} },
     isByzcoin: function () {
       return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
+    },
+    isEvoting: function () {
+      return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === '1b4db7eb-4057-5ddf-91e0-36dec72071f5')
     }
   },
   methods: {

@@ -760,13 +760,13 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@dedis/cothority@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-3.0.4.tgz#57d02c02edeb5f3f91862e09d70860934e223dd8"
-  integrity sha512-yji6VINtn4BeP2by5o2+9iIQaAjDfzDymGfNXphVY20MDz8Wp58JeGgxW3nzT5Mx4DF3GeuFPEgXjvJGvqrZCQ==
+"@dedis/cothority@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-3.0.6.tgz#b36406e5e694b65f7c5646650d902223d059c853"
+  integrity sha512-cdL7yKaADX9rkrpyomQf6z4sVgH9IWaWfNl500y5+7EgNGLnoiiusDK94xxV0bDQTPDZabMD3++sBsa7VpSQ/w==
   dependencies:
     "@babel/polyfill" "^7.2.5"
-    "@dedis/kyber" "^3.0.1"
+    "@dedis/kyber" "^3.0.6"
     "@stablelib/blake2xs" "^0.10.4"
     "@types/crypto-js" "^3.1.43"
     "@types/node" "^10.12.18"
@@ -787,10 +787,10 @@
     util "^0.11.1"
     ws "^6.1.2"
 
-"@dedis/kyber@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@dedis/kyber/-/kyber-3.0.1.tgz#4c0ff3c0bb297a4dae169475d79a4cc8c6015943"
-  integrity sha512-ajFFt0BLBx48iDJAdKs3hxaXTaoojYuGkx6+4Y39VEe92G8M/xUKM9soeId6Vqt0RMIhcz5xcWeP13c76DgiKw==
+"@dedis/kyber@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@dedis/kyber/-/kyber-3.0.6.tgz#b26f5c322bb2bbe6bd61729e3ef2e14f6eea6dcb"
+  integrity sha512-To4NSIAaNIy5ss4ezS6P7DZ0oAHpa5P7CxiHztgJ69P8JIY+UUrLfzgymPXa/DU5CA/WlM7acsz306oeIi0ndQ==
   dependencies:
     "@stablelib/blake2xs" "^0.10.4"
     bn.js "^4.11.8"

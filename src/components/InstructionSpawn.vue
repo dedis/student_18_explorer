@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { bytes2Hex, formatArg } from '../utils'
+import { formatArg } from '../utils'
 
 export default {
   props: ['instruction', 'length'],

@@ -37,4 +37,3 @@ Transaction.register()
 Footer.register()
 Election.register()
 Ballot.register()
-

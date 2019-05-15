@@ -3,26 +3,24 @@
   <v-list-tile v-if="tx.user">
     <v-list-tile-content>
       <v-list-tile-title>From user: <a :href="userUrl">{{ tx.user }}</a></v-list-tile-title>
-    </v-list-tile-content>    
+    </v-list-tile-content>
   </v-list-tile>
-  
+
   <v-list-tile
     v-for="(elem, elemi) in output"
     :key="elemi"
     avatar
     >
-    
+
     <v-list-tile-content>
       <v-list-tile-title>{{ elemi }}: {{ elem }}</v-list-tile-title>
     </v-list-tile-content>
-    
+
   </v-list-tile>
 </v-list>
 </template>
 
 <script>
-import { DataHeader } from '@dedis/cothority/byzcoin/proto'
-import { bytes2Hex } from '../utils'
 import { Transaction } from '@/proto'
 import moment from 'moment'
 import kyber from '@dedis/kyber'
@@ -40,19 +38,19 @@ export default {
   },
   props: ['block', 'roster'],
   data: function () {
-     return {
-       output: {},
-       tx: {}
-     }
+    return {
+      output: {},
+      tx: {}
+    }
   },
   mounted: function () {
-    if (this.block.data.length ===0) {
+    if (this.block.data.length === 0) {
       return
     }
     const tx = Transaction.decode(this.block.data)
-    this.tx= tx
+    this.tx = tx
     console.log(tx)
-    
+
     if (tx.election != null) {
       const e = tx.election
       this.output = {
@@ -72,7 +70,7 @@ export default {
       alpha.unmarshalBinary(tx.ballot.alpha.subarray(8))
       const beta = curve.point()
       beta.unmarshalBinary(tx.ballot.beta.subarray(8))
-      
+
       this.output = {
         'block type': 'encrypted ballot',
         'alpha': alpha.toString(),

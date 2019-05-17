@@ -158,11 +158,13 @@ export default {
     }
 
     const last = this.blocks[this.blocks.length - 1]
-    const lastID = last ? last.hash : hex2Bytes(this.chosenSkipchain)
+    // we check if the last element is correctly loaded to prevent corrupted
+    // cache to be used
+    const lastID = last && last.loaded ? last.hash : hex2Bytes(this.chosenSkipchain)
 
     this.socket.getUpdateChain(lastID, false).then(
       (update) => {
-        const newLength = update[update.length - 1].index + 1 - this.blocks.length
+        const newLength = update[update.length - 1].index + 1
         const newBlocks = new Array(newLength).fill({}).map((_, i) => {
           if (update.length > 0 && update[0].index === i) {
             return { loaded: true, ...update.shift() }
@@ -171,7 +173,8 @@ export default {
           return { loaded: false, index: i, height: 1 }
         })
 
-        this.blocks = [...this.blocks, ...newBlocks]
+        newBlocks.splice(0, this.blocks.length, ...this.blocks)
+        this.blocks = newBlocks
         storeBlocks(this.chosenSkipchain, this.blocks)
         this.loaded = true
       },

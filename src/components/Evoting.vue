@@ -38,7 +38,6 @@ export default {
       }
       const tx = Transaction.decode(this.block.data)
       this.tx = tx
-      console.log(tx)
       
       if (tx.election != null) {
         const e = tx.election

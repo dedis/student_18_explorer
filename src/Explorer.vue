@@ -12,7 +12,7 @@ import { SkipchainRPC, SkipBlock } from '@dedis/cothority/skipchain'
 const { localStorage } = window
 
 // Defines how many entries the local storage should have at maximum.
-const STORAGE_THRESHOLD = 3
+const STORAGE_THRESHOLD = 10
 const STORAGE_PREFIX = 'dedis_cache_'
 
 const REGEX_SKIPCHAIN_ID = /^dedis_cache_[0-9a-f]+$/
@@ -158,20 +158,28 @@ export default {
     }
 
     const last = this.blocks[this.blocks.length - 1]
-    const lastID = last ? last.hash : hex2Bytes(this.chosenSkipchain)
+    // we check if the last element is correctly loaded to prevent corrupted
+    // cache to be used
+    const lastID = last && last.loaded ? last.hash : hex2Bytes(this.chosenSkipchain)
 
     this.socket.getUpdateChain(lastID, false).then(
       (update) => {
-        const newLength = update[update.length - 1].index + 1 - this.blocks.length
-        const newBlocks = new Array(newLength).fill({}).map((_, i) => {
-          if (update.length > 0 && update[0].index === i) {
-            return { loaded: true, ...update.shift() }
+        // update has always at least the latest known block if the
+        // request is a success
+        const newBlocks = new Array(update[update.length - 1].index + 1)
+        // fill only the updates
+        for (let i = update[0].index; i < newBlocks.length; i++) {
+          if (update[0] && update[0].index === i) {
+            newBlocks[i] = { loaded: true, ...update.shift() }
+          } else {
+            newBlocks[i] = { loaded: false, index: i, height: 1 }
           }
+        }
 
-          return { loaded: false, index: i, height: 1 }
-        })
+        // ... and reuse cached blocks
+        newBlocks.splice(0, this.blocks.length, ...this.blocks)
 
-        this.blocks = [...this.blocks, ...newBlocks]
+        this.blocks = newBlocks
         storeBlocks(this.chosenSkipchain, this.blocks)
         this.loaded = true
       },

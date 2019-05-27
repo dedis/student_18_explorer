@@ -85,11 +85,6 @@ export default {
       dump
     }
   },
-  methods: {
-    expo: function (x, f) {
-      return Number.parseFloat(x).toExponential(f)
-    }
-  },
   mounted: function () {
     const body = DataBody.decode(this.block.payload)
     const decoder = new TextDecoder('utf-8')

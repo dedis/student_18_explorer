@@ -15,10 +15,6 @@
         <v-btn flat>Graph</v-btn>
       </router-link>
 
-      <router-link :to="`/${$route.params.chain}/measurements`" class="title-link">
-        <v-btn flat>Measurements</v-btn>
-      </router-link>
-
       <router-link :to="`/${$route.params.chain}/status`" class="title-link">
         <v-btn flat>Status</v-btn>
       </router-link>
@@ -40,13 +36,12 @@
           </v-list-tile>
         </v-list>
       </v-menu>
-      <UserRoster :connectToCothority="connectToCothority" />
     </v-toolbar>
 
     <Explorer v-if="socket" :roster="roster" :socket="socket" :key="JSON.stringify(chosenSkipchain)"/>
 
     <v-footer :fixed="fixed" app>
-      <span style="padding-left: 1rem">&copy; DEDIS 2018 - Student Project</span>
+      <span style="padding-left: 1rem">&copy; EPFL 2018</span>
       <span style="padding-left: 1rem">v.{{version}}</span>
     </v-footer>
   </v-app>
@@ -87,7 +82,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'SkipChain Explorer',
+      title: 'Election Audit Chain Explorer',
       socket: null,
       blocks: [],
       skipchains,

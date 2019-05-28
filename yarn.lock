@@ -760,10 +760,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@dedis/cothority@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-3.0.6.tgz#b36406e5e694b65f7c5646650d902223d059c853"
-  integrity sha512-cdL7yKaADX9rkrpyomQf6z4sVgH9IWaWfNl500y5+7EgNGLnoiiusDK94xxV0bDQTPDZabMD3++sBsa7VpSQ/w==
+"@dedis/cothority@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@dedis/cothority/-/cothority-3.1.0.tgz#0d430bbbfafe097058573bab279cdaa283356f48"
+  integrity sha512-xt9mEwwkz3mfwSYqGDnWdU3e3ZpfAXb8UW+KhcYtGkv1h93s9CGg6vss/+yokFDG7PxNI2eBWxACjRV2lnmW4w==
   dependencies:
     "@babel/polyfill" "^7.2.5"
     "@dedis/kyber" "^3.0.6"
@@ -775,6 +775,7 @@
     co "^4.6.0"
     file "^0.2.2"
     isomorphic-ws "^4.0.1"
+    keccak "^2.0.0"
     lodash "^4.17.11"
     long "^4.0.0"
     moment "^2.24.0"
@@ -2146,6 +2147,13 @@ binary-extensions@^1.0.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.0.tgz#9523e001306a32444b907423f1de2164222f6ab1"
   integrity sha512-EgmjVLMn22z7eGGv3kcnHwSnJXmFHjISTY9E/S5lIcTD3Oxw05QTcBLNkJFzcb3cNueUdF/IN4U+d78V0zO8Hw==
+
+bindings@^1.2.1:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
+  integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
+  dependencies:
+    file-uri-to-path "1.0.0"
 
 blob@0.0.5:
   version "0.0.5"
@@ -4742,6 +4750,11 @@ file-loader@^3.0.1:
     loader-utils "^1.0.2"
     schema-utils "^1.0.0"
 
+file-uri-to-path@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
+  integrity sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==
+
 file@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/file/-/file-0.2.2.tgz#c3dfd8f8cf3535ae455c2b423c2e52635d76b4d3"
@@ -6278,6 +6291,16 @@ karma@^3.1.1:
     tmp "0.0.33"
     useragent "2.3.0"
 
+keccak@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/keccak/-/keccak-2.0.0.tgz#7456ea5023284271e6f362b4397e8df4d2bb994c"
+  integrity sha512-rKe/lRr0KGhjoz97cwg+oeT1Rj/Y4cjae6glArioUC8JBF9ROGZctwIaaruM7d7naovME4Q8WcQSO908A8qcyQ==
+  dependencies:
+    bindings "^1.2.1"
+    inherits "^2.0.3"
+    nan "^2.2.1"
+    safe-buffer "^5.1.0"
+
 killable@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
@@ -6872,6 +6895,11 @@ mz@^2.4.0:
     any-promise "^1.0.0"
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
+
+nan@^2.2.1:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
+  integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
 nan@^2.9.2:
   version "2.13.2"

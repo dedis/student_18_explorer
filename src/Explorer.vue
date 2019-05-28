@@ -157,12 +157,9 @@ export default {
       // key not set, ignoring the error
     }
 
-    const last = this.blocks[this.blocks.length - 1]
-    // we check if the last element is correctly loaded to prevent corrupted
-    // cache to be used
-    const lastID = last && last.loaded ? last.hash : hex2Bytes(this.chosenSkipchain)
-
-    this.socket.getUpdateChain(lastID, false).then(
+    // Refetch the full update to take potential new forward-links and then get the
+    // shortest existing proof of the chain.
+    this.socket.getUpdateChain(hex2Bytes(this.chosenSkipchain), false).then(
       (update) => {
         // update has always at least the latest known block if the
         // request is a success
@@ -175,9 +172,6 @@ export default {
             newBlocks[i] = { loaded: false, index: i, height: 1 }
           }
         }
-
-        // ... and reuse cached blocks
-        newBlocks.splice(0, this.blocks.length, ...this.blocks)
 
         this.blocks = newBlocks
         storeBlocks(this.chosenSkipchain, this.blocks)

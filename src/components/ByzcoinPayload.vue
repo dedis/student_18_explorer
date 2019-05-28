@@ -21,7 +21,7 @@
 
       <v-expansion-panel>
         <v-expansion-panel-content v-for="inst in tx.instructions" :key="inst.index">
-          <template slot="header">
+          <template v-if="inst.invoke" slot="header">
             <div><strong>Command {{ inst.index + 1}}/{{ tx.instructions.length }}: {{ inst.invoke.command }}</strong></div>
           </template>
 

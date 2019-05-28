@@ -57,7 +57,6 @@ function formatArg (name, value) {
     }
     if (name === 'update_config.config') {
       const c = ChainConfig.decode(value)
-      console.log('chainconfig', c)
       return `Value: ${c.toString()}`
     }
   } catch (e) {

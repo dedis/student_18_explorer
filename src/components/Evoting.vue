@@ -24,6 +24,8 @@
 import { Transaction } from '@/proto'
 import moment from 'moment'
 import kyber from '@dedis/kyber'
+import { bytes2Hex } from '@/utils'
+
 const curve = new kyber.curve.edwards25519.Curve()
 
 function nodeidToNode (roster, nodeid) {
@@ -32,13 +34,13 @@ function nodeidToNode (roster, nodeid) {
 
 export default {
   methods: {
-    format: function() {
+    format: function () {
       if (this.block.data.length === 0) {
         return
       }
       const tx = Transaction.decode(this.block.data)
       this.tx = tx
-      
+
       if (tx.election != null) {
         const e = tx.election
         this.output = {
@@ -52,13 +54,13 @@ export default {
         }
         return
       }
-      
+
       if (tx.ballot != null) {
         const alpha = curve.point()
         alpha.unmarshalBinary(tx.ballot.alpha.subarray(8))
         const beta = curve.point()
         beta.unmarshalBinary(tx.ballot.beta.subarray(8))
-        
+
         this.output = {
           'block type': 'encrypted ballot',
           'alpha': alpha.toString(),
@@ -66,7 +68,7 @@ export default {
         }
         return
       }
-      
+
       if (tx.mix != null) {
         // user is set in mix, this might be a bug in the server, but whatever, it's meaningless, so don't show it.
         this.tx.user = null
@@ -77,7 +79,7 @@ export default {
         }
         return
       }
-      
+
       if (tx.partial != null) {
         // user is set in partial, this might be a bug in the server, but whatever, it's meaningless, so don't show it.
         this.tx.user = null
@@ -88,7 +90,24 @@ export default {
         }
         return
       }
-      
+
+      if (tx.master != null) {
+        this.output = {
+          'block type': 'master',
+          'admin SCIPERs': tx.master.admins.join(','),
+          'auth server public key': bytes2Hex(tx.master.key)
+        }
+        return
+      }
+
+      if (tx.link != null) {
+        this.output = {
+          'block type': 'link',
+          'election chain': bytes2Hex(tx.link.id)
+        }
+        return
+      }
+
       // Default case:
       this.output = {
         'block type': 'unknown'

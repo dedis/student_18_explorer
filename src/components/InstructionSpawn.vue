@@ -21,7 +21,6 @@ export default {
     args: function () {
       return this.instruction.spawn.args.map((arg) => {
         var contract = this.instruction.spawn.contractid
-        console.log('formatting', arg)
         return {
           name: `Name: ${arg.name}`,
           value: formatArg(`${contract}.${arg.name}`, arg.value)

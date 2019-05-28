@@ -149,7 +149,7 @@ export default {
       return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === '14b74055-89f3-5031-aa63-a2839dbfdbdd')
     },
     isEvoting: function () {
-      return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === '1b4db7eb-4057-5ddf-91e0-36dec72071f5')
+      return this.block.verifiers && this.block.verifiers.find(verifier => toUUID(bytes2Hex(verifier)) === 'f7b6750d-188d-5f48-93a9-d8fba9cc262d')
     }
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <v-expansion-panel expand>
-    <v-expansion-panel-content v-for="instruction in instructions" :key="instruction.index">
+    <v-expansion-panel-content>
       <template slot="header">
         <div><strong>Signatures ({{instruction.signatures.length}})</strong></div>
       </template>
@@ -20,6 +20,6 @@
 
 <script>
 export default {
-  props: ['instructions']
+  props: ['instruction']
 }
 </script>

@@ -2,76 +2,29 @@
 <v-layout row>
   <!-- when we don't have any payload (genesis block for instance)-->
   <v-container v-if="noPayload">
-    <v-alert
-      :value="true"
-      type="warning"
-      >
-        No payload to display.
+    <v-alert :value="true" type="warning">
+      No payload to display.
     </v-alert>
   </v-container>
 
-  <!-- Invoke instruction -->
-  <v-container v-else-if="invokeExists" xs12>
-    <v-card
-      v-for="(tx, txi) in body"
-      :key="txi"
-      color="#D4916A">
-
-      <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists" />
-
-      <v-expansion-panel>
-        <v-expansion-panel-content v-for="inst in tx.instructions" :key="inst.index">
-          <template v-if="inst.invoke" slot="header">
-            <div><strong>Command {{ inst.index + 1}}/{{ tx.instructions.length }}: {{ inst.invoke.command }}</strong></div>
-          </template>
-
-          <InstructionInvoke v-if="inst.invoke" :instruction="inst"/>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-
-      <!-- Signatures -->
-      <Signatures :instructions="tx.instructions"/>
-    </v-card>
+  <v-container xs12>
+    <v-container v-for="(tx, txi) in body" :key="txi">
+      <Transaction :tx="tx" :index="txi" />
+    </v-container>
   </v-container>
-
-  <!-- Spawn instruction -->
-  <v-container v-else-if="spawnExists" xs12>
-    <v-card v-for="(tx, txi) in body" :key="txi" color="#D4916A">
-      <AcceptedChip :tx="tx" :txi="txi" :spawnExists="spawnExists"/>
-
-      <v-expansion-panel expand>
-        <v-expansion-panel-content v-for="inst in tx.instructions" :key="inst.index">
-          <template slot="header">
-            <div><strong>{{ inst.spawn.contractid }} {{ inst.instanceid }}</strong></div>
-          </template>
-
-          <InstructionSpawn v-if="inst.spawn" :instruction="inst"/>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-
-      <Signatures :instructions="tx.instructions"/>
-    </v-card>
-  </v-container>
-
 </v-layout>
 
 </template>
 <script>
 import { DataBody } from '@dedis/cothority/byzcoin/proto'
 import { toUUID, bytes2Hex } from '../utils'
-import Signatures from './Signatures'
-import InstructionInvoke from './InstructionInvoke'
-import InstructionSpawn from './InstructionSpawn'
-import AcceptedChip from './AcceptedChip'
+import Transaction from './transaction/Transaction'
 import dump from 'buffer-hexdump'
 
 export default {
   props: ['block'],
   components: {
-    'Signatures': Signatures,
-    'InstructionSpawn': InstructionSpawn,
-    'InstructionInvoke': InstructionInvoke,
-    'AcceptedChip': AcceptedChip
+    'Transaction': Transaction
   },
   data: function () {
     return {
@@ -79,8 +32,6 @@ export default {
       panel: [true, true, false],
       disabled: false,
       noPayload: false,
-      invokeExists: false,
-      spawnExists: false,
       readonly: false,
       dump
     }
@@ -96,10 +47,6 @@ export default {
 
     if (!body.txresults[0].clienttransaction.instructions[0].invoke && !body.txresults[0].clienttransaction.instructions[0].spawn) {
       this.noPayload = true
-    } else if (!body.txresults[0].clienttransaction.instructions[0].invoke) {
-      this.spawnExists = true
-    } else {
-      this.invokeExists = true
     }
 
     this.body = body.txresults.map(tx => ({
@@ -114,6 +61,9 @@ export default {
         spawn: instr.spawn && {
           args: instr.spawn.args,
           contractid: instr.spawn.contractid
+        },
+        delete: instr.delete && {
+          contractid: instr.delete.contractid
         },
         invoke: instr.invoke && {
           command: instr.invoke.command,

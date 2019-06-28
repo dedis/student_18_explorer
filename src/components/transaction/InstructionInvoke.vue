@@ -31,7 +31,6 @@ export default {
     args: function () {
       return this.instruction.invoke.args.map((arg) => {
         // For invokes, we put the command before the arg name.
-        console.log('formatting invoke', this.instruction.invoke)
         const uint = new Uint8Array(arg.value.length)
         for (var i = 0, j = arg.value.length; i < j; ++i) {
           uint[i] = arg.value.charCodeAt(i)

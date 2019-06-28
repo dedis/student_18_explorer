@@ -102,9 +102,10 @@ import ByzcoinPayload from './ByzcoinPayload'
 import ByzcoinData from './ByzcoinData'
 import Evoting from './Evoting'
 import Verifier from './Verifier'
+import { SkipchainRPC } from '@dedis/cothority/skipchain'
 
 export default {
-  props: ['blocks', 'socket', 'getBlockByIndex', 'getBlockByHash'],
+  props: ['blocks', 'getBlockRoster', 'getBlockByIndex', 'getBlockByHash'],
   components: {
     'BackwardLink': BackwardLink,
     'ForwardLink': ForwardLink,
@@ -167,7 +168,8 @@ export default {
       // match, we can be sur that no new blocks were added. Otherwise we can
       // safely fetch the i+1 block.
       if (i > this.blocks.length - 1) {
-        this.socket.getUpdateChain(hex2Bytes(this.block.hash), false).then(
+        const socket = new SkipchainRPC(this.getBlockRoster(i))
+        socket.getUpdateChain(hex2Bytes(this.block.hash), false).then(
           (blocks) => {
             if (blocks.length > 1) {
               // If getUpdateChain returned the next block, use it without another network access.

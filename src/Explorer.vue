@@ -1,7 +1,10 @@
 <template lang="html">
   <v-content v-if="loaded">
     <br>
-    <router-view :key="JSON.stringify(blocks)" :blocks="blocks" :getBlockByIndex="getBlockByIndex" :getBlockByHash="getBlockByHash" :socket="socket"></router-view>
+    <router-view :key="JSON.stringify(blocks)" :blocks="blocks"
+                 :getBlockRoster="getBlockRoster"
+                 :getBlockByIndex="getBlockByIndex"
+                 :getBlockByHash="getBlockByHash"></router-view>
   </v-content>
 </template>
 

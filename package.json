@@ -1,6 +1,6 @@
 {
   "name": "skipchain-explorer",
-  "version": "1.1.0-evoting",
+  "version": "1.2.0-evoting",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -12,7 +12,7 @@
     "coverage": "nyc vue-cli-service test:unit"
   },
   "dependencies": {
-    "@dedis/cothority": "^3.0.6",
+    "@dedis/cothority": "^3.4.6",
     "buffer": "^5.2.1",
     "buffer-hexdump": "^1.0.0",
     "bufferutil": "^4.0.0",

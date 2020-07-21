@@ -3,6 +3,7 @@ import 'buffer'
 import { Darc } from '@dedis/cothority/darc'
 import { Roster } from '@dedis/cothority/network'
 import { ChainConfig } from '@dedis/cothority/byzcoin'
+import { ProjectData } from '@/proto'
 import moment from 'moment'
 import varint from 'varint'
 
@@ -59,6 +60,14 @@ function formatArg (name, value) {
       const c = ChainConfig.decode(value)
       console.log('chainconfig', c)
       return `Value: ${c.toString()}`
+    }
+    if (name === 'setReady.enclaveURL') {
+      const url = new TextDecoder('utf-8').decode(value)
+      return `Value: ${url}`
+    }
+    if (name === 'update.projectData' || name === 'odysseyproject.projectData') {
+      const data = JSON.stringify(ProjectData.decode(value))
+      return `Value: ${data}`
     }
   } catch (e) {
     // If we fail to format specially, then do nothing; fall thru to default format.

@@ -1,0 +1,35 @@
+{
+  "nested": {
+    "ProjectData": {
+      "fields": {
+        "datasets": {
+          "rule": "repeated",
+          "type": "bytes",
+          "id": 1
+        },
+        "purposes": {
+          "rule": "repeated",
+          "type": "string",
+          "id": 2
+        },
+        "uses": {
+          "rule": "repeated",
+          "type": "string",
+          "id": 3
+        },
+        "pubKey": {
+          "type": "string",
+          "id": 4
+        },
+        "isReady": {
+          "type": "bool",
+          "id": 5
+        },
+        "enclaveUrl": {
+          "type": "string",
+          "id": 6
+        }
+      }
+    }
+  }
+}

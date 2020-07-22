@@ -162,10 +162,10 @@ export default {
       const i = parseInt(this.$route.params.blockIndex) + relativeIndex
       if (i < 0) return
       // In the case we want to fetch a block whose index is greater than the
-      // current number of loaded block, we have to check if one or more blocks
+      // current number of loaded blocks, we have to check if one or more blocks
       // have been added. To do so, we query the last stored block in the chain
       // and compare its hash with our last local stored block. If the hash
-      // match, we can be sur that no new blocks were added. Otherwise we can
+      // match, we can be sure that no new blocks were added. Otherwise we can
       // safely fetch the i+1 block.
       if (i > this.blocks.length - 1) {
         const socket = new SkipchainRPC(this.getBlockRoster(i))

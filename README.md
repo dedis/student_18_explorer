@@ -1,3 +1,6 @@
+⚠️ This project is no longer maintained and has been moved to
+[https://github.com/dedis/skipchain-explorer](https://github.com/dedis/skipchain-explorer).
+
 # student_18_explorer
 
 ## A Skipchain Explorer
